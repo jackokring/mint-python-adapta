@@ -6,4 +6,8 @@
 # make source .tgz and .whl
 hatch build .
 
+# then install the wheel to check
+pip install --force-reinstall ./*.whl
+
 # then maybe twine, but remeber API keys for PyPI
+# apparently hatch publish can also do this

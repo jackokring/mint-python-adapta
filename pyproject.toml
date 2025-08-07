@@ -35,5 +35,8 @@ only-packages = true
 "Homepage" = "https://github.com/jackokring/mint-python-adapta"
 "Bug Tracker" = "https://github.com/jackokring/mint-python-adapta/issues"
 
+[project.scripts]
+test = "adapta:test"
+
 [tool.pyright]
 reportMissingModuleSource = false
