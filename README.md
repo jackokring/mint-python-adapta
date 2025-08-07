@@ -6,7 +6,7 @@ There are some scripts.
 - `build.sh` to build the `.gz`, `.whl` and install the package.
 - `freeze.sh` to make `requirements.txt` before a `git add`.
 
-Change the paths from `xapp-adapta` as the name must be unique on `PyPI` if
+Change the paths from `xapp_adapta` as the name must be unique on `PyPI` if
 you intend to upload a derivative work there.
 
 Thanks
