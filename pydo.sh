@@ -10,4 +10,18 @@ cd "$(dirname "$1")" || exit
 . ./bin/activate
 
 # call file as if overrides builtin, then needs following
-"./bin/$(basename "$1")"
+"./bin/$(basename "$1")" || exit
+
+# make a desktop file
+cat <<EOF >"./$(basename "$1").desktop"
+[Desktop Entry]
+Name=$(basename "$1")
+Comment=XApp Python Application
+Exec="$(pwd)/pydo.sh" "$(pwd)/$(basename "$1")"
+Icon=utilities-terminal
+Terminal=true
+Type=Application
+Categories=Utility;
+EOF
+
+chmod +x "$(basename "$1").desktop"
