@@ -10,6 +10,6 @@ There are some scripts.
   `./pydo.sh ./test` for example, and see `cat ./test.desktop`.
 
 Change the paths from `xapp_adapta` as the name must be unique on `PyPI` if
-you intend to upload a derivative work there.
+you intend to upload a derivative work there. This is important.
 
 Thanks

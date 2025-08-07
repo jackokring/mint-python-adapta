@@ -1,8 +1,0 @@
-[Desktop Entry]
-Name=test
-Comment=XApp Python Application
-Exec="/home/jacko/python-adapta/pydo.sh" "/home/jacko/python-adapta/test"
-Icon=utilities-terminal
-Terminal=true
-Type=Application
-Categories=Utility;

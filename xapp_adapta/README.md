@@ -4,11 +4,15 @@ This is the `PyPI` readme. Included commands can be used for effect. Add
 any commands to the `pyproject.toml` in the source linked below.
 
 Are you sure you've changed any `xapp_adapta` references to be unique?
-Please check `pyproject.toml` and rename the module directory from `xapp_adapta`.
+Please check `pyproject.toml` and also rename the module directory from
+`xapp_adapta`. Also check that `_` is not `-`.
 
 Included commands (add more):
 
-- `./bin/test` the basic original python demo of `libadapta`.
+- `./bin/test` the basic original python demo of `libadapta`. Added a try catch
+  to make `àdwaita` be used instead if `àdapta` is not present. Also as `test`
+  is a shell command, it tests if the right `test` is done. This is why the path
+  has to be specified, and not just `test`.
 - ...
 
 Thanks
