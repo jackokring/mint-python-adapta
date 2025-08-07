@@ -3,6 +3,9 @@
 # make sure you install.sh first (at least once)
 # you don't need to freeze.sh unless you wish to git push new dependencies
 
+# enter virtual environment
+. ./bin/activate
+
 # make source .tgz and .whl
 hatch build
 

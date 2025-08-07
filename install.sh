@@ -6,6 +6,9 @@ VER=$(python -c 'import sys; print(".".join(map(str, sys.version_info[0:2])))')
 # virtual environment
 python3 -m venv .
 
+# set virtual environment
+. ./bin/activate
+
 # add libadapta-1
 sudo dpkg -i ./*.deb
 
