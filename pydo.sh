@@ -17,7 +17,10 @@ cat <<EOF >"./$(basename "$1").desktop"
 [Desktop Entry]
 Name=$(basename "$1")
 Comment=XApp Python Application
+# Maybe it's a full git clone
 Exec="$(pwd)/pydo.sh" "$(pwd)/$(basename "$1")"
+# Maybe it's just a PyPI module (so place inside the venv/bin)
+#Exec=". ./activate && ./$(basename "$1")"
 Icon=utilities-terminal
 Terminal=true
 Type=Application
