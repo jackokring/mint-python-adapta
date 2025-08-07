@@ -4,7 +4,7 @@
 # you don't need to freeze.sh unless you wish to git push new dependencies
 
 # make source .tgz and .whl
-hatch build .
+hatch build
 
 # then install the wheel to check
 pip install --force-reinstall ./*.whl
