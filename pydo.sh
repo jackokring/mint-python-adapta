@@ -10,7 +10,7 @@ FILE="$(which "$1")"
 cd "$(dirname "$FILE")/.." || exit
 
 # enter virtual environment
-. ./bin/activate || echo "Error! No VENV." && exit
+. ./bin/activate
 
 # call file as if overrides builtin, then needs following
 "$(basename "$FILE")" || exit
@@ -21,7 +21,7 @@ cat <<EOF >"./bin/$(basename "$FILE").desktop"
 Name=$(basename "$FILE")
 Comment=XApp Python Application
 # Maybe it's just a PyPI module (so place inside the venv/bin)
-Exec=". $(dirname "$FILE")/activate && $(basename "$FILE")"
+Exec=bash -c '. "$(dirname "$FILE")/activate" && "$(basename "$FILE")"'
 Icon=utilities-terminal
 Terminal=true
 Type=Application
