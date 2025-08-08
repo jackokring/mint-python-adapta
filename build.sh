@@ -4,7 +4,7 @@
 # you don't need to freeze.sh unless you wish to git push new dependencies
 
 # enter virtual environment
-. ./bin/activate || echo "Error! No VENV." && exit
+. ./bin/activate || echo "Error! No VENV."
 
 # clear old files
 rm ./dist/*
