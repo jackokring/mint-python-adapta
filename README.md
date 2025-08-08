@@ -7,8 +7,9 @@ There are some scripts.
 - `freeze.sh` to make `requirements.txt` before a `git add`.
 - `pydo.sh` to make a virtual environment launch. Just in case you don't
   have `pipx` or admin rights, and maybe need a `.desktop` file. Try
-  `./pydo.sh ./test` for example, and see `cat ./test.desktop`. Yes,
-  you might want to edit it a little and place it in a virtual environment
+  `./pydo.sh xapp_adapta_test` for example, and see
+  `cat ./bin/xapp_adapta_test.desktop`. Yes,
+  you might want to edit it a little. It's placed in the virtual environment
   `bin` directory next to the command. Something to do with GUI launch and  
   setting the virtual environment not being automatic.
 

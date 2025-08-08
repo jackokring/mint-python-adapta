@@ -4,13 +4,16 @@
 # you don't need to freeze.sh unless you wish to git push new dependencies
 
 # enter virtual environment
-. ./bin/activate
+. ./bin/activate || echo "Error! No VENV." && exit
+
+# clear old files
+rm ./dist/*
 
 # make source .tgz and .whl
 hatch build
 
 # then install the wheel to check
-pip install --force-reinstall ./*.whl
+pip install --force-reinstall ./dist/*.whl
 
 # then maybe twine, but remeber API keys for PyPI
 # apparently hatch publish can also do this

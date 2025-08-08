@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "xapp_adapta"
-version = "0.0.2"
+version = "0.0.3"
 authors = [{ name = "Simon Jackson", email = "jackokring@gmail.com" }]
 description = ""
 readme = "xapp_adapta/README.md"
@@ -35,7 +35,7 @@ only-packages = true
 "Bug Tracker" = "https://github.com/jackokring/mint-python-adapta/issues"
 
 [project.scripts]
-test = "xapp_adapta:test"
+xapp_adapta_test = "xapp_adapta:test"
 
 [tool.pyright]
 reportMissingModuleSource = false

@@ -9,10 +9,8 @@ Please check `pyproject.toml` and also rename the module directory from
 
 Included commands (add more):
 
-- `./bin/test` the basic original python demo of `libadapta`. Added a try catch
-  to make `àdwaita` be used instead if `àdapta` is not present. Also as `test`
-  is a shell command, it tests if the right `test` is done. This is why the path
-  has to be specified, and not just `test`.
+- `xapp_adapta_test` the basic original python demo of `libadapta`. Added a try catch
+  to make `àdwaita` be used instead if `àdapta` is not present.
 - ...
 
 Thanks

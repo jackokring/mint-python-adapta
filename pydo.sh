@@ -1,30 +1,31 @@
 #!/usr/bin/bash
 # MAYBE USEFUL FOR .desktop FILES
-# SUPPLY command name to run as "venv_dir/command"
+# SUPPLY command name to run as "command"
 # YOU DON'T need the "/bin/"
 
-# cd to directory containing venv
-cd "$(dirname "$1")" || exit
+# filename within bin
+FILE="$(which "$1")"
 
-# activate venv
-. ./bin/activate
+# cd to directory containing venv
+cd "$(dirname "$FILE")/.." || exit
+
+# enter virtual environment
+. ./bin/activate || echo "Error! No VENV." && exit
 
 # call file as if overrides builtin, then needs following
-"./bin/$(basename "$1")" || exit
+"$(basename "$FILE")" || exit
 
 # make a desktop file
-cat <<EOF >"./$(basename "$1").desktop"
+cat <<EOF >"./bin/$(basename "$FILE").desktop"
 [Desktop Entry]
-Name=$(basename "$1")
+Name=$(basename "$FILE")
 Comment=XApp Python Application
-# Maybe it's a full git clone
-Exec="$(pwd)/pydo.sh" "$(pwd)/$(basename "$1")"
 # Maybe it's just a PyPI module (so place inside the venv/bin)
-#Exec=". ./activate && ./$(basename "$1")"
+Exec=". $(dirname "$FILE")/activate && $(basename "$FILE")"
 Icon=utilities-terminal
 Terminal=true
 Type=Application
 Categories=Utility;
 EOF
 
-chmod +x "$(basename "$1").desktop"
+chmod +x "./bin/$(basename "$FILE").desktop"
