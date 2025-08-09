@@ -36,6 +36,9 @@ only-packages = true
 
 [project.scripts]
 xapp_adapta_test = "xapp_adapta:test"
+cdv = "xapp_adapta:cdv"
 
 [tool.pyright]
 reportMissingModuleSource = false
+reportIncompatibleVariableOverride = false
+reportIncompatibleMethodOverride = false

@@ -22,7 +22,7 @@ except ImportError or ValueError as ex:
     from gi.repository import Adw
 
 
-class MainWindow(Adw.ApplicationWindow):
+class MainWindow(Adw.ApplicationWindow):  # pyright: ignore
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -67,13 +67,13 @@ class MainWindow(Adw.ApplicationWindow):
         content_page = Adw.NavigationPage(title="Page")
         content_page.set_child(content_toolbar)
 
-        split_view.set_sidebar(sidebar_page)
-        split_view.set_content(content_page)
+        split_view.set_sidebar(sidebar_page)  # pyright: ignore
+        split_view.set_content(content_page)  # pyright: ignore
 
         self.set_content(split_view)
 
 
-class MyApp(Adw.Application):
+class MyApp(Adw.Application):  # pyright: ignore
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.connect("activate", self.on_activate)

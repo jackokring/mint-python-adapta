@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 
 # version
-VER=$(python -c 'import sys; print(".".join(map(str, sys.version_info[0:2])))')
+VER=$(python3 -c 'import sys; print(".".join(map(str, sys.version_info[0:2])))')
 
 # virtual environment
 python3 -m venv .
@@ -11,6 +11,9 @@ python3 -m venv .
 
 # add libadapta-1
 sudo dpkg -i ./*.deb
+
+# apt installs might be necessary
+sudo apt install libadwaita-* libadwaita-*-dev gir1.2-adw-* python3-gi
 
 # install pips
 pip install -r requirements.txt
