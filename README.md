@@ -1,5 +1,9 @@
 # A template for using `libadapta` with python
 
+![PyPI - Version](https://img.shields.io/pypi/v/xapp_adapta)
+![GitHub Downloads](https://img.shields.io/github/downloads/jackokring/mint-python-adapta/total)
+![GitHub Commit Activity](https://img.shields.io/github/commit-activity/t/jackokring/mint-python-adapta)
+
 There are some scripts.
 
 - `ìnstall.sh` to add the `.deb` files, `pip install` and python syntax symbols.
