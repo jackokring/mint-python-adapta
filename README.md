@@ -3,9 +3,13 @@
 There are some scripts.
 
 - `ìnstall.sh` to add the `.deb` files, `pip install` and python syntax symbols.
-- `build.sh` to build the `.gz`, `.whl` and install the package.
-- `freeze.sh` to make `requirements.txt` before a `git add`.
-- `pydo.sh` to make a virtual environment launch. Just in case you don't
+  Also it rebuilds and fixes a few issues if you rename or move the repo
+  directory.
+- `build.sh` to build the `.gz`, `.whl` and install the package. This causes
+  all python packages to be updated and makes ready for `hatch publish`.
+- `freeze.sh` to make `requirements.txt` before a `git add` if more python
+  dependencies become included in the project.
+- `pydo.sh` to make a virtual environment launch icon. Just in case you don't
   have `pipx` or admin rights, and maybe need a `.desktop` file. Try
   `./pydo.sh xapp_adapta_test` for example, and see
   `cat ./bin/xapp_adapta_test.desktop`. Yes,
