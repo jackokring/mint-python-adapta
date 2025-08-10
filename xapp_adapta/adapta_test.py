@@ -76,6 +76,8 @@ class MainWindow(Adw.ApplicationWindow):  # pyright: ignore
         # make a page
         toolbar = Adw.ToolbarView()
         header = Adw.HeaderBar()
+        footer_on = False
+        footer = Adw.HeaderBar()
         # left and right arrays of buttons
         for key, value in buttons.items():
             for b in value:
@@ -84,9 +86,17 @@ class MainWindow(Adw.ApplicationWindow):  # pyright: ignore
                         header.pack_start(b)
                     case "right":
                         header.pack_end(b)
+                    case "bottom":
+                        # I like the alignment
+                        footer_on = True
+                        footer.pack_end(b)
+                    case _:
+                        print("Unhandled Tool Button:\n", b)
         # can't alter buttons later
         # buttons can have callbacks connected at creation
         toolbar.add_top_bar(header)
+        if footer_on:
+            toolbar.add_bottom_bar(footer)
         toolbar.set_content(content)
         page = Adw.NavigationPage(title=title)
         page.set_child(toolbar)
