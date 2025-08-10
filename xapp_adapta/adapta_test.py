@@ -44,9 +44,18 @@ class MainWindow(Adw.ApplicationWindow):  # pyright: ignore
 
         self.set_content(split_view)
 
+    def fancy(self):
+        box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        box.set_margin_top(10)
+        box.set_margin_bottom(10)
+        box.set_margin_start(10)
+        box.set_margin_end(10)
+        box.set_spacing(10)
+        return box
+
     def side(self):
         # Create a sidebar
-        sidebar_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        sidebar_box = self.fancy()
         listbox = Gtk.ListBox()
         listbox.add_css_class("navigation-sidebar")
         listbox.set_selection_mode(Gtk.SelectionMode.SINGLE)
@@ -62,18 +71,16 @@ class MainWindow(Adw.ApplicationWindow):  # pyright: ignore
 
     def content(self):
         # Create the content page
-        content_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        content_box = self.fancy()
         status_page = Adw.StatusPage()
         status_page.set_title("Python libAdapta Example")
         status_page.set_description(
             "Split navigation view, symbolic icon and a calendar widget to feature the accent color."
         )
         status_page.set_icon_name("document-open-recent-symbolic")
-        box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=12)
         calendar = Gtk.Calendar()
-        box.append(status_page)
-        box.append(calendar)
-        content_box.append(box)
+        content_box.append(status_page)
+        content_box.append(calendar)
         content_toolbar = Adw.ToolbarView()
         content_toolbar.add_top_bar(Adw.HeaderBar())
         content_toolbar.set_content(content_box)
