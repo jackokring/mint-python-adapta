@@ -4,6 +4,10 @@
 ![GitHub Downloads](https://img.shields.io/github/downloads/jackokring/mint-python-adapta/total)
 ![GitHub Commit Activity](https://img.shields.io/github/commit-activity/t/jackokring/mint-python-adapta)
 
+![License](https://img.shields.io/badge/License-MIT-blue)
+![License](https://img.shields.io/badge/License-LGPL-blue)
+![License](https://img.shields.io/badge/License-GPL-blue)
+
 There are some scripts.
 
 - `ìnstall.sh` to add the `.deb` files, `pip install` and python syntax symbols.
