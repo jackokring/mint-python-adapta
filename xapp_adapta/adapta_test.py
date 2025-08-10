@@ -4,7 +4,10 @@
 import gi
 
 gi.require_version("Gtk", "4.0")
-from gi.repository import Gtk
+# so Gtk for graphics
+# Gio for data files
+# GLib.Error (FileDialog?)
+from gi.repository import Gtk, Gio, GLib
 
 # libAdapta uses its own module name (Adap.ApplicationWindow etc..).
 # We would normally import it like this:
@@ -17,7 +20,7 @@ try:
     from gi.repository import Adap as Adw
 except ImportError or ValueError as ex:
     # To use libAdwaita, we would import this instead:
-    print("Using Adwaita as Adapta not found", ex)
+    print("Using Adwaita as Adapta not found:\n", ex)
     gi.require_version("Adw", "1")
     from gi.repository import Adw
 
