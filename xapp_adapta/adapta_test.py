@@ -2,6 +2,7 @@
 
 # sudo apt install libgirepository-2.0-dev
 import gi
+import sys
 
 gi.require_version("Gtk", "4.0")
 # so Gtk for graphics
@@ -37,6 +38,13 @@ class MainWindow(Adw.ApplicationWindow):  # pyright: ignore
         split_view.set_min_sidebar_width(200)
         split_view.set_max_sidebar_width(300)
 
+        # set for overrides in complex examples
+        split_view.set_sidebar(self.side())  # pyright: ignore
+        split_view.set_content(self.content())  # pyright: ignore
+
+        self.set_content(split_view)
+
+    def side(self):
         # Create a sidebar
         sidebar_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         listbox = Gtk.ListBox()
@@ -50,7 +58,9 @@ class MainWindow(Adw.ApplicationWindow):  # pyright: ignore
         sidebar_toolbar.set_content(sidebar_box)
         sidebar_page = Adw.NavigationPage(title="Sidebar")
         sidebar_page.set_child(sidebar_toolbar)
+        return sidebar_page
 
+    def content(self):
         # Create the content page
         content_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         status_page = Adw.StatusPage()
@@ -69,11 +79,7 @@ class MainWindow(Adw.ApplicationWindow):  # pyright: ignore
         content_toolbar.set_content(content_box)
         content_page = Adw.NavigationPage(title="Page")
         content_page.set_child(content_toolbar)
-
-        split_view.set_sidebar(sidebar_page)  # pyright: ignore
-        split_view.set_content(content_page)  # pyright: ignore
-
-        self.set_content(split_view)
+        return content_page
 
 
 class MyApp(Adw.Application):  # pyright: ignore
@@ -88,7 +94,7 @@ class MyApp(Adw.Application):  # pyright: ignore
 
 def main():
     app = MyApp()
-    app.run(None)
+    app.run(sys.argv)
 
 
 if __name__ == "__main__":
