@@ -44,7 +44,7 @@ class MainWindow(Adw.ApplicationWindow):  # pyright: ignore
 
         self.set_content(split_view)
 
-    def fancy(self):
+    def fancy(self) -> Gtk.Box:
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         box.set_margin_top(10)
         box.set_margin_bottom(10)
@@ -53,7 +53,16 @@ class MainWindow(Adw.ApplicationWindow):  # pyright: ignore
         box.set_spacing(10)
         return box
 
-    def side(self):
+    def top(self, content: Gtk.Box, title: str) -> Adw.NavigationPage:
+        # make a page
+        toolbar = Adw.ToolbarView()
+        toolbar.add_top_bar(Adw.HeaderBar())
+        toolbar.set_content(content)
+        page = Adw.NavigationPage(title=title)
+        page.set_child(toolbar)
+        return page
+
+    def side(self) -> Adw.NavigationPage:
         # Create a sidebar
         sidebar_box = self.fancy()
         listbox = Gtk.ListBox()
@@ -62,14 +71,9 @@ class MainWindow(Adw.ApplicationWindow):  # pyright: ignore
         row = Adw.ActionRow(title="Page")
         listbox.append(row)
         sidebar_box.append(listbox)
-        sidebar_toolbar = Adw.ToolbarView()
-        sidebar_toolbar.add_top_bar(Adw.HeaderBar())
-        sidebar_toolbar.set_content(sidebar_box)
-        sidebar_page = Adw.NavigationPage(title="Sidebar")
-        sidebar_page.set_child(sidebar_toolbar)
-        return sidebar_page
+        return self.top(sidebar_box, "navigation")
 
-    def content(self):
+    def content(self) -> Adw.NavigationPage:
         # Create the content page
         content_box = self.fancy()
         status_page = Adw.StatusPage()
@@ -81,12 +85,7 @@ class MainWindow(Adw.ApplicationWindow):  # pyright: ignore
         calendar = Gtk.Calendar()
         content_box.append(status_page)
         content_box.append(calendar)
-        content_toolbar = Adw.ToolbarView()
-        content_toolbar.add_top_bar(Adw.HeaderBar())
-        content_toolbar.set_content(content_box)
-        content_page = Adw.NavigationPage(title="Page")
-        content_page.set_child(content_toolbar)
-        return content_page
+        return self.top(content_box, "content")
 
 
 class MyApp(Adw.Application):  # pyright: ignore
