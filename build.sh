@@ -9,6 +9,9 @@
 # clear old files
 rm ./dist/*
 
+# desktop
+cp ./bin/*.desktop ./xapp_adapta/
+
 # make source .tgz and .whl
 hatch build
 

@@ -27,7 +27,7 @@ dependencies = [
 [tool.hatch.build]
 include = []
 exclude = []
-artifacts = []
+artifacts = ["*.desktop"]
 only-packages = true
 
 [project.urls]

@@ -5,6 +5,7 @@
 
 # filename within bin
 FILE="$(which "$1")"
+FILE2="${FILE#"$HOME"/}"
 
 # cd to directory containing venv
 cd "$(dirname "$FILE")/.." || exit
@@ -21,7 +22,7 @@ cat <<EOF >"./bin/$(basename "$FILE").desktop"
 Name=$(basename "$FILE")
 Comment=XApp Python Application
 # Maybe it's just a PyPI module (so place inside the venv/bin)
-Exec=bash -c '. "$(dirname "$FILE")/activate" && "$(basename "$FILE")"'
+Exec=bash -c '. "\$HOME/$(dirname "$FILE2")/activate" && "$(basename "$FILE")"'
 Icon=utilities-terminal
 Terminal=true
 Type=Application
