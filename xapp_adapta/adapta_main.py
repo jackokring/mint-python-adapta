@@ -32,8 +32,9 @@ class MyWindow(MainWindow):  # pyright: ignore
     # override for different behaviour
     def layout(self):
         # multipaned content by selection widget
-        # set list name in navigation 1:1 matches [] and {}
+        # set list name [] and button nav {}
         self.pages = [self.content(_("Content"))]
+        self.buttons = {}
 
     # methods to define navigation pages
     def content(self, name: str) -> Adw.NavigationPage:
@@ -49,7 +50,7 @@ class MyWindow(MainWindow):  # pyright: ignore
         content_box.append(status_page)
         content_box.append(calendar)
         # set title and bar
-        return self.top(content_box, name)
+        return self.top(content_box, name, **{})
 
 
 class MyApp(Adw.Application):  # pyright: ignore

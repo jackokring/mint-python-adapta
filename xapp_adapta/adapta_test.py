@@ -55,15 +55,16 @@ class MainWindow(Adw.ApplicationWindow):  # pyright: ignore
         self.listbox = Gtk.ListBox()
 
         # set for overrides in complex examples
-        self.split_view.set_sidebar(self.side())  # pyright: ignore
+        self.split_view.set_sidebar(self.side(**self.buttons))  # pyright: ignore
         self.select_new()
         self.set_content(self.split_view)
 
     # override for different behaviour
     def layout(self):
         # multipaned content by selection widget
-        # set list name in navigation 1:1 matches [] and {}
+        # set list name [] and button nav {}
         self.pages = [self.content(_("Content"))]
+        self.buttons = {}
 
     def select_new(self):
         self.split_view.set_content(
@@ -114,7 +115,7 @@ class MainWindow(Adw.ApplicationWindow):  # pyright: ignore
         return page
 
     # the side navigation generator
-    def side(self) -> Adw.NavigationPage:
+    def side(self, **buttons) -> Adw.NavigationPage:
         # Create a sidebar
         sidebar_box = self.fancy()
         self.listbox.add_css_class("navigation-sidebar")
@@ -125,7 +126,7 @@ class MainWindow(Adw.ApplicationWindow):  # pyright: ignore
             self.page_map.update({row: self.pages[idx]})
             row.connect("activated", self.select_new)
         sidebar_box.append(self.listbox)
-        return self.top(sidebar_box, _("Navigation"))
+        return self.top(sidebar_box, _("Navigation"), **buttons)
 
     # methods to define navigation pages
     def content(self, name: str) -> Adw.NavigationPage:
