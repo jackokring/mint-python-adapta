@@ -51,8 +51,9 @@ class MyWindow(MainWindow):  # pyright: ignore
         # set list name [] and button nav {}
         self.pages = [self.content()]
         self.buttons = {
-            "left": [self.burger()],  # the burger menu
-            "right": [button("utilities-terminal", self.about)],  # about icon
+            # yes the lest about icon (long close ad) and more oft menu burger UI
+            "right": [self.burger()],  # the burger menu
+            "left": [button("utilities-terminal", self.about)],  # about icon
             # 1:1 pages match of subtitle injection
             "subs": [_("Sub Title")],
             # 1:1 pages match of icon names injection
