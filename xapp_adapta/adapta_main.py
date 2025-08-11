@@ -29,6 +29,7 @@ except ImportError or ValueError as ex:
 from .adapta_test import _, MainWindow, domain
 
 
+# doesn't need to be class method
 def button(icon: str, callback: Callable):
     button = Gtk.Button()
     button.set_icon_name(icon)
@@ -42,7 +43,18 @@ class MyWindow(MainWindow):  # pyright: ignore
         # multipaned content by selection widget
         # set list name [] and button nav {}
         self.pages = [self.content(_("Content"))]
-        self.buttons = {"right": [button("utilities-terminal", self.about)]}
+        self.buttons = {
+            "left": [self.burger()],  # the burger menu
+            "right": [button("utilities-terminal", self.about)],  # about icon
+        }
+
+    # text might have to be translated. adds menu to burger
+    def add_menu(self, index: str, callback: Callable, text: str):
+        action = Gio.SimpleAction.new(index, None)
+        action.connect("activate", callback)
+        self.add_action(action)
+        # Create a new menu, containing that action
+        self.menu.append(text, "win." + index)
 
     # methods to define navigation pages
     def content(self, name: str) -> Adw.NavigationPage:
@@ -83,6 +95,20 @@ class MyWindow(MainWindow):  # pyright: ignore
         about.set_version("0.0.0")
         about.set_logo_icon_name("utilities-terminal")
         about.set_visible(True)
+
+    # make the top left burger
+    def burger(self):
+        self.menu = Gio.Menu.new()  # export the menu
+
+        # Create a popover
+        popover = Gtk.PopoverMenu()  # Create a new popover menu
+        popover.set_menu_model(self.menu)
+
+        # Create a menu button
+        hamburger = Gtk.MenuButton()
+        hamburger.set_popover(popover)
+        hamburger.set_icon_name("open-menu-symbolic")
+        return hamburger
 
 
 class MyApp(Adw.Application):  # pyright: ignore
