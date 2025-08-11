@@ -27,7 +27,7 @@ except ImportError or ValueError as ex:
     gi.require_version("Adw", "1")
     from gi.repository import Adw
 
-from .adapta_test import _, MainWindow, domain
+from .adapta_test import _, MainWindow, domain, xapp_adapta
 
 
 # doesn't need to be class method
@@ -41,6 +41,12 @@ def button(icon: str, callback: Callable):
 class MyWindow(MainWindow):  # pyright: ignore
     # override for different behaviour
     def layout(self):
+        # this appears in some window managers
+        # cinnaman hover taskbar ...
+        self.set_title(__name__)
+        self.set_default_size(800, 600)
+        self.split_view.set_min_sidebar_width(200)
+        self.split_view.set_max_sidebar_width(300)
         # multipaned content by selection widget
         # set list name [] and button nav {}
         self.pages = [self.content()]
@@ -87,9 +93,15 @@ class MyWindow(MainWindow):  # pyright: ignore
         )
         about.set_copyright("(C) 2025 Simon P. Jackson")
         about.set_license_type(Gtk.License.LGPL_3_0_ONLY)
-        about.set_website("https://github.com/jackokring/mint-python-adapta")
-        about.set_website_label("xapp_adapta")
-        about.set_version(metadata.version("xapp_adapta"))
+        urls = metadata.metadata(xapp_adapta).get_all("Project-URL")
+        splitter = "Homepage, "
+        if urls is not None:
+            for u in urls:
+                if splitter in u:
+                    # about.set_website("https://github.com/jackokring/mint-python-adapta")
+                    about.set_website(u.split(splitter)[1])
+        about.set_website_label(xapp_adapta)
+        about.set_version(metadata.version(xapp_adapta))
         about.set_logo_icon_name("utilities-terminal")
         about.set_visible(True)
 
@@ -125,7 +137,3 @@ class MyApp(Adw.Application):  # pyright: ignore
 def main():
     app = MyApp(application_id=domain)
     sys.exit(app.run(sys.argv))
-
-
-if __name__ == "__main__":
-    main()

@@ -29,9 +29,11 @@ except ImportError or ValueError as ex:
     from gi.repository import Adw
 
 # locale handling
-domain = "com.github.jackokring.xapp_adapta"
 path = os.path.dirname(sys.argv[0])
 dir = os.path.abspath(path) + "/locale"
+# ah the package name
+xapp_adapta = __name__.split(".")[0]
+domain = "com.github.jackokring." + __name__
 gettext.bindtextdomain(domain, dir)
 gettext.textdomain(domain)
 _ = gettext.gettext
@@ -41,13 +43,8 @@ class MainWindow(Adw.ApplicationWindow):  # pyright: ignore
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.set_title(__name__)
-        self.set_default_size(800, 600)
-
         # Create a split view
         self.split_view = Adw.NavigationSplitView()
-        self.split_view.set_min_sidebar_width(200)
-        self.split_view.set_max_sidebar_width(300)
 
         # set layout variables
         self.names = []
@@ -62,6 +59,10 @@ class MainWindow(Adw.ApplicationWindow):  # pyright: ignore
 
     # override for different behaviour
     def layout(self):
+        self.set_title(__name__)
+        self.set_default_size(800, 600)
+        self.split_view.set_min_sidebar_width(200)
+        self.split_view.set_max_sidebar_width(300)
         # multipaned content by selection widget
         # set list name [] and button nav {}
         self.pages = [self.content()]
