@@ -4,6 +4,7 @@
 from typing import Callable
 import gi
 import sys
+import importlib.metadata as metadata
 
 gi.require_version("Gtk", "4.0")
 # so Gtk for graphics
@@ -42,22 +43,18 @@ class MyWindow(MainWindow):  # pyright: ignore
     def layout(self):
         # multipaned content by selection widget
         # set list name [] and button nav {}
-        self.pages = [self.content(_("Content"))]
+        self.pages = [self.content()]
         self.buttons = {
             "left": [self.burger()],  # the burger menu
             "right": [button("utilities-terminal", self.about)],  # about icon
+            # 1:1 pages match of subtitle injection
+            "subs": [_("Sub Title")],
+            # 1:1 pages match of icon names injection
+            "icons": ["utilities-terminal"],
         }
 
-    # text might have to be translated. adds menu to burger
-    def add_menu(self, index: str, callback: Callable, text: str):
-        action = Gio.SimpleAction.new(index, None)
-        action.connect("activate", callback)
-        self.add_action(action)
-        # Create a new menu, containing that action
-        self.menu.append(text, "win." + index)
-
     # methods to define navigation pages
-    def content(self, name: str) -> Adw.NavigationPage:
+    def content(self) -> Adw.NavigationPage:
         # Create the content page _() for i18n
         content_box = self.fancy()
         status_page = Adw.StatusPage()
@@ -70,7 +67,7 @@ class MyWindow(MainWindow):  # pyright: ignore
         content_box.append(status_page)
         content_box.append(calendar)
         # set title and bar
-        return self.top(content_box, name, **{})
+        return self.top(content_box, _("Content"), **{})
 
     def about(self, action):
         about = Gtk.AboutDialog()
@@ -92,23 +89,9 @@ class MyWindow(MainWindow):  # pyright: ignore
         about.set_license_type(Gtk.License.LGPL_3_0_ONLY)
         about.set_website("https://github.com/jackokring/mint-python-adapta")
         about.set_website_label("xapp_adapta")
-        about.set_version("0.0.0")
+        about.set_version(metadata.version("xapp_adapta"))
         about.set_logo_icon_name("utilities-terminal")
         about.set_visible(True)
-
-    # make the top left burger
-    def burger(self):
-        self.menu = Gio.Menu.new()  # export the menu
-
-        # Create a popover
-        popover = Gtk.PopoverMenu()  # Create a new popover menu
-        popover.set_menu_model(self.menu)
-
-        # Create a menu button
-        hamburger = Gtk.MenuButton()
-        hamburger.set_popover(popover)
-        hamburger.set_icon_name("open-menu-symbolic")
-        return hamburger
 
 
 class MyApp(Adw.Application):  # pyright: ignore

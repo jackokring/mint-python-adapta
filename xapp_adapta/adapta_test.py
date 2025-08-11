@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 # sudo apt install libgirepository-2.0-dev
+from typing import Callable
 import gi
 import os
 import sys
@@ -10,7 +11,7 @@ gi.require_version("Gtk", "4.0")
 # so Gtk for graphics
 # Gio for data files
 # GLib.Error (FileDialog?)
-from gi.repository import Gtk
+from gi.repository import Gtk, Gio
 
 # libAdapta uses its own module name (Adap.ApplicationWindow etc..).
 # We would normally import it like this:
@@ -63,7 +64,7 @@ class MainWindow(Adw.ApplicationWindow):  # pyright: ignore
     def layout(self):
         # multipaned content by selection widget
         # set list name [] and button nav {}
-        self.pages = [self.content(_("Content"))]
+        self.pages = [self.content()]
         self.buttons = {}
 
     def select_new(self):
@@ -102,7 +103,7 @@ class MainWindow(Adw.ApplicationWindow):  # pyright: ignore
                         footer_on = True
                         footer.pack_end(b)
                     case _:
-                        print("Unhandled Tool Button:\n", b)
+                        pass
         # can't alter buttons later
         # buttons can have callbacks connected at creation
         toolbar.add_top_bar(header)
@@ -121,15 +122,41 @@ class MainWindow(Adw.ApplicationWindow):  # pyright: ignore
         self.listbox.add_css_class("navigation-sidebar")
         self.listbox.set_selection_mode(Gtk.SelectionMode.SINGLE)
         for idx, named in enumerate(self.names):
-            row = Adw.ActionRow(title=named)
+            params = {}
+            subs = buttons.get("subs", None)
+            if subs:
+                params["subtitle"] = str(subs[idx])
+            icons = buttons.get("icons", None)
+            if icons:
+                params["icon_name"] = str(icons[idx])
+            row = Adw.ActionRow(title=named, **params)
             self.listbox.append(row)
             self.page_map.update({row: self.pages[idx]})
             row.connect("activated", self.select_new)
         sidebar_box.append(self.listbox)
         return self.top(sidebar_box, _("Navigation"), **buttons)
 
+    def burger(self):
+        menu = Gio.Menu.new()
+        # Create a popover
+        popover = Gtk.PopoverMenu()  # Create a new popover menu
+        popover.set_menu_model(menu)
+        # Create a menu button
+        hamburger = Gtk.MenuButton()
+        hamburger.set_popover(popover)
+        hamburger.set_icon_name("open-menu-symbolic")
+        return hamburger
+
+    # text might have to be translated. adds menu to burger
+    def add_menu(self, index: str, callback: Callable, text: str):
+        action = Gio.SimpleAction.new(index, None)
+        action.connect("activate", callback)
+        self.add_action(action)
+        # Create a new menu, containing that action
+        self.menu.append(text, "win." + index)
+
     # methods to define navigation pages
-    def content(self, name: str) -> Adw.NavigationPage:
+    def content(self) -> Adw.NavigationPage:
         # Create the content page _() for i18n
         content_box = self.fancy()
         status_page = Adw.StatusPage()
@@ -142,7 +169,7 @@ class MainWindow(Adw.ApplicationWindow):  # pyright: ignore
         content_box.append(status_page)
         content_box.append(calendar)
         # set title and bar
-        return self.top(content_box, name)
+        return self.top(content_box, _("Content"))
 
 
 class MyApp(Adw.Application):  # pyright: ignore
