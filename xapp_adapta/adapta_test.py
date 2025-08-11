@@ -10,7 +10,7 @@ gi.require_version("Gtk", "4.0")
 # so Gtk for graphics
 # Gio for data files
 # GLib.Error (FileDialog?)
-from gi.repository import Gtk, Gio, GLib
+from gi.repository import Gtk
 
 # libAdapta uses its own module name (Adap.ApplicationWindow etc..).
 # We would normally import it like this:

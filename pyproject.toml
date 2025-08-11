@@ -36,7 +36,7 @@ only-packages = true
 
 [project.scripts]
 xapp_adapta_test = "xapp_adapta:test"
-cdv = "xapp_adapta:cdv"
+xapp_adapta_main = "xapp_adapta:main"
 
 [tool.pyright]
 reportMissingModuleSource = false
