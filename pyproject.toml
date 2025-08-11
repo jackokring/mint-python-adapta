@@ -27,7 +27,7 @@ dependencies = [
 [tool.hatch.build]
 include = []
 exclude = []
-artifacts = ["*.desktop"]
+artifacts = ["*.desktop", "*.svg"]
 only-packages = true
 
 [project.urls]
@@ -37,6 +37,7 @@ only-packages = true
 [project.scripts]
 xapp_adapta_test = "xapp_adapta:test"
 xapp_adapta_main = "xapp_adapta:main"
+make_local = "xapp_adapta:make_local"
 
 [tool.pyright]
 reportMissingModuleSource = false
