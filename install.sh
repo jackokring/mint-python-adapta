@@ -18,6 +18,9 @@ sudo dpkg -i ./*.deb
 # apt installs might be necessary
 sudo apt install -y libadwaita-* libadwaita-*-dev gir1.2-adw-* python3-gi
 
+# international
+sudo apt install gettext*
+
 # install pips
 ./bin/pip install -r requirements.txt
 
