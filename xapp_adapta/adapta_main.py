@@ -89,15 +89,33 @@ class MyApp(Adw.Application):  # pyright: ignore
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.connect("activate", self.on_activate)
+        self.connect("open", self.on_open)
+        self.connect("command-line", self.on_command_line)
+        self.set_flags(Gio.ApplicationFlags.HANDLES_OPEN)
+        self.set_flags(Gio.ApplicationFlags.HANDLES_COMMAND_LINE)
+        self.win = None
 
     def on_activate(self, app):
-        self.win = MyWindow(application=app)
+        if not self.win:
+            self.win = MyWindow(application=app)
         self.win.present()
+
+    # detects if present, but doesn't print anything?
+    def on_open(self, app, files, n_files, hint):
+        self.on_activate(app)
+        for file in n_files:
+            print("File to open: " + file.get_path() + "\n")
+
+    def on_command_line(self, app, argv):
+        self.on_activate(app)
+        for file in argv.get_arguments()[1:]:
+            print("File to open: " + file + "\n")
+        return 0  # exit code
 
 
 def main():
     app = MyApp(application_id=domain)
-    app.run(sys.argv)
+    sys.exit(app.run(sys.argv))
 
 
 if __name__ == "__main__":
