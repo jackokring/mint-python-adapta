@@ -92,6 +92,7 @@ class MyWindow(MainWindow):  # pyright: ignore
                 "All Di Nice",  # ha, ha!
             ]
         )
+        # metadata more in here to auto ...
         about.set_copyright("(C) 2025 Simon P. Jackson")
         about.set_license_type(Gtk.License.LGPL_3_0_ONLY)
         urls = metadata.metadata(xapp_adapta).get_all("Project-URL")

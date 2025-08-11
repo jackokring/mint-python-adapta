@@ -7,8 +7,9 @@ import shutil, os
 # make_local icons and desktop files
 def make_local():
     file = os.path.dirname(__file__)
-    copy_files_of_type(file, "~/.local/share/applications", ".desktop")
-    copy_files_of_type(file, "~/.local/share/icons", ".svg")
+    home = os.path.expanduser("~")
+    copy_files_of_type(file, home + "/.local/share/applications", ".desktop")
+    copy_files_of_type(file, home + "/.local/share/icons", ".svg")
 
 
 def copy_files_of_type(src_dir, dst_dir, extension):
