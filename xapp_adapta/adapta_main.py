@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 # sudo apt install libgirepository-2.0-dev
+from typing import Callable
 import gi
 import sys
 
@@ -28,13 +29,20 @@ except ImportError or ValueError as ex:
 from .adapta_test import _, MainWindow, domain
 
 
+def button(icon: str, callback: Callable):
+    button = Gtk.Button()
+    button.set_icon_name(icon)
+    button.connect("clicked", callback)
+    return button
+
+
 class MyWindow(MainWindow):  # pyright: ignore
     # override for different behaviour
     def layout(self):
         # multipaned content by selection widget
         # set list name [] and button nav {}
         self.pages = [self.content(_("Content"))]
-        self.buttons = {}
+        self.buttons = {"right": [button("utilities-terminal", self.about)]}
 
     # methods to define navigation pages
     def content(self, name: str) -> Adw.NavigationPage:
@@ -51,6 +59,30 @@ class MyWindow(MainWindow):  # pyright: ignore
         content_box.append(calendar)
         # set title and bar
         return self.top(content_box, name, **{})
+
+    def about(self, action):
+        about = Gtk.AboutDialog()
+        about.set_transient_for(
+            self
+        )  # Makes the dialog always appear in from of the parent window
+        about.set_modal(
+            True
+        )  # Makes the parent window unresponsive while dialog is showing
+        about.set_authors(
+            [
+                "Simon Jackson",  # project authors
+                "Linux Mint Team",
+                "GNOME Adwaita Team",  # teams
+                "All Di Nice",  # ha, ha!
+            ]
+        )
+        about.set_copyright("(C) 2025 Simon P. Jackson")
+        about.set_license_type(Gtk.License.LGPL_3_0_ONLY)
+        about.set_website("https://github.com/jackokring/mint-python-adapta")
+        about.set_website_label("xapp_adapta")
+        about.set_version("0.0.0")
+        about.set_logo_icon_name("utilities-terminal")
+        about.set_visible(True)
 
 
 class MyApp(Adw.Application):  # pyright: ignore
