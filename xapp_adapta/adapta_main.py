@@ -7,10 +7,13 @@ import sys
 import importlib.metadata as metadata
 
 gi.require_version("Gtk", "4.0")
+gi.require_version("XApp", "1.0")
 # so Gtk for graphics
 # Gio for data files
 # GLib.Error (FileDialog?)
 from gi.repository import Gtk, Gio, GLib
+
+# form gi.repository import XApp
 
 # libAdapta uses its own module name (Adap.ApplicationWindow etc..).
 # We would normally import it like this:
@@ -43,7 +46,7 @@ class MyWindow(MainWindow):  # pyright: ignore
     def layout(self):
         # this appears in some window managers
         # cinnaman hover taskbar ...
-        self.set_title(__name__)
+        self.set_title(sys.argv[0])
         self.set_default_size(800, 600)
         self.split_view.set_min_sidebar_width(200)
         self.split_view.set_max_sidebar_width(300)
@@ -59,6 +62,14 @@ class MyWindow(MainWindow):  # pyright: ignore
             # 1:1 pages match of icon names injection
             "icons": ["utilities-terminal"],
         }
+        # N.B. Gtk4 error as would need Gtk3
+        # self.tray = XApp.StatusIcon()
+        # self.tray.set_icon_name("utilities-terminal")
+        # self.tray.set_tooltip_text(sys.argv[0])
+        # self.tray.connect("left-click", self.on_tray_left)
+
+    def on_tray_left(self, icon, x, y, time, button):
+        pass
 
     # methods to define navigation pages
     def content(self) -> Adw.NavigationPage:
