@@ -29,11 +29,11 @@ except ImportError or ValueError as ex:
     from gi.repository import Adw
 
 # locale handling
-path = os.path.dirname(sys.argv[0])
+path = os.path.dirname(__file__)
 dir = os.path.abspath(path) + "/locale"
 # ah the package name
 xapp_adapta = __name__.split(".")[0]
-domain = "com.github.jackokring." + __name__
+domain = "com.github.jackokring." + xapp_adapta
 gettext.bindtextdomain(domain, dir)
 gettext.textdomain(domain)
 _ = gettext.gettext
