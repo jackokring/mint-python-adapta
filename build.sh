@@ -15,18 +15,11 @@ cp ./bin/*.desktop ./xapp_adapta/
 # xgettext
 xgettext ./xapp_adapta/*.py -p ./locale
 for n in ./locale/*.po; do
-	msgfmt "$n"
+	file="$(basename "$n")"
+	dir="./xapp_adapta/locale/LC_MESSAGES/${file%.*}"
+	mkdir -p "$dir"
+	msgfmt "$n" -o "$dir/com.github.jackokring.xapp_adapta.mo"
 done
-echo "Compiling .mo"
-cnt="$(ls -1q ./locale/*.mo | wc -l)"
-if [ "$cnt" -ge 0 ]; then
-	for n in ./locale/*.mo; do
-		file="$(basename "$n")"
-		dir="./xapp_adapta/locale/LC_MESSAGES/${file%.*}"
-		mkdir -p "$dir"
-		cp "$n" "$dir/com.github.jackokring.xapp_adapta.mo"
-	done
-fi
 
 # make source .tgz and .whl
 hatch build

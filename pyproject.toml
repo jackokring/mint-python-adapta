@@ -27,7 +27,7 @@ dependencies = [
 [tool.hatch.build]
 include = []
 exclude = []
-artifacts = ["*.desktop", "*.svg"]
+artifacts = ["*.desktop", "*.svg", "locale"]
 only-packages = true
 
 [project.urls]
