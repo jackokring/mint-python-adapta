@@ -84,16 +84,11 @@ class MyWindow(MainWindow):  # pyright: ignore
         about.set_modal(
             True
         )  # Makes the parent window unresponsive while dialog is showing
-        about.set_authors(
-            [
-                "Simon Jackson",  # project authors
-                "Linux Mint Team",
-                "GNOME Adwaita Team",  # teams
-                "All Di Nice",  # ha, ha!
-            ]
-        )
         # metadata more in here to auto ...
-        about.set_copyright("(C) 2025 Simon P. Jackson")
+        authors = metadata.metadata(xapp_adapta).get_all("Author-email")
+        if authors is not None:
+            about.set_copyright("(C) 2025 " + authors[0])
+            about.set_authors(authors)
         about.set_license_type(Gtk.License.LGPL_3_0_ONLY)
         urls = metadata.metadata(xapp_adapta).get_all("Project-URL")
         splitter = "Homepage, "

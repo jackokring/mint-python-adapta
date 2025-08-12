@@ -5,7 +5,12 @@ build-backend = "hatchling.build"
 [project]
 name = "xapp_adapta"
 version = "0.0.7"
-authors = [{ name = "Simon Jackson", email = "jackokring@gmail.com" }]
+authors = [
+  { name = "Simon Jackson", email = "jackokring@gmail.com" },
+  { name = "Linux Mint Team" },
+  { name = "GNOME Adwaita Team" },
+  { name = "All Di Nice" },
+]
 description = "Python libAdapta"
 readme = "xapp_adapta/README.md"
 requires-python = ">=3.12"
