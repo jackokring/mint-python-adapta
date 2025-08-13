@@ -2,6 +2,10 @@
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
+[sed]
+#sed -nr "s/^domain = \"(.*)\"$/\1/p" < pyproject.toml
+domain = "hello"
+
 [project]
 name = "xapp_adapta"
 version = "0.0.7"
