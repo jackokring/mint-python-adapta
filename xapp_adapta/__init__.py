@@ -4,11 +4,14 @@ from .adapta_main import main
 import shutil, os
 
 
+def copy_with(dir):
+    path = os.path.dirname(__file__) + "/"
+    home_local = os.path.expanduser("~/.local/share/")
+    shutil.copytree(path + dir, home_local + dir, dirs_exist_ok=True)
+
+
 # make_local icons and desktop files
 def make_local():
-    # where are we?
-    path = os.path.dirname(__file__)
-    home_local = os.path.expanduser("~/.local/share")
-    shutil.copytree(path + "/applications", home_local, dirs_exist_ok=True)
-    shutil.copytree(path + "/icons", home_local, dirs_exist_ok=True)
-    shutil.copytree(path + "/locale", home_local, dirs_exist_ok=True)
+    copy_with("applications")
+    copy_with("icons")
+    copy_with("locale")

@@ -19,11 +19,12 @@ mkdir -p "./$NAME/applications"
 cp ./*.desktop "./$NAME/applications/"
 mkdir -p "./$NAME/icons/hicolor/scalable/apps"
 for icon in ./*.svg; do
-	cp "$icon" "./$NAME/icons/hicolor/scalable/apps/$DOM.$icon"
+	cp "$icon" "./$NAME/icons/hicolor/scalable/apps/"
 done
 
 # xgettext
-xgettext "./$NAME/*.py" -p ./locale
+mkdir -p "./$NAME/locale"
+xgettext -d "./$NAME" -p ./locale -- *.py
 for n in ./locale/*.po; do
 	file="$(basename "$n")"
 	dir="./$NAME/locale/LC_MESSAGES/${file%.*}"
