@@ -9,9 +9,9 @@ Please check `pyproject.toml` and also rename the module directory from
 
 Included commands (add more):
 
-- `xapp_adapta_test` the basic original python demo of `libadapta`. Added a try catch
+- `adapta_test` the basic original python demo of `libadapta`. Added a try catch
   to make `àdwaita` be used instead if `àdapta` is not present. Plus more.
-- `xapp_adapta_main` extends the test `MainWindow` class for effect.
+- `adapta_main` extends the test `MainWindow` class for effect.
 - `make_local` to install `.desktop` and `.svg` files.
   The `~/.local/share/applications/*.desktop` files might need `Èxec` edits.
 - ...

@@ -19,8 +19,8 @@ There are some scripts.
   dependencies become included in the project.
 - `pydo.sh` to make a virtual environment launch icon. Just in case you don't
   have `pipx` or admin rights, and maybe need a `.desktop` file. Try
-  `./pydo.sh xapp_adapta_test` for example, and see
-  `cat ./bin/xapp_adapta_test.desktop`. Yes,
+  `./pydo.sh adapta_test` for example, and see
+  `cat ./bin/adapta_test.desktop`. Yes,
   you might want to edit it a little. It's placed in the virtual environment
   `bin` directory next to the command. Something to do with GUI launch and  
   setting the virtual environment not being automatic.

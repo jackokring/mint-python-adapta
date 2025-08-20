@@ -29,7 +29,7 @@ Name=$(basename "$FILE")
 Comment=XApp Python Application
 # Maybe it's just a PyPI module (so place inside the venv/bin)
 Exec=bash -c '. "\$HOME/$(dirname "$FILE2")/activate" && "$(basename "$FILE")"'
-Icon=$DOM.$(basename "$FILE").svg
+Icon=$DOM.$(basename "$FILE")
 Terminal=true
 Type=Application
 Categories=Utility;

@@ -30,7 +30,7 @@ except ImportError or ValueError as ex:
 
 # locale handling
 path = os.path.dirname(__file__)
-domain = open(path + "/domain.txt").read()
+domain = open(path + "/domain.txt").read().strip()
 # ah the package name
 xapp_adapta = __name__.split(".")[0]
 gettext.bindtextdomain(domain + xapp_adapta)

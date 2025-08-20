@@ -34,6 +34,7 @@ except ImportError or ValueError as ex:
 from .adapta_test import _, MainWindow, xapp_adapta, domain
 
 icon = domain + "." + ".".join(os.path.basename(__file__).split(".")[:-1])
+# print(icon) -- ok neede white space remove
 
 
 # doesn't need to be class method
