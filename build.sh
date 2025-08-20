@@ -9,16 +9,26 @@
 # clear old files
 rm ./dist/*
 
+# env vars
+DOM=$(sed -nr "s/^domain = \"(.*)\"$/\1/p" <pyproject.toml)
+NAME=$(sed -nr "s/^name = \"(.*)\"$/\1/p" <pyproject.toml)
+echo "$DOM" >"./$NAME/domain.txt"
+
 # desktop
-cp ./bin/*.desktop ./xapp_adapta/
+mkdir -p "./$NAME/applications"
+cp ./*.desktop "./$NAME/applications/"
+mkdir -p "./$NAME/icons/hicolor/scalable/apps"
+for icon in ./*.svg; do
+	cp "$icon" "./$NAME/icons/hicolor/scalable/apps/$DOM.$icon"
+done
 
 # xgettext
-xgettext ./xapp_adapta/*.py -p ./locale
+xgettext "./$NAME/*.py" -p ./locale
 for n in ./locale/*.po; do
 	file="$(basename "$n")"
-	dir="./xapp_adapta/locale/LC_MESSAGES/${file%.*}"
+	dir="./$NAME/locale/LC_MESSAGES/${file%.*}"
 	mkdir -p "$dir"
-	msgfmt "$n" -o "$dir/com.github.jackokring.xapp_adapta.mo"
+	msgfmt "$n" -o "$dir/$DOM.$NAME.mo"
 done
 
 # make source .tgz and .whl

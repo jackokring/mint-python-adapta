@@ -2,9 +2,10 @@
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
-[sed]
+[tool.metadata]
 #sed -nr "s/^domain = \"(.*)\"$/\1/p" < pyproject.toml
-domain = "hello"
+# copies to $NAME/domain.txt for .py usage
+domain = "com.github.jackokring"
 
 [project]
 name = "xapp_adapta"
@@ -36,7 +37,7 @@ dependencies = [
 [tool.hatch.build]
 include = []
 exclude = []
-artifacts = ["*.desktop", "*.svg", "locale"]
+artifacts = ["applications", "icons", "locale"]
 only-packages = true
 
 [project.urls]
@@ -44,8 +45,9 @@ only-packages = true
 "Bug Tracker" = "https://github.com/jackokring/mint-python-adapta/issues"
 
 [project.scripts]
-xapp_adapta_test = "xapp_adapta:test"
-xapp_adapta_main = "xapp_adapta:main"
+# maybe icon named after __file__ of entry point and not the entry point
+adapta_test = "xapp_adapta:test"
+adapta_main = "xapp_adapta:main"
 make_local = "xapp_adapta:make_local"
 
 [tool.pyright]

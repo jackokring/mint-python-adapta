@@ -30,13 +30,13 @@ except ImportError or ValueError as ex:
 
 # locale handling
 path = os.path.dirname(__file__)
-dir = os.path.abspath(path) + "/locale"
+domain = open(path + "/domain.txt").read()
 # ah the package name
 xapp_adapta = __name__.split(".")[0]
-domain = "com.github.jackokring." + xapp_adapta
-gettext.bindtextdomain(domain, dir)
-gettext.textdomain(domain)
+gettext.bindtextdomain(domain + xapp_adapta)
+gettext.textdomain(domain + xapp_adapta)
 _ = gettext.gettext
+icon = domain + "." + ".".join(os.path.basename(__file__).split(".")[:-1])
 
 
 class MainWindow(Adw.ApplicationWindow):  # pyright: ignore
@@ -184,7 +184,7 @@ class MyApp(Adw.Application):  # pyright: ignore
 
 
 def main():
-    app = MyApp(application_id=domain)
+    app = MyApp(application_id=icon)
     app.run(sys.argv)
 
 

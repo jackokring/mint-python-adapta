@@ -4,6 +4,7 @@
 from typing import Callable
 import gi
 import sys
+import os
 import importlib.metadata as metadata
 
 gi.require_version("Gtk", "4.0")
@@ -30,7 +31,9 @@ except ImportError or ValueError as ex:
     gi.require_version("Adw", "1")
     from gi.repository import Adw
 
-from .adapta_test import _, MainWindow, domain, xapp_adapta
+from .adapta_test import _, MainWindow, xapp_adapta, domain
+
+icon = domain + "." + ".".join(os.path.basename(__file__).split(".")[:-1])
 
 
 # doesn't need to be class method
@@ -56,7 +59,7 @@ class MyWindow(MainWindow):  # pyright: ignore
         self.buttons = {
             # yes the lest about icon (long close ad) and more oft menu burger UI
             "right": [self.burger()],  # the burger menu
-            "left": [button("utilities-terminal", self.about)],  # about icon
+            "left": [button(icon, self.about)],  # about icon
             # 1:1 pages match of subtitle injection
             "subs": [_("Sub Title")],
             # 1:1 pages match of icon names injection
@@ -110,7 +113,7 @@ class MyWindow(MainWindow):  # pyright: ignore
                     about.set_website(u.split(splitter)[1])
         about.set_website_label(xapp_adapta)
         about.set_version(metadata.version(xapp_adapta))
-        about.set_logo_icon_name("utilities-terminal")
+        about.set_logo_icon_name(icon)
         about.set_visible(True)
 
 
@@ -143,5 +146,5 @@ class MyApp(Adw.Application):  # pyright: ignore
 
 
 def main():
-    app = MyApp(application_id=domain)
+    app = MyApp(application_id=icon)
     sys.exit(app.run(sys.argv))
