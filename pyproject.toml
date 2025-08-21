@@ -54,3 +54,7 @@ make_local = "xapp_adapta:make_local"
 reportMissingModuleSource = false
 reportIncompatibleVariableOverride = false
 reportIncompatibleMethodOverride = false
+
+[tool.ruff]
+# Never enforce `E402` (top of file after gi introspection req).
+ignore = ["E402"]

@@ -6,6 +6,8 @@ import gi
 import sys
 import os
 import importlib.metadata as metadata
+from .adapta_test import _, MainWindow, xapp_adapta, domain
+
 
 gi.require_version("Gtk", "4.0")
 gi.require_version("XApp", "1.0")
@@ -30,8 +32,6 @@ except ImportError or ValueError as ex:
     print("Using Adwaita as Adapta not found:\n", ex)
     gi.require_version("Adw", "1")
     from gi.repository import Adw
-
-from .adapta_test import _, MainWindow, xapp_adapta, domain
 
 icon = domain + "." + ".".join(os.path.basename(__file__).split(".")[:-1])
 # print(icon) -- ok neede white space remove
