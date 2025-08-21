@@ -33,8 +33,12 @@ except ImportError or ValueError as ex:
     gi.require_version("Adw", "1")
     from gi.repository import Adw
 
-icon = domain + "." + ".".join(os.path.basename(__file__).split(".")[:-1])
-# print(icon) -- ok neede white space remove
+
+def make_icon(named: str):
+    return domain + "." + named
+
+
+app_icon = make_icon(".".join(os.path.basename(__file__).split(".")[:-1]))
 
 
 # doesn't need to be class method
@@ -60,7 +64,7 @@ class MyWindow(MainWindow):  # pyright: ignore
         self.buttons = {
             # yes the lest about icon (long close ad) and more oft menu burger UI
             "right": [self.burger()],  # the burger menu
-            "left": [button(icon, self.about)],  # about icon
+            "left": [button(app_icon, self.about)],  # about icon
             # 1:1 pages match of subtitle injection
             "subs": [_("Sub Title")],
             # 1:1 pages match of icon names injection
@@ -114,7 +118,7 @@ class MyWindow(MainWindow):  # pyright: ignore
                     about.set_website(u.split(splitter)[1])
         about.set_website_label(xapp_adapta)
         about.set_version(metadata.version(xapp_adapta))
-        about.set_logo_icon_name(icon)
+        about.set_logo_icon_name(app_icon)
         about.set_visible(True)
 
 
@@ -147,5 +151,5 @@ class MyApp(Adw.Application):  # pyright: ignore
 
 
 def main():
-    app = MyApp(application_id=icon)
+    app = MyApp(application_id=app_icon)
     sys.exit(app.run(sys.argv))
