@@ -25,10 +25,12 @@ done
 # xgettext
 mkdir -p "./$NAME/locale"
 xgettext -d "./$NAME" -p ./locale -- *.py
+# makes the messages.po file to adapt into <LANG>.po files
 for n in ./locale/*.po; do
 	file="$(basename "$n")"
 	dir="./$NAME/locale/LC_MESSAGES/${file%.*}"
 	mkdir -p "$dir"
+	# makes the language indexes
 	msgfmt "$n" -o "$dir/$DOM.$NAME.mo"
 done
 
@@ -36,7 +38,10 @@ done
 hatch build
 
 # then install the wheel to check
+# has a tight redownload for checks on dependencies
 pip install --force-reinstall ./dist/*.whl
 
 # then maybe twine, but remeber API keys for PyPI
 # apparently hatch publish can also do this
+
+# hatch publish after first config using __token__

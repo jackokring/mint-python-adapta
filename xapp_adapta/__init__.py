@@ -1,10 +1,14 @@
 # module initialization
-from .adapta_test import main as test
-from .adapta_main import main
-import shutil, os
+# These are the command imports
+# N.B. Ignore the errors and warnings, as the pyproject.toml does use these
+from .adapta_test import main as test  # pyright: ignore
+from .adapta_main import main  # pyright: ignore
+import shutil
+import os
 
 
 def copy_with(dir):
+    # ah, OS kind is for later as Windows/MacOS ...
     path = os.path.dirname(__file__) + "/"
     home_local = os.path.expanduser("~/.local/share/")
     shutil.copytree(path + dir, home_local + dir, dirs_exist_ok=True)

@@ -2,9 +2,10 @@
 
 # version
 VER=$(python3 -c 'import sys; print(".".join(map(str, sys.version_info[0:2])))')
+NAME=$(sed -nr "s/^name = \"(.*)\"$/\1/p" <pyproject.toml)
 
 # ivalidate older
-rm -rf bin include lib
+rm -rf bin include lib "$NAME/applications" "$NAME/icons" "$NAME/locale"
 
 # virtual environment
 python3 -m venv .

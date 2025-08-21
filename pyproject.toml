@@ -9,7 +9,7 @@ domain = "com.github.jackokring"
 
 [project]
 name = "xapp_adapta"
-version = "0.0.7"
+version = "0.0.8"
 authors = [
   { name = "Simon Jackson", email = "jackokring@gmail.com" },
   { name = "Linux Mint Team" },
@@ -48,7 +48,8 @@ only-packages = true
 # maybe icon named after __file__ of entry point and not the entry point
 adapta_test = "xapp_adapta:test"
 adapta_main = "xapp_adapta:main"
-make_local = "xapp_adapta:make_local"
+# multiple pathed on the venv?
+adapta_make_local = "xapp_adapta:make_local"
 
 [tool.pyright]
 reportMissingModuleSource = false
