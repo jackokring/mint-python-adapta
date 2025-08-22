@@ -1,9 +1,7 @@
 #!/usr/bin/bash
 
 # in dir
-if [ "$(realpath "$(dirname "$0")")" != "$(pwd)" ]; then
-	exit 1
-fi
+cd "$(realpath "$(dirname "$0")")"
 
 # MAYBE USEFUL FOR .desktop FILES
 # SUPPLY command name to run as "command"
@@ -42,3 +40,4 @@ Categories=Utility;
 EOF
 
 chmod +x "./$(basename "$FILE").desktop"
+echo "Make .svg and .desktop ..."

@@ -1,12 +1,11 @@
 #!/usr/bin/bash
 
 # in dir
-if [ "$(realpath "$(dirname "$0")")" != "$(pwd)" ]; then
-	exit 1
-fi
+cd "$(realpath "$(dirname "$0")")" || exit 1
 
 # ah, try removing the package first if not ok
 #pip uninstall ./*.whl
 
 # output the currently installed venv
 pip freeze >./requirements.txt
+echo "Make requirements.txt ..."

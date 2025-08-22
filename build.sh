@@ -1,15 +1,16 @@
 #!/usr/bin/bash
 
 # in dir
-if [ "$(realpath "$(dirname "$0")")" != "$(pwd)" ]; then
-	exit 1
-fi
+cd "$(realpath "$(dirname "$0")")" || exit 1
 
 # make sure you install.sh first (at least once)
 # you don't need to freeze.sh unless you wish to git push new dependencies
 
 # enter virtual environment
-. ./bin/activate || echo "Error! No VENV."
+. ./bin/activate || (
+	echo "Error! No VENV."
+	exit 1
+)
 
 # clear old files
 rm ./dist/*
@@ -22,14 +23,17 @@ echo "$DOM" >"./$NAME/domain.txt"
 # desktop
 mkdir -p "./$NAME/applications"
 cp ./*.desktop "./$NAME/applications/"
+echo "Desktops ..."
 mkdir -p "./$NAME/icons/hicolor/scalable/apps"
 for icon in ./*.svg; do
 	cp "$icon" "./$NAME/icons/hicolor/scalable/apps/"
 done
+echo "Icons ..."
 
 # xgettext
 mkdir -p "./$NAME/locale"
 xgettext -d "./$NAME" -p ./locale -- *.py
+echo "New messages.po ... (edit and name <lang>.po)"
 # makes the messages.po file to adapt into <LANG>.po files
 for n in ./locale/*.po; do
 	file="$(basename "$n")"
@@ -37,6 +41,7 @@ for n in ./locale/*.po; do
 	mkdir -p "$dir"
 	# makes the language indexes
 	msgfmt "$n" -o "$dir/$DOM.$NAME.mo"
+	echo "Language: $n"
 done
 
 # make source .tgz and .whl
