@@ -33,18 +33,18 @@ echo "Icons ..."
 # xgettext
 mkdir -p "./$NAME/locale"
 pushd "$NAME" || exit 1
-xgettext -p ../locale -- *.py
+sed -r "s/LOCALE/$DOM\.$NAME/" "cpp/so.in.hpp" >"cpp/so.hpp"
+xgettext -p ../locale --keyword="_" -o messages.pot -- *.py cpp/so.hpp cpp/so.cpp
 popd || exit 1
 # set a reasonable 2025 charset
-sed -ir "s/CHARSET/UTF-8/" locale/messages.po
-echo "New messages.po ... (edit and name <lang>.po)"
+echo "New messages.pot ... (edit and name <lang>.po [msginit])"
 # makes the messages.po file to adapt into <LANG>.po files
 for n in ./locale/*.po; do
 	file="$(basename "$n")"
 	dir="./$NAME/locale/${file%.*}/LC_MESSAGES"
 	mkdir -p "$dir"
 	# makes the language indexes
-	msgfmt "$n" -o "$dir/$DOM.$NAME.mo"
+	msgfmt "$n" -o "$dir/$DOM.$NAME.mo" || rmdir "$dir"
 	echo "Language: $n"
 done
 

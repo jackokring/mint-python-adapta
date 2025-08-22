@@ -14,7 +14,7 @@ static PyModuleDef so_module = {PyModuleDef_HEAD_INIT, "so", "C++ .so", -1,
 
 PyMODINIT_FUNC PyInit_so(void) {
   Py_Initialize();
-  bindtextdomain("com.github.jackokring.xapp_adapta", NULL);
-  textdomain("com.github.jackokring.xapp_adapta");
+  bindtextdomain("LOCALE", NULL);
+  textdomain("LOCALE");
   return PyModule_Create(&so_module);
 }

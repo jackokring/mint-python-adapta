@@ -29,4 +29,7 @@ There are some scripts.
 Change the paths from `xapp_adapta` as the name must be unique on `PyPI` if
 you intend to upload a derivative work there. This is important.
 
+The `C++` module `.so` must be edited in `cpp` with `so.in.hpp` being edited
+to auto generate `so.hpp` so ...
+
 Thanks
