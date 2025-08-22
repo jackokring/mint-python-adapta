@@ -25,8 +25,9 @@ classifiers = [
   "Operating System :: OS Independent",
 ]
 dependencies = [
-  "hatch>=1.14.1",
-  "hatchling>=1.27.0",
+  # Runtime deps only 
+  #"hatch>=1.14.1",
+  #"hatchling>=1.27.0",
   "pygobject>=3.52.3",
   "pycairo>=1.28.0",
   "pygobject-stubs>=2.13.0",
