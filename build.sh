@@ -35,6 +35,8 @@ mkdir -p "./$NAME/locale"
 pushd "$NAME" || exit 1
 xgettext -p ../locale -- *.py
 popd || exit 1
+# set a reasonable 2025 charset
+sed -ir "s/CHARSET/UTF-8/" locale/messages.po
 echo "New messages.po ... (edit and name <lang>.po)"
 # makes the messages.po file to adapt into <LANG>.po files
 for n in ./locale/*.po; do
