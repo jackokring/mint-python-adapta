@@ -1,4 +1,10 @@
 #!/usr/bin/bash
+
+# in dir
+if [ "$(realpath "$(dirname "$0")")" != "$(pwd)" ]; then
+	exit 1
+fi
+
 # MAYBE USEFUL FOR .desktop FILES
 # SUPPLY command name to run as "command"
 # YOU DON'T need the "/bin/"

@@ -1,5 +1,10 @@
 #!/usr/bin/bash
 
+# in dir
+if [ "$(realpath "$(dirname "$0")")" != "$(pwd)" ]; then
+	exit 1
+fi
+
 # make sure you install.sh first (at least once)
 # you don't need to freeze.sh unless you wish to git push new dependencies
 

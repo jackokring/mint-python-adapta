@@ -1,5 +1,10 @@
 #!/usr/bin/bash
 
+# in dir
+if [ "$(realpath "$(dirname "$0")")" != "$(pwd)" ]; then
+	exit 1
+fi
+
 # version
 VER=$(python3 -c 'import sys; print(".".join(map(str, sys.version_info[0:2])))')
 NAME=$(sed -nr "s/^name = \"(.*)\"$/\1/p" <pyproject.toml)
@@ -13,7 +18,7 @@ python3 -m venv .
 # set virtual environment
 . ./bin/activate
 
-# add libadapta-1
+# add libadapta-1 and gum TUI tool for nicer scripts
 sudo dpkg -i ./*.deb
 
 # apt installs might be necessary

@@ -38,6 +38,7 @@ def make_icon(named: str):
     return domain + "." + named
 
 
+# the app icon id the .py removed filename on the end of the domain
 app_icon = make_icon(".".join(os.path.basename(__file__).split(".")[:-1]))
 
 
@@ -122,6 +123,11 @@ class MyWindow(MainWindow):  # pyright: ignore
         about.set_visible(True)
 
 
+def open_file(name: str):
+    # common file import code from CLI and GUI
+    print("File to open: " + name + "\n")
+
+
 class MyApp(Adw.Application):  # pyright: ignore
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -141,12 +147,12 @@ class MyApp(Adw.Application):  # pyright: ignore
     def on_open(self, app, files, n_files, hint):
         self.on_activate(app)
         for file in n_files:
-            print("File to open: " + file.get_path() + "\n")
+            open_file(file.get_path())
 
     def on_command_line(self, app, argv):
         self.on_activate(app)
         for file in argv.get_arguments()[1:]:
-            print("File to open: " + file + "\n")
+            open_file(file)
         return 0  # exit code
 
 

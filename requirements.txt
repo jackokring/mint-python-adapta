@@ -4,7 +4,7 @@ cffi==1.17.1
 click==8.2.1
 cryptography==45.0.6
 distlib==0.4.0
-filelock==3.18.0
+filelock==3.19.1
 h11==0.16.0
 hatch==1.14.1
 hatchling==1.27.0
@@ -14,10 +14,10 @@ hyperlink==21.0.0
 idna==3.10
 jaraco.classes==3.4.0
 jaraco.context==6.0.1
-jaraco.functools==4.2.1
+jaraco.functools==4.3.0
 jeepney==0.9.0
 keyring==25.6.0
-markdown-it-py==3.0.0
+markdown-it-py==4.0.0
 mdurl==0.1.2
 more-itertools==10.7.0
 packaging==25.0
@@ -40,6 +40,7 @@ tomlkit==0.13.3
 trove-classifiers==2025.8.6.13
 typing_extensions==4.14.1
 userpath==1.9.2
-uv==0.8.6
-virtualenv==20.33.1
-zstandard==0.23.0
+uv==0.8.12
+virtualenv==20.34.0
+xapp_adapta @ file:///home/jacko/adapta/dist/xapp_adapta-0.0.7-py3-none-any.whl#sha256=d6fcbdcbb9f818901d58e3368273678e5900751806d01a69de3612b753d4f175
+zstandard==0.24.0
