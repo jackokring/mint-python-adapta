@@ -1,5 +1,5 @@
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling", "hatch-cpp"]
 build-backend = "hatchling.build"
 
 [tool.metadata]
@@ -26,8 +26,6 @@ classifiers = [
 ]
 dependencies = [
   # Runtime deps only 
-  #"hatch>=1.14.1",
-  #"hatchling>=1.27.0",
   "pygobject>=3.52.3",
   "pycairo>=1.28.0",
   "pygobject-stubs>=2.13.0",
@@ -35,10 +33,20 @@ dependencies = [
   #"numpy>=1.23.4"
 ]
 
+[tool.hatch.build.hooks.hatch-cpp]
+verbose = true
+libraries = [
+  { name = "xapp_adapta/so", sources = [
+    "xapp_adapta/cpp/so.cpp",
+  ], include-dirs = [
+    "xapp_adapta/cpp",
+  ] },
+]
+
 [tool.hatch.build]
 include = []
 exclude = []
-artifacts = ["applications", "icons", "locale"]
+artifacts = ["applications", "icons", "locale", "*.so"]
 only-packages = true
 
 [project.urls]

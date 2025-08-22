@@ -4,7 +4,15 @@
 from .adapta_test import main as test  # pyright: ignore
 from .adapta_main import main  # pyright: ignore
 import shutil
+from pathlib import Path
 import os
+import sys
+
+here = Path(__file__).parent
+sys.path.insert(0, str(here))
+import xapp_adapta.so as so
+
+print(so.hello())
 
 
 def copy_with(dir):

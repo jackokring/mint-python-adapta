@@ -41,7 +41,7 @@ echo "New messages.po ... (edit and name <lang>.po)"
 # makes the messages.po file to adapt into <LANG>.po files
 for n in ./locale/*.po; do
 	file="$(basename "$n")"
-	dir="./$NAME/locale/LC_MESSAGES/${file%.*}"
+	dir="./$NAME/locale/${file%.*}/LC_MESSAGES"
 	mkdir -p "$dir"
 	# makes the language indexes
 	msgfmt "$n" -o "$dir/$DOM.$NAME.mo"
