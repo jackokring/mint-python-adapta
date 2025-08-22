@@ -32,7 +32,9 @@ echo "Icons ..."
 
 # xgettext
 mkdir -p "./$NAME/locale"
-xgettext -d "./$NAME" -p ./locale -- *.py
+pushd "$NAME" || exit 1
+xgettext -p ../locale -- *.py
+popd || exit 1
 echo "New messages.po ... (edit and name <lang>.po)"
 # makes the messages.po file to adapt into <LANG>.po files
 for n in ./locale/*.po; do

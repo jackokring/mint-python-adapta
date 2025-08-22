@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-12 04:36+0000\n"
+"POT-Creation-Date: 2025-08-22 16:45+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,14 +17,14 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: xapp_adapta/adapta_main.py:61
+#: adapta_main.py:70
 msgid "Sub Title"
 msgstr ""
 
-#: xapp_adapta/adapta_main.py:88 xapp_adapta/adapta_test.py:173
+#: adapta_main.py:97 adapta_test.py:173
 msgid "Content"
 msgstr ""
 
-#: xapp_adapta/adapta_test.py:138
+#: adapta_test.py:138
 msgid "Navigation"
 msgstr ""
