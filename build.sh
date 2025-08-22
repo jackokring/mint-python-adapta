@@ -54,6 +54,7 @@ hatch build
 # then install the wheel to check
 # has a tight redownload for checks on dependencies
 pip install --force-reinstall ./dist/*.whl
+rm ./dist/*.whl
 
 # then maybe twine, but remeber API keys for PyPI
 # apparently hatch publish can also do this
