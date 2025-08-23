@@ -16,7 +16,7 @@ static PyModuleDef so_module = {PyModuleDef_HEAD_INIT, "so", "C++ .so", -1,
 PyMODINIT_FUNC PyInit_so(void) {
   Py_Initialize();
   // ./build.sh replaces locale to correct domain making so.cpp
-  bindtextdomain("com.github.jackokring.xapp_adapta", NULL);
-  textdomain("com.github.jackokring.xapp_adapta");
+  bindtextdomain("_LOCALE", NULL);
+  textdomain("_LOCALE");
   return PyModule_Create(&so_module);
 }
