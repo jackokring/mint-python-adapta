@@ -7,6 +7,6 @@ lib64
 dist/
 # desktop fckupiles
 *.desktop
-# sed backup
+# sed backups for -i option inplace edits
 *.por
-
+*.cppr
