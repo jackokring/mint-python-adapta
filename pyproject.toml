@@ -9,7 +9,7 @@ domain = "com.github.jackokring"
 
 [project]
 name = "xapp_adapta"
-version = "0.0.8"
+version = "0.0.9"
 authors = [
   { name = "Simon Jackson", email = "jackokring@gmail.com" },
   { name = "Linux Mint Team" },
@@ -22,7 +22,6 @@ requires-python = ">=3.12"
 classifiers = [
   "Programming Language :: Python :: 3",
   "License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)",
-  "Operating System :: OS Independent",
 ]
 dependencies = [
   # Runtime deps only 
