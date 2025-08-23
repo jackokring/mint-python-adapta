@@ -1,4 +1,5 @@
 [build-system]
+# build deps
 requires = ["hatchling", "hatch-cpp"]
 build-backend = "hatchling.build"
 
@@ -12,15 +13,17 @@ name = "xapp_adapta"
 version = "0.0.9"
 authors = [
   { name = "Simon Jackson", email = "jackokring@gmail.com" },
+  # no email stops showing author in about dialog
   { name = "Linux Mint Team" },
   { name = "GNOME Adwaita Team" },
   { name = "All Di Nice" },
 ]
-description = "Python libAdapta"
+description = "Python XApp libAdapta Framework"
 readme = "xapp_adapta/README.md"
 requires-python = ">=3.12"
 classifiers = [
   "Programming Language :: Python :: 3",
+  # Lowest common denominator?
   "License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)",
 ]
 dependencies = [
@@ -45,7 +48,8 @@ libraries = [
 [tool.hatch.build]
 include = []
 exclude = []
-artifacts = ["applications", "icons", "locale", "*.so"]
+# Maybe Windows/MacOS later (.local directory existance?)
+artifacts = ["applications", "icons", "locale", "*.so", "*.dll", "*.dynlib"]
 only-packages = true
 
 [project.urls]
