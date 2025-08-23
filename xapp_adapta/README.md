@@ -32,6 +32,7 @@ Included commands (add more):
 - ...
 
 Thanks
+
 _Simon Jackson_
 
 ## Links

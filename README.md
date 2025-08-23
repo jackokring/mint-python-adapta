@@ -25,6 +25,8 @@ The scripts.
   setting the virtual environment not being automatic, or maybe you don't need
   a debug terminal. You also get an icon made. For other icons, don't use
   a command name, just make a `.svg` and pick a unique ID.
+- `lang.sh` makes a localization file based on the user's language setting.
+  Also updates the localizations if new things to translate are found.
 
 Change the paths from `xapp_adapta`, as the name must be unique on `PyPI`, if
 you intend to upload a derivative work there. This is important.
@@ -34,4 +36,5 @@ being edited to auto generate `so.hpp`. So, don't edit `so.hpp` and add
 interface definitions to `so.pyi` in `xapp_adapta`.
 
 Thanks
+
 _Simon Jackson_
