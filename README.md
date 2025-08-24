@@ -20,8 +20,8 @@ The scripts.
 - `pydo.sh` to make a virtual environment launch icon. Just in case you don't
   have `pipx` or admin rights, and maybe need a `.desktop` file. Try
   `./pydo.sh adapta_test` for example, and see
-  `cat ./adapta_test.desktop`. Yes,
-  you might want to edit it a little. Something to do with GUI launch and  
+  `cat ./adapta_test.desktop`. Yes, icons are made after launch test.
+  You might want to edit it a little. Something to do with GUI launch and  
   setting the virtual environment not being automatic, or maybe you don't need
   a debug terminal. You also get an icon made. For other icons, don't use
   a command name, just make a `.svg` and pick a unique ID.

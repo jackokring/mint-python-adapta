@@ -59,6 +59,9 @@ hatch build
 pip install --force-reinstall ./dist/*.whl
 rm ./dist/*.whl
 
+# call the named command which makes make_local
+"./bin/$(sed -nr "s/^(.*) = \".*:make_local\"\$/\1/p" <pyproject.toml)"
+
 # then maybe twine, but remeber API keys for PyPI
 # apparently hatch publish can also do this
 

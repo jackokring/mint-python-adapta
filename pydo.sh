@@ -9,15 +9,12 @@ cd "$(realpath "$(dirname "$0")")" || exit 1
 
 # filename within bin
 FILE="$(which "$1")"
-FILE2="${FILE#"$HOME"/}"
-
-# cd to directory containing venv
-cd "$(dirname "$FILE")/.." || exit
 
 # enter virtual environment
 . ./bin/activate
 
 # call file as if overrides builtin, then needs following
+echo "No icon test of launch ..."
 "$(basename "$FILE")" || exit
 
 # env vars
@@ -33,7 +30,7 @@ cat <<EOF >"./$(basename "$FILE").desktop"
 Name=$(basename "$FILE")
 Comment=XApp Python Application
 # Maybe it's just a PyPI module (so place inside the venv/bin)
-Exec=bash -c '. "\$HOME/$(dirname "$FILE2")/activate" && "$(basename "$FILE")"'
+Exec=bash -c '. "$(dirname "$FILE")/activate" && "$(basename "$FILE")"'
 Icon=$DOM.$(basename "$FILE")
 Terminal=true
 Type=Application
@@ -42,3 +39,9 @@ EOF
 
 chmod +x "./$(basename "$FILE").desktop"
 echo "Make .svg and .desktop ..."
+# call the named command which makes make_local
+"./bin/$(sed -nr "s/^(.*) = \".*:make_local\"\$/\1/p" <pyproject.toml)"
+
+# Icon test of launch
+echo "Should have application icon now ..."
+"$(basename "$FILE")" || exit
