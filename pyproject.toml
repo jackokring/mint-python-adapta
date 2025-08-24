@@ -62,6 +62,7 @@ adapta_test = "xapp_adapta:test"
 adapta_main = "xapp_adapta:main"
 # multiple pathed on the venv?
 adapta_make_local = "xapp_adapta:make_local"
+adapta_remove_local = "xapp_adapta:remove_local"
 
 [tool.pyright]
 reportMissingModuleSource = false
