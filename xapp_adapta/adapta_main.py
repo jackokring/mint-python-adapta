@@ -6,6 +6,9 @@ import gi
 import sys
 import os
 import importlib.metadata as metadata
+
+# import translate, window, module name and app domain
+# you do not have to change xapp_adapta as it's gotten from the __file__
 from .adapta_test import _, MainWindow, xapp_adapta, domain
 
 
@@ -34,12 +37,19 @@ except ImportError or ValueError as ex:
     from gi.repository import Adw
 
 
+# no .svg suffix is required
 def make_icon(named: str):
     return domain + "." + named
 
 
 # the app icon id the .py removed filename on the end of the domain
-app_icon = make_icon(".".join(os.path.basename(__file__).split(".")[:-1]))
+app_name = ".".join(os.path.basename(__file__).split(".")[:-1])
+app_icon = make_icon(app_name)
+
+
+# linux dbus message
+def notify(message: str):
+    os.system("notify-send -i " + app_icon + " -a " + app_name + ' "' + message + '"')
 
 
 # doesn't need to be class method
@@ -50,6 +60,7 @@ def button(icon: str, callback: Callable):
     return button
 
 
+# the big main window of the application
 class MyWindow(MainWindow):  # pyright: ignore
     # override for different behaviour
     def layout(self):
@@ -71,14 +82,6 @@ class MyWindow(MainWindow):  # pyright: ignore
             # 1:1 pages match of icon names injection
             "icons": ["utilities-terminal"],
         }
-        # N.B. Gtk4 error as would need Gtk3
-        # self.tray = XApp.StatusIcon()
-        # self.tray.set_icon_name("utilities-terminal")
-        # self.tray.set_tooltip_text(sys.argv[0])
-        # self.tray.connect("left-click", self.on_tray_left)
-
-    def on_tray_left(self, icon, x, y, time, button):
-        pass
 
     # methods to define navigation pages
     def content(self) -> Adw.NavigationPage:
@@ -96,6 +99,7 @@ class MyWindow(MainWindow):  # pyright: ignore
         # set title and bar
         return self.top(content_box, _("Content"), **{})
 
+    # automatic fill of an about dialog from pyproject.toml and built metadata
     def about(self, action):
         about = Gtk.AboutDialog()
         about.set_transient_for(
@@ -123,11 +127,13 @@ class MyWindow(MainWindow):  # pyright: ignore
         about.set_visible(True)
 
 
+# passed command args or open with target
 def open_file(name: str):
     # common file import code from CLI and GUI
     print("File to open: " + name + "\n")
 
 
+# application boiler plate (no editing required)
 class MyApp(Adw.Application):  # pyright: ignore
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -140,6 +146,7 @@ class MyApp(Adw.Application):  # pyright: ignore
 
     def on_activate(self, app):
         if not self.win:
+            # the application window
             self.win = MyWindow(application=app)
         self.win.present()
 
@@ -156,6 +163,7 @@ class MyApp(Adw.Application):  # pyright: ignore
         return 0  # exit code
 
 
+# enter Gtk toolkit event loop
 def main():
     app = MyApp(application_id=app_icon)
     sys.exit(app.run(sys.argv))
