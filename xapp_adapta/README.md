@@ -27,8 +27,8 @@ Included commands (add more):
 - `adapta_main` extends the test `MainWindow` class for effect.
 - `adapta_make_local` to install `.desktop`, `.svg` and locale `.mo` files.
   The `~/.local/share/applications/*.desktop` files might need edits.
-  This is not automatic, and only has to be done once. There is no uninstall
-  as yet.
+- `adapta_remove_local` is an uninstall to clean the user's `~/.local/share` of
+  just the installed files which `adapta_make_local` placed.
 - ...
 
 Thanks
