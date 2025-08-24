@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 
 # in dir
-cd "$(realpath "$(dirname "$0")")"
+cd "$(realpath "$(dirname "$0")")" || exit 1
 
 # MAYBE USEFUL FOR .desktop FILES
 # SUPPLY command name to run as "command"
@@ -24,7 +24,8 @@ cd "$(dirname "$FILE")/.." || exit
 DOM=$(sed -nr "s/^domain = \"(.*)\"$/\1/p" <pyproject.toml)
 
 # copy an Icon
-cp "/usr/share/icons/hicolor/scalable/apps/org.gnome.Terminal.svg" "./$DOM.$(basename "$FILE").svg"
+# the marvels of ChatGPT and Freud
+cp "./butt-mint-axe.svg" "./$DOM.$(basename "$FILE").svg"
 
 # make a desktop file
 cat <<EOF >"./$(basename "$FILE").desktop"
