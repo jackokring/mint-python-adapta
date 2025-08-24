@@ -4,7 +4,7 @@
 #include <python3.12/Python.h>
 
 PyObject *hello(PyObject *, PyObject *) {
-  return PyUnicode_FromString(_("A string"));
+  return PyUnicode_FromString(_("C++ module loaded"));
 }
 
 static PyMethodDef so_methods[] = {{"hello", (PyCFunction)hello, METH_NOARGS},
