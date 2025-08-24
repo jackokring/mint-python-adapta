@@ -10,3 +10,5 @@ dist/
 # sed backups for -i option inplace edits
 *.por
 *.cppr
+# language files made by build
+*.mo
