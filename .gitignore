@@ -12,3 +12,5 @@ dist/
 *.cppr
 # language files made by build
 *.mo
+# nano, when open nvim don't want lose session
+*~
