@@ -49,6 +49,7 @@ app_icon = make_icon(app_name)
 
 # linux dbus message
 def notify(message: str):
+    message = message.replace('"', '\\"')
     os.system("notify-send -i " + app_icon + " -a " + app_name + ' "' + message + '"')
 
 

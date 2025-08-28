@@ -22,11 +22,17 @@ def copy_with(dir, fn=shutil.copy2):
     shutil.copytree(path + dir, home_local + dir, dirs_exist_ok=True, copy_function=fn)
 
 
+def update_resources():
+    # maybe order and refresh is required
+    os.system("gtk-update-icon-cache -f ~/.local/share/icons/hicolor")
+
+
 # make_local icons and desktop files
 def make_local():
-    copy_with("applications")
-    copy_with("icons")
     copy_with("locale")
+    copy_with("icons")
+    copy_with("applications")
+    update_resources()
 
 
 # using as a copy function?
@@ -38,6 +44,8 @@ def remove(src, dst):
 
 # ininstall
 def remove_local():
+    # remove app .desktop before icons
     copy_with("applications", fn=remove)
     copy_with("icons", fn=remove)
     copy_with("locale", fn=remove)
+    update_resources()
