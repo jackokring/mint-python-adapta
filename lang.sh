@@ -14,6 +14,10 @@ cd "$(realpath "$(dirname "$0")")" || exit 1
 
 # env vars
 FILE=$(sed -nr "s/^(.*)\..*\$/\1/p" <<<"$LANG")
+# old format no .charset
+FILE_OLD=$(sed -nr "s/^([^.]*)\$/\1/p" <<<"$LANG")
+# just one or the other
+FILE="$FILE$FILE_OLD"
 
 # msginit
 if [ ! -f "locale/$FILE.po" ]; then
