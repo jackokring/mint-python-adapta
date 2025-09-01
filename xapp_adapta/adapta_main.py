@@ -1,13 +1,13 @@
 #!/usr/bin/python3
 
 # sudo apt install libgirepository-2.0-dev
-from _typeshed import NoneType
-from typing import Callable, Sequence
+from typing import Callable
 import gi
 import sys
 import os
 import subprocess
 import importlib.metadata as metadata
+import datetime
 
 # import translate, window, module name and app domain
 # you do not have to change xapp_adapta as it's gotten from the __file__
@@ -48,6 +48,9 @@ def make_icon(named: str):
 app_name: str = ".".join(os.path.basename(__file__).split(".")[:-1])
 app_icon = make_icon(app_name)
 notify_proc = []
+datetime_file = datetime.datetime.fromtimestamp(
+    os.path.getmtime(os.path.realpath(__file__))
+)
 
 
 # linux dbus message with possible button dictionary { code: label, ... }
@@ -178,7 +181,8 @@ class MyWindow(MainWindow):  # pyright: ignore
         # metadata more in here to auto ...
         authors = metadata.metadata(xapp_adapta).get_all("Author-email")
         if authors is not None:
-            about.set_copyright("(C) 2025 " + authors[0])
+            # make edit modification of this file be Copyright
+            about.set_copyright("©" + str(datetime_file.year) + " " + authors[0])
             about.set_authors(authors)
         about.set_license_type(Gtk.License.LGPL_3_0_ONLY)
         urls = metadata.metadata(xapp_adapta).get_all("Project-URL")
