@@ -48,9 +48,22 @@ app_icon = make_icon(app_name)
 
 
 # linux dbus message
-def notify(message: str):
+def notify(message: str, body: str | None = None):
+    if body is None:
+        body = ""
     message = message.replace('"', '\\"')
-    os.system("notify-send -i " + app_icon + " -a " + app_name + ' "' + message + '"')
+    body = body.replace('"', '\\"')
+    os.system(
+        "notify-send -i "
+        + app_icon
+        + " -a "
+        + app_name
+        + ' "'
+        + message
+        + '" "'
+        + body
+        + '"'
+    )
 
 
 # doesn't need to be class method
