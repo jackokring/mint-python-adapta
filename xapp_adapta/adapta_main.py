@@ -1,10 +1,12 @@
 #!/usr/bin/python3
 
 # sudo apt install libgirepository-2.0-dev
-from typing import Callable
+from _typeshed import NoneType
+from typing import Callable, Sequence
 import gi
 import sys
 import os
+import subprocess
 import importlib.metadata as metadata
 
 # import translate, window, module name and app domain
@@ -43,27 +45,39 @@ def make_icon(named: str):
 
 
 # the app icon id the .py removed filename on the end of the domain
-app_name = ".".join(os.path.basename(__file__).split(".")[:-1])
+app_name: str = ".".join(os.path.basename(__file__).split(".")[:-1])
 app_icon = make_icon(app_name)
+notify_proc = None
 
 
-# linux dbus message
-def notify(message: str, body: str | None = None):
-    if body is None:
-        body = ""
-    message = message.replace('"', '\\"')
-    body = body.replace('"', '\\"')
-    os.system(
-        "notify-send -i "
-        + app_icon
-        + " -a "
-        + app_name
-        + ' "'
-        + message
-        + '" "'
-        + body
-        + '"'
+# linux dbus message with possible button dictionary { code: label, ... }
+def notify(message: str, body: str | None = None, buttons: dict[str, str] = {}):
+    global notify_proc
+    b: list[str] = ["notify-send", "-i", app_icon]
+    for code in buttons:
+        b.append("-A")
+        # code and button label
+        b.append(code + "=" + buttons[code])
+    b.extend(["-a", app_name, message])
+    # and a body texy if it's not None
+    if body is not None:
+        b.append(body)
+    notify_proc = subprocess.Popen(
+        b,
+        stdout=subprocess.PIPE,
+        text=True,
     )
+
+
+# obtain notification button name if available
+def notify_done() -> str | None:
+    if notify_proc is None:
+        return None
+    try:
+        (out, err) = notify_proc.communicate(timeout=0.1)
+        return out
+    except subprocess.TimeoutExpired:
+        return None
 
 
 # doesn't need to be class method
