@@ -71,10 +71,27 @@ def notify(message: str, body: str | None = None, buttons: dict[str, str] = {}):
 
 # obtain notification button name if available
 def notify_done() -> str | None:
+    global notify_proc
     if notify_proc is None:
         return None
     try:
         (out, err) = notify_proc.communicate(timeout=0.1)
+        # retray botch for sort of persistance on clicked button/menu
+        # and the message dbus "knowns" how to place a tray icon?
+        cmd: list[str] = notify_proc.args  # type: ignore
+        for i, v in enumerate(cmd):
+            if v == "-h":
+                # is hint to retray
+                if cmd[i + 1].lower() == "boolean:tray:true":
+                    # maybe it should imply ["-h", "boolean:supress-sound:true"]
+                    # so that a notification manager may place it as a tray icon?
+                    # This is perhaps a good way of XApp StatusIcons and with
+                    # buttons as menus placed in context menu?
+                    notify_proc = subprocess.Popen(
+                        cmd,
+                        stdout=subprocess.PIPE,
+                        text=True,
+                    )
         return out
     except subprocess.TimeoutExpired:
         return None
