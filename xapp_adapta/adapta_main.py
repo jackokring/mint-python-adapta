@@ -47,54 +47,76 @@ def make_icon(named: str):
 # the app icon id the .py removed filename on the end of the domain
 app_name: str = ".".join(os.path.basename(__file__).split(".")[:-1])
 app_icon = make_icon(app_name)
-notify_proc = None
+notify_proc = []
 
 
 # linux dbus message with possible button dictionary { code: label, ... }
-def notify(message: str, body: str | None = None, buttons: dict[str, str] = {}):
+# so this makes for an easy StatusIcon replacement
+def notify(
+    message: str,
+    body: str | None = None,
+    buttons: dict[str, str] = {},
+    tray: bool = False,
+):
     global notify_proc
     b: list[str] = ["notify-send", "-i", app_icon]
     for code in buttons:
         b.append("-A")
         # code and button label
         b.append(code + "=" + buttons[code])
+    if tray:
+        b.extend(["-h", "boolean:tray:true"])
+        # and botch supress-sound
+        b.extend(["-h", "boolean:supress-sound:true"])
     b.extend(["-a", app_name, message])
     # and a body texy if it's not None
     if body is not None:
         b.append(body)
-    notify_proc = subprocess.Popen(
-        b,
-        stdout=subprocess.PIPE,
-        text=True,
+    notify_proc.append(
+        subprocess.Popen(
+            b,
+            stdout=subprocess.PIPE,
+            text=True,
+        )
     )
 
 
 # obtain notification button name if available
 def notify_done() -> str | None:
     global notify_proc
-    if notify_proc is None:
+    # no notifications
+    if not notify_proc:
         return None
-    try:
-        (out, err) = notify_proc.communicate(timeout=0.1)
-        # retray botch for sort of persistance on clicked button/menu
-        # and the message dbus "knowns" how to place a tray icon?
-        cmd: list[str] = notify_proc.args  # type: ignore
-        for i, v in enumerate(cmd):
-            if v == "-h":
-                # is hint to retray
-                if cmd[i + 1].lower() == "boolean:tray:true":
-                    # maybe it should imply ["-h", "boolean:supress-sound:true"]
-                    # so that a notification manager may place it as a tray icon?
-                    # This is perhaps a good way of XApp StatusIcons and with
-                    # buttons as menus placed in context menu?
-                    notify_proc = subprocess.Popen(
-                        cmd,
-                        stdout=subprocess.PIPE,
-                        text=True,
-                    )
-        return out
-    except subprocess.TimeoutExpired:
-        return None
+    # N.B. don't need to iterate over copy as return if communicated
+    # No danger of a skipped item
+    for p in notify_proc:
+        try:
+            # apparently this is less blocking than poll() with a .stdout.read()
+            out, err = p.communicate(timeout=0)
+            # remove the communicated subprocess
+            notify_proc.remove(p)
+            # retray botch for sort of persistance on clicked button/menu
+            # and the message dbus "knowns" how to place a tray icon?
+            cmd: list[str] = p.args  # type: ignore
+            for i, v in enumerate(cmd):
+                if v == "-h":
+                    # is hint to retray
+                    if cmd[i + 1].lower() == "boolean:tray:true":
+                        # maybe it should imply ["-h", "boolean:supress-sound:true"]
+                        # so that a notification manager may place it as a tray icon?
+                        # This is perhaps a good way of XApp StatusIcons and with
+                        # buttons as menus placed in context menu?
+                        notify_proc.append(
+                            subprocess.Popen(
+                                cmd,
+                                stdout=subprocess.PIPE,
+                                text=True,
+                            )
+                        )
+            return out
+        except subprocess.TimeoutExpired:
+            pass
+    return None
 
 
 # doesn't need to be class method
