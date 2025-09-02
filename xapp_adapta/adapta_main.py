@@ -48,25 +48,29 @@ def make_icon(named: str):
 app_name: str = ".".join(os.path.basename(__file__).split(".")[:-1])
 app_icon = make_icon(app_name)
 notify_proc = []
+map_buttons: dict[str, Callable] = {}
 datetime_file = datetime.datetime.fromtimestamp(
     os.path.getmtime(os.path.realpath(__file__))
 )
 
 
-# linux dbus message with possible button dictionary { code: label, ... }
+# linux dbus message with possible button dictionary { label: Callable, ... }
 # so this makes for an easy StatusIcon replacement
+# the __qualname__ of the Callable is used to index the calls
 def notify(
     message: str,
     body: str | None = None,
-    buttons: dict[str, str] = {},
+    buttons: dict[str, Callable] = {},
     tray: bool = False,
 ):
     global notify_proc
     b: list[str] = ["notify-send", "-i", app_icon]
-    for code in buttons:
+    for label in buttons:
         b.append("-A")
         # code and button label
-        b.append(code + "=" + buttons[code])
+        key = buttons[label].__qualname__
+        b.append(key + "=" + label)
+        map_buttons[key] = buttons[label]
     if tray:
         b.extend(["-h", "boolean:tray:true"])
         # and botch supress-sound
@@ -85,11 +89,11 @@ def notify(
 
 
 # obtain notification button name if available
-def notify_done() -> str | None:
+def notify_done():
     global notify_proc
     # no notifications
     if not notify_proc:
-        return None
+        return
     # N.B. don't need to iterate over copy as return if communicated
     # No danger of a skipped item
     for p in notify_proc:
@@ -116,10 +120,13 @@ def notify_done() -> str | None:
                                 text=True,
                             )
                         )
-            return out
+            todo = map_buttons[out]
+            if todo is not None:
+                # call it
+                todo()
+            return
         except subprocess.TimeoutExpired:
             pass
-    return None
 
 
 # doesn't need to be class method
