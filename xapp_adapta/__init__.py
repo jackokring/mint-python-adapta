@@ -24,7 +24,7 @@ def copy_with(dir, fn=shutil.copy2):
 
 def update_resources():
     # maybe order and refresh is required
-    os.system("gtk-update-icon-cache -f ~/.local/share/icons/hicolor")
+    os.system("touch ~/.local/share/icons/hicolor && gtk-update-icon-cache")
 
 
 # make_local icons and desktop files
