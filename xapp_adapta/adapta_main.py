@@ -54,6 +54,11 @@ datetime_file = datetime.datetime.fromtimestamp(
 )
 
 
+# schedule for 1 second using notify_done -> False to one shot
+def schedule(arg):
+    GLib.timeout_add_seconds(1, notify_done, arg)
+
+
 # linux dbus message with possible button dictionary { label: Callable, ... }
 # so this makes for an easy StatusIcon replacement
 # the __qualname__ of the Callable is used to index the calls
@@ -89,11 +94,14 @@ def notify(
 
 
 # obtain notification button name if available
-def notify_done():
+def notify_done(arg) -> bool:
     global notify_proc
+    # schedule test interval one shot
+    # print(".")
     # no notifications
     if not notify_proc:
-        return
+        schedule(arg)
+        return False
     # N.B. don't need to iterate over copy as return if communicated
     # No danger of a skipped item
     for p in notify_proc:
@@ -124,9 +132,12 @@ def notify_done():
             if todo is not None:
                 # call it
                 todo()
-            return
+            schedule(arg)
+            return False
         except subprocess.TimeoutExpired:
             pass
+    schedule(arg)
+    return False
 
 
 # doesn't need to be class method
@@ -159,6 +170,8 @@ class MyWindow(MainWindow):  # pyright: ignore
             # 1:1 pages match of icon names injection
             "icons": ["utilities-terminal"],
         }
+        # run schedule event loop
+        schedule(self)
 
     # methods to define navigation pages
     def content(self) -> Adw.NavigationPage:
