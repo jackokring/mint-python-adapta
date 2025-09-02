@@ -2,7 +2,7 @@
 # English (United Kingdom) translations for PACKAGE package.
 # Copyright (C) 2025 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Jacko <jacko@jacknuky>, 2025.
+# Jacko <jackokring@gmail.com>, 2025.
 #
 msgid ""
 msgstr ""
@@ -33,6 +33,3 @@ msgstr "Navigation"
 #: cpp/so.cpp:7
 msgid "C++ module loaded"
 msgstr ""
-
-#~ msgid "A string"
-#~ msgstr "A string"
