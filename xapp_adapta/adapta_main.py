@@ -202,7 +202,9 @@ class MyWindow(MainWindow):  # pyright: ignore
         authors = metadata.metadata(xapp_adapta).get_all("Author-email")
         if authors is not None:
             # make edit modification of this file be Copyright
-            about.set_copyright("©" + str(datetime_file.year) + " " + authors[0])
+            about.set_copyright(
+                "©" + str(datetime_file.year) + " " + authors[0].split(" <")[0]
+            )
             about.set_authors(authors)
         about.set_license_type(Gtk.License.LGPL_3_0_ONLY)
         urls = metadata.metadata(xapp_adapta).get_all("Project-URL")
@@ -229,9 +231,7 @@ class MyApp(Adw.Application):  # pyright: ignore
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.connect("activate", self.on_activate)
-        self.connect("open", self.on_open)
         self.connect("command-line", self.on_command_line)
-        self.set_flags(Gio.ApplicationFlags.HANDLES_OPEN)
         self.set_flags(Gio.ApplicationFlags.HANDLES_COMMAND_LINE)
         self.win = None
 
@@ -241,17 +241,11 @@ class MyApp(Adw.Application):  # pyright: ignore
             self.win = MyWindow(application=app)
         self.win.present()
 
-    # detects if present, but doesn't print anything?
-    def on_open(self, app, files, n_files, hint):
-        self.on_activate(app)
-        for file in n_files:
-            open_file(file.get_path())
-
     def on_command_line(self, app, argv):
         self.on_activate(app)
         for file in argv.get_arguments()[1:]:
             open_file(file)
-        return 0  # exit code
+        return 0
 
 
 # enter Gtk toolkit event loop
