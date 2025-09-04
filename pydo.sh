@@ -33,11 +33,15 @@ Name=$(basename "$FILE")
 Comment=XApp Python Application
 # Maybe it's just a PyPI module (so place inside the venv/bin)
 # Do you feel lucky, punk?
-Exec=bash -c '. "$VIRTUAL_ENV/activate" && "$(basename "$FILE")" %f'
+# Big F for all files as args (thanx for ')
+Exec=bash -c '. "$VIRTUAL_ENV/activate" && "$(basename "$FILE")" %F'
 Icon=$DOM.$(basename "$FILE")
+# If you don't need debug terminal
 Terminal=true
 Type=Application
-Categories=Utility;
+Categories=Utility
+# And the mimetype
+MimeType=application/$DOM-$(basename "$FILE")
 EOF
 
 # make a mimetype for project opening
