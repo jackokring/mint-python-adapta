@@ -16,7 +16,7 @@ cd "$(realpath "$(dirname "$0")")" || exit 1
 rm ./dist/*
 
 # version
-VER=$(python3 -c 'import sys; print(".".join(map(str, sys.version_info[0:2])))')
+PYVER=$(python3 -c 'import sys; print(".".join(map(str, sys.version_info[0:2])))')
 # env vars
 DOM=$(sed -nr "s/^domain = \"(.*)\"$/\1/p" <pyproject.toml)
 NAME=$(sed -nr "s/^name = \"(.*)\"$/\1/p" <pyproject.toml)
@@ -36,8 +36,12 @@ echo "Icons ..."
 mkdir -p "./$NAME/locale"
 pushd "$NAME" || exit 1
 sed -r "s/_LOCALE/$DOM\.$NAME/" "cpp/so.in.cpp" >"cpp/so.cpp"
-sed -ir "s/python3.12/python$VER/" "cpp/so.cpp"
+sed -ir "s/python3.12/python$PYVER/" "cpp/so.cpp"
 xgettext -p ../locale --keyword="_" -o messages.pot -- *.py cpp/so.cpp
+# alter specific phrases in .pot file
+VER=$(sed -nr "s/^version = \"(.*)\"$/\1/p" <../pyproject.toml)
+sed -ir "s/VERSION/$VER/g" "../locale/messages.pot"
+sed -ir "s/PACKAGE/$NAME/g" "../locale/messages.pot"
 popd || exit 1
 # set a reasonable 2025 charset
 echo "New messages.pot ... (edit and name <lang>.po [msginit])"
