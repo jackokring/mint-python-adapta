@@ -6,7 +6,7 @@ lib64
 # ignore hatch build .
 dist/
 # desktop fckupiles
-*.desktop
+# *.desktop
 # sed backups for -i option inplace edits
 *.por
 *.cppr
