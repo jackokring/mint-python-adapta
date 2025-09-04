@@ -2,7 +2,7 @@
 Name=adapta_main
 Comment=XApp Python Application
 # Maybe it's just a PyPI module (so place inside the venv/bin)
-Exec=bash -c '. "$VIRTUAL_ENV/activate" && "adapta_main" %f'
+Exec=bash -c '. "$VIRTUAL_ENV/activate" && "adapta_main" %F'
 Icon=com.github.jackokring.adapta_main
 Terminal=true
 Type=Application
