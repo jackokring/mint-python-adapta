@@ -24,7 +24,8 @@ The scripts.
   You might want to edit it a little. Something to do with GUI launch and  
   setting the virtual environment not being automatic, or maybe you don't need
   a debug terminal. You also get an icon made. For other icons, don't use
-  a command name, just make a `.svg` and pick a unique ID.
+  a command name, just make a `.svg` and pick a unique ID. It also makes a
+  mimetype for the application icon.
 - `lang.sh` makes a localization file based on the user's language setting.
   Also updates the localizations if new things to translate are found.
 

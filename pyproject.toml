@@ -49,7 +49,15 @@ libraries = [
 include = []
 exclude = []
 # Maybe Windows/MacOS later (.local directory existance?)
-artifacts = ["applications", "icons", "locale", "*.so", "*.dll", "*.dynlib"]
+artifacts = [
+  "applications",
+  "icons",
+  "locale",
+  "mime",
+  "*.so",
+  "*.dll",
+  "*.dynlib",
+]
 only-packages = true
 
 [project.urls]

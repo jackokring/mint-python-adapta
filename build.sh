@@ -27,10 +27,17 @@ mkdir -p "./$NAME/applications"
 cp ./*.desktop "./$NAME/applications/"
 echo "Desktops ..."
 mkdir -p "./$NAME/icons/hicolor/scalable/apps"
+mkdir -p "./$NAME/icons/hicolor/scalable/mimetypes"
 for icon in ./*.svg; do
 	cp "$icon" "./$NAME/icons/hicolor/scalable/apps/"
+	# use same icon for mimetype but might change later ... applications v. documents
+	MIME=$(sed -nr "s/^\.\/$DOM\.(.*?\.svg)\$/\1/p" <<<"$icon")
+	echo "Creating mime $MIME"
+	cp "$icon" "./$NAME/icons/hicolor/scalable/mimetypes/application-$DOM-$MIME"
 done
 echo "Icons ..."
+mkdir -p "./$NAME/mime/packages"
+cp ./*.xml "./$NAME/mime/packages/"
 
 # xgettext
 mkdir -p "./$NAME/locale"

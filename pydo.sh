@@ -14,7 +14,9 @@ FILE="$(which "$1")"
 . ./bin/activate
 
 # call file as if overrides builtin, then needs following
-echo "No icon test of launch ..."
+echo "No icon YET test of launch before making it ..."
+echo "Click in terminal and ctrl+C if this is not the action you expect ..."
+echo "Just close the application if it's the right one ..."
 "$(basename "$FILE")" || exit
 
 # env vars
@@ -37,8 +39,19 @@ Type=Application
 Categories=Utility;
 EOF
 
+# make a mimetype for project opening
+cat <<EOF >"./$DOM-$(basename "$FILE").xml"
+<?xml version="1.0"?>
+<mime-info xmlns='http://www.freedesktop.org/standards/shared-mime-info'>
+  <mime-type type="application/$DOM-$(basename "$FILE")">
+    <comment>$(basename "$FILE") file</comment>
+    <glob pattern="*.$(basename "$FILE")"/>
+  </mime-type>
+</mime-info>
+EOF
+
 chmod +x "./$(basename "$FILE").desktop"
-echo "Make .svg and .desktop ..."
+echo "Make .svg and .desktop, and mime-type ..."
 # call the named command which makes make_local
 "./bin/$(sed -nr "s/^(.*) = \".*:make_local\"\$/\1/p" <pyproject.toml)"
 
