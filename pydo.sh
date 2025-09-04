@@ -32,7 +32,8 @@ cat <<EOF >"./$(basename "$FILE").desktop"
 Name=$(basename "$FILE")
 Comment=XApp Python Application
 # Maybe it's just a PyPI module (so place inside the venv/bin)
-Exec=bash -c '. "$(dirname "$FILE")/activate" && "$(basename "$FILE")" %f'
+# Do you feel lucky, punk?
+Exec=bash -c '. "$VIRTUAL_ENV/activate" && "$(basename "$FILE")" %f'
 Icon=$DOM.$(basename "$FILE")
 Terminal=true
 Type=Application

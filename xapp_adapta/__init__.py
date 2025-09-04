@@ -13,11 +13,11 @@ sys.path.insert(0, str(here))
 import xapp_adapta.so as so
 
 print(so.hello())
+path = os.path.dirname(__file__) + "/"
 
 
 def copy_with(dir, fn=shutil.copy2):
     # ah, OS kind is for later as Windows/MacOS ...
-    path = os.path.dirname(__file__) + "/"
     home_local = os.path.expanduser("~/.local/share/")
     shutil.copytree(path + dir, home_local + dir, dirs_exist_ok=True, copy_function=fn)
 
@@ -37,6 +37,20 @@ def update_resources(installing):
 def make_local():
     copy_with("locale")
     copy_with("icons")
+    for file in os.scandir(path + "applications"):
+        # fix VIRTUAL ENVIRONMENT in user's local install context
+        # and remove the sed backup chaff
+        # ooooh some / action ....
+        file = os.fsdecode(file)
+        os.system(
+            "sed -ir 's/\\$VIRTUAL_ENV/"
+            + os.path.expandvars("$VIRTUAL_ENV").replace("/", "\\/")
+            + "/' "
+            + file
+            + "&& rm "
+            + file
+            + "r"
+        )
     copy_with("applications")
     copy_with("mime")
     update_resources(True)
