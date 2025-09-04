@@ -53,7 +53,8 @@ EOF
 chmod +x "./$(basename "$FILE").desktop"
 echo "Make .svg and .desktop, and mime-type ..."
 # call the named command which makes make_local
-"./bin/$(sed -nr "s/^(.*) = \".*:make_local\"\$/\1/p" <pyproject.toml)"
+echo "rebuild ..."
+./build.sh
 
 # Icon test of launch
 echo "Should have application icon now ..."
