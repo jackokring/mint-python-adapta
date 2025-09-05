@@ -22,19 +22,34 @@ def copy_with(dir, fn=shutil.copy2):
     shutil.copytree(path + dir, home_local + dir, dirs_exist_ok=True, copy_function=fn)
 
 
-def update_resources(installing):
+def update_resources(installing, before):
     # maybe order and refresh is required
-    if installing:
-        mime = "install"
+    # Well it might make a difference but multiple installs at once
+    # and uninstalls generally don't have a last right click of be gone
+    if before:
+        if installing:
+            pass
+        else:
+            # uninstalling
+            for file in os.scandir(os.path.expanduser("~/.local/share/mime/packages")):
+                os.system("xdg-mime uninstall " + os.fsdecode(file))
+        # always before
+        pass
     else:
-        mime = "uninstall"
-    for file in os.scandir(os.path.expanduser("~/.local/share/mime/packages")):
-        os.system("xdg-mime " + mime + " " + os.fsdecode(file))
-    os.system("touch $HOME/.local/share/icons/hicolor && gtk-update-icon-cache")
+        # after
+        if installing:
+            for file in os.scandir(os.path.expanduser("~/.local/share/mime/packages")):
+                os.system("xdg-mime install " + os.fsdecode(file))
+        else:
+            # uninstalling
+            pass
+        # always after
+        os.system("touch $HOME/.local/share/icons/hicolor && gtk-update-icon-cache")
 
 
 # make_local icons and desktop files
 def make_local():
+    update_resources(True, True)
     copy_with("locale")
     copy_with("icons")
     for file in os.scandir(path + "applications"):
@@ -43,17 +58,14 @@ def make_local():
         # ooooh some / action ....
         file = os.fsdecode(file)
         os.system(
-            "sed -ir 's/\\$VIRTUAL_ENV/"
+            "sed -ri 's/\\$VIRTUAL_ENV/"
             + os.path.expandvars("$VIRTUAL_ENV").replace("/", "\\/")
             + "/' "
             + file
-            + "&& rm "
-            + file
-            + "r"
         )
     copy_with("applications")
     copy_with("mime")
-    update_resources(True)
+    update_resources(True, False)
 
 
 # using as a copy function?
@@ -66,8 +78,9 @@ def remove(src, dst):
 # ininstall
 def remove_local():
     # remove app .desktop before icons
+    update_resources(False, True)
     copy_with("mime", fn=remove)
     copy_with("applications", fn=remove)
     copy_with("icons", fn=remove)
     copy_with("locale", fn=remove)
-    update_resources(False)
+    update_resources(False, False)

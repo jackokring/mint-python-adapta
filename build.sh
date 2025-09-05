@@ -28,13 +28,13 @@ cp ./*.desktop "./$NAME/applications/"
 echo "Desktops ..."
 mkdir -p "./$NAME/icons/hicolor/scalable/apps"
 mkdir -p "./$NAME/icons/hicolor/scalable/mimetypes"
-for icon in ./*.svg; do
+for icon in $(find . -maxdepth 1 -name '*.svg' | sed -nr 's/^([^-]*)$/\1/p'); do
 	cp "$icon" "./$NAME/icons/hicolor/scalable/apps/"
-	# use same icon for mimetype but might change later ... applications v. documents
-	MIME=$(sed -nr "s/^\.\/$DOM\.(.*?\.svg)\$/\1/p" <<<"$icon")
-	echo "Creating mime $MIME"
-	cp "$icon" "./$NAME/icons/hicolor/scalable/mimetypes/application-$DOM-$MIME"
 done
+for icon in $(find . -maxdepth 1 -name '*.svg' | sed -nr 's/^(.*\/application-.*)$/\1/p'); do
+	cp "$icon" "./$NAME/icons/hicolor/scalable/mimetypes/"
+done
+# use same icon for mimetype but might change later ... applications v. documents
 echo "Icons ..."
 mkdir -p "./$NAME/mime/packages"
 cp ./*.xml "./$NAME/mime/packages/"
@@ -43,12 +43,12 @@ cp ./*.xml "./$NAME/mime/packages/"
 mkdir -p "./$NAME/locale"
 pushd "$NAME" || exit 1
 sed -r "s/_LOCALE/$DOM\.$NAME/" "cpp/so.in.cpp" >"cpp/so.cpp"
-sed -ir "s/python3.12/python$PYVER/" "cpp/so.cpp"
+sed -ri "s/python3.12/python$PYVER/" "cpp/so.cpp"
 xgettext -p ../locale --keyword="_" -o messages.pot -- *.py cpp/so.cpp
 # alter specific phrases in .pot file
 VER=$(sed -nr "s/^version = \"(.*)\"$/\1/p" <../pyproject.toml)
-sed -ir "s/VERSION/$VER/g" "../locale/messages.pot"
-sed -ir "s/PACKAGE/$NAME/g" "../locale/messages.pot"
+sed -ri "s/VERSION/$VER/g" "../locale/messages.pot"
+sed -ri "s/PACKAGE/$NAME/g" "../locale/messages.pot"
 popd || exit 1
 # set a reasonable 2025 charset
 echo "New messages.pot ... (edit and name <lang>.po [msginit])"

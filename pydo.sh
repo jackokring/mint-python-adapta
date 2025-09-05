@@ -24,7 +24,8 @@ DOM=$(sed -nr "s/^domain = \"(.*)\"$/\1/p" <pyproject.toml)
 
 # copy an Icon
 # the marvels of ChatGPT and Freud
-cp "./butt-mint-axe.svg" "./$DOM.$(basename "$FILE").svg"
+cp "./$DOM.butt-mint-axe.svg" "./$DOM.$(basename "$FILE").svg"
+cp "./$DOM.butt-mint-axe.svg" "./application-$DOM-$(basename "$FILE").svg"
 
 # make a desktop file
 cat <<EOF >"./$(basename "$FILE").desktop"
