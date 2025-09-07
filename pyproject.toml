@@ -11,7 +11,7 @@ domain = "com.github.jackokring"
 [project]
 # don't use a minus sign ("-")
 name = "xapp_adapta"
-version = "0.2.0"
+version = "0.3.0"
 authors = [
   { name = "Simon Jackson", email = "jackokring@gmail.com" },
   # no email stops showing author in about dialog
