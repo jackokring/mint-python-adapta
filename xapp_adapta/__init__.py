@@ -2,6 +2,7 @@
 # These are the command imports
 # N.B. Ignore the errors and warnings, as the pyproject.toml does use these
 from .adapta_test import main as test  # pyright: ignore
+from .adapta_test import _
 from .adapta_main import main  # pyright: ignore
 import shutil
 from pathlib import Path
@@ -49,6 +50,10 @@ def update_resources(installing, before):
 
 # make_local icons and desktop files
 def make_local():
+    venv = os.path.expandvars("$VIRTUAL_ENV")
+    if not os.path.isfile(venv + "/bin/activate"):
+        print(_("Not possible outside of a virtual environment."))
+        return
     update_resources(True, True)
     copy_with("locale")
     copy_with("icons")
