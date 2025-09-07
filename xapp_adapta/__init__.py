@@ -51,7 +51,9 @@ def update_resources(installing, before):
 # make_local icons and desktop files
 def make_local():
     venv = os.path.expandvars("$VIRTUAL_ENV")
-    if not os.path.isfile(venv + "/bin/activate"):
+    if not os.path.isfile(venv + "/bin/activate") or venv == "$VIRTUAL_ENV":
+        # destroyed or non existant
+        # plus unlucky filename from cwd
         print(_("Not possible outside of a virtual environment."))
         return
     update_resources(True, True)
@@ -63,10 +65,7 @@ def make_local():
         # ooooh some / action ....
         file = os.fsdecode(file)
         os.system(
-            "sed -ri 's/\\$VIRTUAL_ENV/"
-            + os.path.expandvars("$VIRTUAL_ENV").replace("/", "\\/")
-            + "/' "
-            + file
+            "sed -ri 's/\\$VIRTUAL_ENV/" + venv.replace("/", "\\/") + "/' " + file
         )
     copy_with("applications")
     copy_with("mime")
