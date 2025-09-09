@@ -31,6 +31,8 @@ echo "VENV ..."
 echo "The next bit depends on Linux Mint being installed."
 echo "If you have Xia you can install libAdapta (not needed if you have Zara or later)."
 echo "This has not been tested on Wilma or earlier."
+echo "You may ignore any later version installed messages as that is good."
+echo "Needs SUDO"
 
 if ./yes-no.sh "install libAdapata"; then
 	# add libadapta-1 and gum TUI tool for nicer scripts
@@ -39,6 +41,7 @@ fi
 
 echo "If your disto Ubuntu LTS based (Noble or later), you can install the necessary packages."
 echo "It might work on other versions or even debian 12 or 13, but has not been tested."
+echo "Nedds SUDO"
 
 if ./yes-no.sh "install gtk4 instrospection and pyhton libs"; then
 	# apt installs might be necessary
@@ -46,6 +49,7 @@ if ./yes-no.sh "install gtk4 instrospection and pyhton libs"; then
 fi
 
 echo "If you wish to develop for other locales, the following might be required."
+echo "Needs SUDO"
 
 if ./yes-no.sh "gettext language locale utilities"; then
 	# international
@@ -57,6 +61,8 @@ fi
 
 echo "An error about 'Adap.pyi' indicates a fall back to libAdwaita."
 echo "The symbols for libAdapta might not have installed."
+echo "This allows python programming LSP symbols for libAdapta."
+
 # make ADap symbol visible
 # change this when the version bumps from 3.12
 cp Adap.pyi "lib/python$VER/site-packages/gi-stubs/repository/Adap.pyi"
