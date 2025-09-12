@@ -32,8 +32,8 @@ The scripts.
 Change the paths from `xapp_adapta`, as the name must be unique on `PyPI`, if
 you intend to upload a derivative work there. This is important.
 
-The `C++` module `.so` must be edited in `xapp_adapta/cpp` with `so.in.hpp`
-being edited to auto generate `so.hpp`. So, don't edit `so.hpp` and add
+The `C++` module `.so` must be edited in `xapp_adapta/cpp` with `so.in.cpp`
+being edited to auto generate `so.cpp`. So, don't edit `so.cpp`. Add python
 interface definitions to `so.pyi` in `xapp_adapta`.
 
 Thanks
