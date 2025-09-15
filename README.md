@@ -49,3 +49,5 @@ _Simon Jackson_
 4. If you've changed the name from `xapp_adapta`, `./build.sh` will make a
    python module which can be uploaded to PyPI by `hatch publish` (check how in
    the `hatch` documentation), making `pip install xapp-adapta` work maybe?
+5. A `pip install` would need a once `àdapta_make_local` for desktop Linux
+   installs. Fancy icons and mimetypes
