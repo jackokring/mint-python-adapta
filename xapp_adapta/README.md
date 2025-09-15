@@ -8,7 +8,7 @@ It might be expanded later.
 ## Notes for Developers
 
 This is the `PyPI` readme. Included commands can be used for effect. Add
-any commands to the `pyproject.toml` in the source linked below.
+any command entries to the `pyproject.toml` in the source linked below.
 
 ### Changing the Application ID
 

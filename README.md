@@ -25,7 +25,8 @@ The scripts.
   setting the virtual environment not being automatic, or maybe you don't need
   a debug terminal. You also get an icon made. For other icons, don't use
   a command name, just make a `.svg` and pick a unique ID. It also makes a
-  mimetype for the application icon.
+  mimetype for the application icon. Put the application icon in `ìcon_base`
+  before `./pydo.sh` so the document mimetype icon is also made.
 - `lang.sh` makes a localization file based on the user's language setting.
   Also updates the localizations if new things to translate are found.
 
@@ -39,3 +40,12 @@ interface definitions to `so.pyi` in `xapp_adapta`.
 Thanks
 
 _Simon Jackson_
+
+## Installing
+
+1. `git clone git@github.com:jackokring/mint-python-adapta.git`
+2. `cd mint-python-adapta`
+3. `./install.sh` (following the instructions for optional things)
+4. If you've changed the name from `xapp_adapta`, `./build.sh` will make a
+   python module which can be uploaded to PyPI by `hatch publish` (check how in
+   the `hatch` documentation), making `pip install xapp-adapta` work maybe?
