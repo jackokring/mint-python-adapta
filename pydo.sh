@@ -22,10 +22,12 @@ echo "Just close the application if it's the right one ..."
 # env vars
 DOM=$(sed -nr "s/^domain = \"(.*)\"$/\1/p" <pyproject.toml)
 
+IB=icon_base
 # copy an Icon
-# the marvels of ChatGPT and Freud
-cp "./$DOM.butt-mint-axe.svg" "./$DOM.$(basename "$FILE").svg"
-cp "./$DOM.butt-mint-axe.svg" "./application-$DOM-$(basename "$FILE").svg"
+# the marvels of ChatGPT and Freudmime_icon
+python mime_icon.py --doc "./$IB/document.svg" --app "./$IB/$DOM.$(basename "$FILE").svg" --out "./$IB/$DOM.document.svg" --fit 0.5
+cp "./$IB/$DOM.$(basename "$FILE").svg" "./$DOM.$(basename "$FILE").svg"
+cp "./$IB/$DOM.document.svg" "./application-$DOM-$(basename "$FILE").svg"
 
 # make a desktop file
 cat <<EOF >"./$(basename "$FILE").desktop"

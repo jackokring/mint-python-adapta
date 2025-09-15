@@ -1,15 +1,40 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" aria-labelledby="title2 desc2" role="img">
-  <title id="title2">Minty App Icon – Monochrome sprig</title>
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:ns1="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:ns2="http://www.inkscape.org/namespaces/inkscape" height="128px" viewBox="0 0 128 128" width="128px" version="1.1" id="svg42" ns1:docname="document.svg" ns2:version="1.2.2 (b0a8486541, 2022-12-01)">
+  <defs id="defs46" />
+  <ns1:namedview id="namedview44" pagecolor="#ffffff" bordercolor="#000000" borderopacity="0.25" ns2:showpageshadow="2" ns2:pageopacity="0.0" ns2:pagecheckerboard="0" ns2:deskcolor="#d1d1d1" showgrid="false" ns2:zoom="4.859375" ns2:cx="64.102894" ns2:cy="64" ns2:window-width="1536" ns2:window-height="792" ns2:window-x="0" ns2:window-y="0" ns2:window-maximized="1" ns2:current-layer="svg42" />
+  <radialGradient id="a" cx="413.639404" cy="226.77327" gradientTransform="matrix(0.231318 0.400655 0.244759 -0.141312 -89.187302 -67.681122)" gradientUnits="userSpaceOnUse" r="192">
+    <stop offset="0" stop-color="#50db81" id="stop2" />
+    <stop offset="1" stop-color="#8ff0a4" stop-opacity="0.003922" id="stop4" />
+  </radialGradient>
+  <radialGradient id="b" cx="521.890137" cy="228.371063" gradientTransform="matrix(0.00000003 -0.278432 -0.284052 0 110.869301 251.310974)" gradientUnits="userSpaceOnUse" r="192">
+    <stop offset="0" stop-color="#4a86cf" id="stop7" />
+    <stop offset="1" stop-color="#87bae1" stop-opacity="0" id="stop9" />
+  </radialGradient>
+  <path d="m 28 8 h 50 l 30.042969 29.917969 v 74.058593 c 0 4.433594 -3.609375 8.023438 -8.042969 8.023438 h -72 c -4.433594 0 -8 -3.566406 -8 -8 v -96 c 0 -4.433594 3.566406 -8 8 -8 z m 0 0" fill="#f6f5f4" id="path12" />
+  <g fill="#deddda" id="g36">
+    <path d="m 78 8 v 22 c 0 4.433594 3.609375 7.921875 8.042969 7.921875 l 22 -0.003906 z m 0 0" id="path14" />
+    <path d="m 82 100 h 12 c 1.105469 0 2 0.894531 2 2 s -0.894531 2 -2 2 h -12 c -1.105469 0 -2 -0.894531 -2 -2 s 0.894531 -2 2 -2 z m 0 0" id="path16" />
+    <path d="m 82 92 h 12 c 1.105469 0 2 0.894531 2 2 s -0.894531 2 -2 2 h -12 c -1.105469 0 -2 -0.894531 -2 -2 s 0.894531 -2 2 -2 z m 0 0" id="path18" />
+    <path d="m 82 84 h 12 c 1.105469 0 2 0.894531 2 2 s -0.894531 2 -2 2 h -12 c -1.105469 0 -2 -0.894531 -2 -2 s 0.894531 -2 2 -2 z m 0 0" id="path20" />
+    <path d="m 82 76 h 12 c 1.105469 0 2 0.894531 2 2 s -0.894531 2 -2 2 h -12 c -1.105469 0 -2 -0.894531 -2 -2 s 0.894531 -2 2 -2 z m 0 0" id="path22" />
+    <path d="m 82 68 h 12 c 1.105469 0 2 0.894531 2 2 s -0.894531 2 -2 2 h -12 c -1.105469 0 -2 -0.894531 -2 -2 s 0.894531 -2 2 -2 z m 0 0" id="path24" />
+    <path d="m 82 60 h 12 c 1.105469 0 2 0.894531 2 2 s -0.894531 2 -2 2 h -12 c -1.105469 0 -2 -0.894531 -2 -2 s 0.894531 -2 2 -2 z m 0 0" id="path26" />
+    <path d="m 82 52 h 12 c 1.105469 0 2 0.894531 2 2 s -0.894531 2 -2 2 h -12 c -1.105469 0 -2 -0.894531 -2 -2 s 0.894531 -2 2 -2 z m 0 0" id="path28" />
+    <path d="m 34 44 h 60 c 1.105469 0 2 0.894531 2 2 s -0.894531 2 -2 2 h -60 c -1.105469 0 -2 -0.894531 -2 -2 s 0.894531 -2 2 -2 z m 0 0" id="path30" />
+    <path d="m 34 36 h 36 c 1.105469 0 2 0.59375 2 1.324219 v 1.351562 c 0 0.730469 -0.894531 1.324219 -2 1.324219 h -36 c -1.105469 0 -2 -0.59375 -2 -1.324219 v -1.351562 c 0 -0.730469 0.894531 -1.324219 2 -1.324219 z m 0 0" id="path32" />
+    <path d="m 34 28 h 36 c 1.105469 0 2 0.59375 2 1.324219 v 1.351562 c 0 0.730469 -0.894531 1.324219 -2 1.324219 h -36 c -1.105469 0 -2 -0.59375 -2 -1.324219 v -1.351562 c 0 -0.730469 0.894531 -1.324219 2 -1.324219 z m 0 0" id="path34" />
+  </g>
+<g id="inserted-app-icon" transform="translate(32.000000,32.000000) scale(0.125000)"><title id="title2">Minty App Icon – Monochrome sprig</title>
   <desc id="desc2">Rounded-square outline with a realistic mint herb sprig shape; designed to inherit text color.</desc>
-  <!-- Background squircle filled with a mint green tone -->
-  <rect x="24" y="24" width="464" height="464" rx="108" fill="#3EB489" stroke="currentColor" stroke-width="20"/>
+  
+  <rect x="24" y="24" width="464" height="464" rx="108" fill="#3EB489" stroke="currentColor" stroke-width="20" />
 
-  <!-- Mint sprig: four serrated leaves -->
-  <path d="M220 280 C160 240, 160 180, 220 160 C280 140, 300 200, 260 240 Z" fill="none" stroke="#0F3D2E" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M292 280 C352 240, 352 180, 292 160 C232 140, 212 200, 252 240 Z" fill="none" stroke="#0F3D2E" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M256 140 C220 100, 292 100, 256 140 Z" fill="none" stroke="#0F3D2E" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M256 340 C220 380, 292 380, 256 340 Z" fill="none" stroke="#0F3D2E" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <path d="M220 280 C160 240, 160 180, 220 160 C280 140, 300 200, 260 240 Z" fill="none" stroke="#0F3D2E" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M292 280 C352 240, 352 180, 292 160 C232 140, 212 200, 252 240 Z" fill="none" stroke="#0F3D2E" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M256 140 C220 100, 292 100, 256 140 Z" fill="none" stroke="#0F3D2E" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M256 340 C220 380, 292 380, 256 340 Z" fill="none" stroke="#0F3D2E" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" />
 
-  <!-- Central stem -->
-  <line x1="256" y1="140" x2="256" y2="340" stroke="#0F3D2E" stroke-width="10" stroke-linecap="round"/>
-</svg>
+  
+  <line x1="256" y1="140" x2="256" y2="340" stroke="#0F3D2E" stroke-width="10" stroke-linecap="round" />
+</g></svg>

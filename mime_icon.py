@@ -3,10 +3,10 @@
 Center one SVG (app icon) inside another SVG (document icon) and save the result.
 
 Usage:
-  python compose_svg.py --doc document.svg --app app.svg --out out.svg
+  python mime_icon.py --doc document.svg --app app.svg --out out.svg
   # Optional controls:
-  python compose_svg.py --doc document.svg --app app.svg --out out.svg --fit 0.7
-  python compose_svg.py --doc document.svg --app app.svg --out out.svg --inner 8,8,80,80
+  python mime_icon.py --doc document.svg --app app.svg --out out.svg --fit 0.7
+  python mime_icon.py --doc document.svg --app app.svg --out out.svg --inner 8,8,80,80
 """
 import argparse
 import re
@@ -20,6 +20,7 @@ XLINK_NS = "http://www.w3.org/1999/xlink"
 ET.register_namespace("", SVG_NS)
 ET.register_namespace("xlink", XLINK_NS)
 
+
 def parse_len(s):
     """Parse an SVG length (px, pt, mm, cm, in). Returns value in px."""
     if s is None:
@@ -32,13 +33,15 @@ def parse_len(s):
     unit = m.group(2).lower()
     # Convert to px; 1in=96px, 1pt=1.3333px, 1mm≈3.7795px, 1cm=37.795px
     conv = {
-        "": 1.0, "px": 1.0,
-        "pt": 96.0/72.0,
+        "": 1.0,
+        "px": 1.0,
+        "pt": 96.0 / 72.0,
         "in": 96.0,
-        "mm": 96.0/25.4,
-        "cm": 96.0/2.54,
+        "mm": 96.0 / 25.4,
+        "cm": 96.0 / 2.54,
     }
     return val * conv.get(unit, 1.0)
+
 
 def get_viewbox_or_size(root):
     """
@@ -56,6 +59,7 @@ def get_viewbox_or_size(root):
         raise ValueError("SVG must have a viewBox or width/height.")
     return (0.0, 0.0, w, h)
 
+
 def ensure_defs(root):
     """Ensure a single <defs> exists; return it."""
     for child in root:
@@ -66,12 +70,14 @@ def ensure_defs(root):
     root.insert(0, defs)
     return defs
 
+
 def move_defs_into(target_defs, src_root):
     """Copy <defs> children from src into target <defs> (shallow, no dedup)."""
     for child in list(src_root):
         if child.tag == f"{{{SVG_NS}}}defs":
             for item in list(child):
                 target_defs.append(deepcopy(item))
+
 
 def parse_inner_rect(arg, doc_box):
     """
@@ -85,16 +91,24 @@ def parse_inner_rect(arg, doc_box):
     except Exception:
         raise ValueError("--inner must be 'x,y,w,h' (numbers)")
 
+
 def main():
     ap = argparse.ArgumentParser(description="Center an app SVG inside a document SVG.")
     ap.add_argument("--doc", required=True, help="Path to the document/background SVG")
     ap.add_argument("--app", required=True, help="Path to the app/foreground SVG")
     ap.add_argument("--out", required=True, help="Output SVG path")
-    ap.add_argument("--fit", type=float, default=0.8,
-                    help="Fraction of inner box size to fill (0<fit<=1). Default 0.8")
-    ap.add_argument("--inner", default=None,
-                    help="Inner content rect in doc viewBox units: x,y,w,h "
-                         "(defaults to full doc viewBox).")
+    ap.add_argument(
+        "--fit",
+        type=float,
+        default=0.8,
+        help="Fraction of inner box size to fill (0<fit<=1). Default 0.8",
+    )
+    ap.add_argument(
+        "--inner",
+        default=None,
+        help="Inner content rect in doc viewBox units: x,y,w,h "
+        "(defaults to full doc viewBox).",
+    )
     args = ap.parse_args()
 
     if not (0 < args.fit <= 1.0):
@@ -111,7 +125,9 @@ def main():
     doc_minx, doc_miny, doc_w, doc_h = get_viewbox_or_size(doc_root)
     app_minx, app_miny, app_w, app_h = get_viewbox_or_size(app_root)
 
-    inner_x, inner_y, inner_w, inner_h = parse_inner_rect(args.inner, (doc_minx, doc_miny, doc_w, doc_h))
+    inner_x, inner_y, inner_w, inner_h = parse_inner_rect(
+        args.inner, (doc_minx, doc_miny, doc_w, doc_h)
+    )
 
     # Target box after applying fit
     target_w = inner_w * args.fit
@@ -152,6 +168,6 @@ def main():
     doc_tree.write(args.out, encoding="utf-8", xml_declaration=True)
     print(f"Wrote {args.out}")
 
+
 if __name__ == "__main__":
     main()
-
