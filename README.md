@@ -51,3 +51,12 @@ _Simon Jackson_
    the `hatch` documentation), making `pip install xapp-adapta` work maybe?
 5. A `pip install` would need a once `àdapta_make_local` for desktop Linux
    installs. Fancy icons and mimetypes
+
+## Interesting Things
+
+The 3-way split of `C++`/`Python`/`LuaJIT-5.1` can solve most problems. The
+`C++` takes the role of ultimate fast without going rusty. The `Python` takes
+the role of glue and any ML via extensive modules from its community. `Lua`
+takes the role of a compact and reasonably fast interface to an alternate
+small scene due to a very compact language embedding, and documentation that
+you can read within a night.

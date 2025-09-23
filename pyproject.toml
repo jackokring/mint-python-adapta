@@ -57,6 +57,7 @@ artifacts = [
   "icons",
   "locale",
   "mime",
+  "lua",
   "*.so",
   "*.dll",
   "*.dynlib",

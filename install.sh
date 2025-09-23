@@ -43,9 +43,9 @@ echo "If your disto Ubuntu LTS based (Noble or later), you can install the neces
 echo "It might work on other versions or even debian 12 or 13, but has not been tested."
 echo "Nedds SUDO"
 
-if ./yes-no.sh "install gtk4 instrospection and pyhton libs"; then
+if ./yes-no.sh "install gtk4, luaJIT and python libs"; then
 	# apt installs might be necessary
-	sudo apt install -y libadwaita-* libadwaita-*-dev gir1.2-adw-* python3-gi
+	sudo apt install -y libadwaita-* libadwaita-*-dev gir1.2-adw-* python3-gi libluajit-5.1-dev
 fi
 
 echo "If you wish to develop for other locales, the following might be required."
@@ -53,7 +53,7 @@ echo "Needs SUDO"
 
 if ./yes-no.sh "gettext language locale utilities"; then
 	# international
-	sudo apt install gettext*
+	sudo apt install -y gettext*
 fi
 
 # install pips
