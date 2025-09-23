@@ -1,6 +1,7 @@
 #include "so.hpp"
 #include <libintl.h>
 // python version replaced by./build.sh script
+#include <lua5.1/lua.hpp>
 #include <python3.12/Python.h>
 
 PyObject *hello(PyObject *, PyObject *) {

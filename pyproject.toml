@@ -43,6 +43,8 @@ libraries = [
     "xapp_adapta/cpp/so.cpp",
   ], include-dirs = [
     "xapp_adapta/cpp",
+  ], libraries = [
+    "luajit-5.1",
   ] },
 ]
 
