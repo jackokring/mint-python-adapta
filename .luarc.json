@@ -1,0 +1,11 @@
+{
+  "runtime.version": "LuaJIT",
+  "runtime.path": [
+    "xapp_adapta/lua/?.lua"
+  ],
+  "diagnostics.globals": ["vim"],
+  "workspace.checkThirdParty": false,
+  "workspace.library": [
+    "$VIMRUNTIME"
+  ]
+}
