@@ -4,7 +4,7 @@
 #include <lua5.1/lauxlib.h>
 // avoid the namespace capture from "C" in a { ... }
 #include <lua5.1/lua.h>
-#include <lua5.1/lua.hpp>
+// #include <lua5.1/lua.hpp>
 #include <lua5.1/lualib.h>
 #include <python3.12/Python.h>
 
@@ -23,6 +23,7 @@ void add_lua_CFunctions() {
   }
 }
 
+// output *name(self, args) { ... }
 PyObject *hello(PyObject *, PyObject *) {
   if ((L = luaL_newstate()) == NULL) {
     printf("Lua out of memory");
