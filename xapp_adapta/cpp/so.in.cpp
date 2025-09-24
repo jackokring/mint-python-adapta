@@ -46,6 +46,7 @@ PyObject *hello(PyObject *, PyObject *) {
 static PyMethodDef so_methods[] = {{"hello", (PyCFunction)hello, METH_NOARGS},
                                    {nullptr, nullptr, 0, nullptr}};
 
+// some stuff about .m_size and multithreading thread local storage
 static PyModuleDef so_module = {PyModuleDef_HEAD_INIT, "so", "C++ .so", -1,
                                 so_methods};
 
@@ -54,5 +55,6 @@ PyMODINIT_FUNC PyInit_so(void) {
   // ./build.sh replaces locale to correct domain making so.cpp
   bindtextdomain("_LOCALE", NULL);
   textdomain("_LOCALE");
+  // ummm ... PyObjectSetAttrString in multi-create threading?
   return PyModule_Create(&so_module);
 }
