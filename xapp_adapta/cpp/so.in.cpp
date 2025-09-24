@@ -10,15 +10,33 @@
 // main lua instance state
 lua_State *L;
 
+void add_lua_CFunctions() {
+  // all CFunctions must be C static global scope
+  // static int foo(lua_State *L) { ... } // for example
+  static const char *names[] = {};
+  static const lua_CFunction fpointers[] = {};
+  auto p = names;
+  auto f = fpointers;
+  while (*p != NULL) {
+    lua_register(L, *p++, *f++);
+  }
+}
+
 PyObject *hello(PyObject *, PyObject *) {
-  L = luaL_newstate();
-  luaL_openlibs(L);
-  // load init.lua file
-  if (luaL_dostring(L, "require(\"init\")")) {
-    // error as -1 from top (zero is empty), +ve are frome frame pointer
-    printf("%s", lua_tostring(L, -1));
-    // pop one error message AFTER string use
-    lua_pop(L, 1);
+  if ((L = luaL_newstate()) == NULL) {
+    printf("Lua out of memory");
+  } else {
+    // surprisingly not sure how this fails out of memory
+    // maybe it's optimized as a bit flag extra table search?
+    luaL_openlibs(L);
+    // load init.lua file
+    if (luaL_dostring(L, "require(\"init\")")) {
+      // error as -1 from top (zero is empty), +ve are from frame pointer
+      printf("%s", lua_tostring(L, -1));
+      // pop one error message AFTER string use
+      lua_pop(L, 1);
+    }
+    add_lua_CFunctions();
   }
   return PyUnicode_FromString(_("C++ module loaded"));
 }
