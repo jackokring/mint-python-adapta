@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xapp_adapta 0.3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-24 03:54+0000\n"
+"POT-Creation-Date: 2025-09-24 06:48+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -29,10 +29,10 @@ msgstr ""
 msgid "Navigation"
 msgstr ""
 
-#: __init__.py:59
+#: __init__.py:60
 msgid "Not possible outside of a virtual environment."
 msgstr ""
 
-#: cpp/so.cpp:8
+#: cpp/so.cpp:21
 msgid "C++ module loaded"
 msgstr ""
