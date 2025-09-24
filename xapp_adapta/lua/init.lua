@@ -1,0 +1,1 @@
+-- init.lua is loaded on startup

@@ -11,7 +11,8 @@ import sys
 
 path = os.path.dirname(__file__)
 # local module path relative to .so file
-os.environ["LUA_PATH"] = path + "/lua/?.lua"
+# ;; for default path after local loading
+os.environ["LUA_PATH"] = path + "/lua/?.lua;;"
 sys.path.insert(0, path)
 import xapp_adapta.so as so
 
