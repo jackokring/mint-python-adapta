@@ -15,8 +15,10 @@ PyObject *hello(PyObject *, PyObject *) {
   luaL_openlibs(L);
   // load init.lua file
   if (luaL_dostring(L, "require(\"init\")")) {
-    // error
+    // error as -1 from top (zero is empty), +ve are frome frame pointer
     printf("%s", lua_tostring(L, -1));
+    // pop one error message AFTER string use
+    lua_pop(L, 1);
   }
   return PyUnicode_FromString(_("C++ module loaded"));
 }
