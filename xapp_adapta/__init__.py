@@ -9,12 +9,14 @@ from pathlib import Path
 import os
 import sys
 
-here = Path(__file__).parent
-sys.path.insert(0, str(here))
+path = os.path.dirname(__file__)
+# local module path relative to .so file
+os.environ["LUA_PATH"] = path + "/lua/?.lua"
+sys.path.insert(0, path)
 import xapp_adapta.so as so
 
 print(so.hello())
-path = os.path.dirname(__file__) + "/"
+path = path + "/"
 
 
 def copy_with(dir, fn=shutil.copy2):
