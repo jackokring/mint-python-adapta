@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: xapp_adapta 0.3.0\n"
+"Project-Id-Version: xapp_adapta 0.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-24 14:44+0000\n"
+"POT-Creation-Date: 2025-09-24 20:23+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,6 +33,6 @@ msgstr ""
 msgid "Not possible outside of a virtual environment."
 msgstr ""
 
-#: cpp/so.cpp:23
+#: cpp/so.cpp:42
 msgid "C++ module loaded"
 msgstr ""

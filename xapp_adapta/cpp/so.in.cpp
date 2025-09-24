@@ -2,6 +2,7 @@
 #include <libintl.h>
 // python version replaced by./build.sh script
 #include <lua5.1/lauxlib.h>
+// avoid the namespace capture from "C" in a { ... }
 #include <lua5.1/lua.h>
 #include <lua5.1/lua.hpp>
 #include <lua5.1/lualib.h>
@@ -13,7 +14,7 @@ lua_State *L;
 void add_lua_CFunctions() {
   // all CFunctions must be C static global scope
   // static int foo(lua_State *L) { ... } // for example
-  static const char *names[] = {};
+  static const char *names[] = {NULL}; // NULL TERMINATE!!
   static const lua_CFunction fpointers[] = {};
   auto p = names;
   auto f = fpointers;
