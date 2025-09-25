@@ -61,7 +61,8 @@ static const luaL_reg so_lua[] = {{"csq", csq}, {NULL, NULL}};
 void add_lua_CFunctions(lua_State *L) {
   // ADD EXTRA HERE BEFDRE RETURN
   lua_getglobal(L, "_G");
-  luaL_openlib(L, NULL, so_lua, 0);
+  // luaL_openlib depricated NULL implies top of stack used as table
+  luaL_register(L, NULL, so_lua);
 }
 
 //=============================================================================
