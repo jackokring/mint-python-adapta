@@ -36,19 +36,18 @@ static int csq(lua_State *L) {
 
 // main lua instance state
 lua_State *L;
+static const struct luaL_reg so_lua[] = {{"csq", csq}, {NULL, NULL}};
 
-void add_lua_CFunctions() {
-  // all CFunctions must be C static global scope
-  // static int foo(lua_State *L) { ... } // for example
-  static const char *names[] = {"csq", NULL}; // NULL TERMINATE!!
-  static const lua_CFunction fpointers[] = {csq};
-  auto p = names;
-  auto f = fpointers;
-  while (*p != NULL) {
-    lua_register(L, *p++, *f++);
+void add_lua_CFunctions(lua_State *L) {
+  auto p = so_lua;
+  while ((*p).name != NULL) {
+    lua_register(L, (*p).name, (*p).func);
+    p++;
   }
 }
 
+//=============================================================================
+// SPECIFIC HELLO FOR xapp_adapta BUT IS A GENERAL PYTHON LIB
 // output *name(self, args) { ... }
 PyObject *hello(PyObject *, PyObject *) {
   if ((L = luaL_newstate()) == NULL) {
@@ -64,7 +63,7 @@ PyObject *hello(PyObject *, PyObject *) {
       // pop one error message AFTER string use
       lua_pop(L, 1);
     }
-    add_lua_CFunctions();
+    add_lua_CFunctions(L);
   }
   return PyUnicode_FromString(_("C++ module loaded"));
 }
@@ -83,4 +82,13 @@ PyMODINIT_FUNC PyInit_so(void) {
   textdomain("_LOCALE");
   // ummm ... PyObjectSetAttrString in multi-create threading?
   return PyModule_Create(&so_module);
+}
+
+//=============================================================================
+// maybe a direct lua loader for some
+// MAKES IT SLIGHTLY MORE USEFUL
+// loads as global overrides not a module
+int luaopen_so(lua_State *L) {
+  add_lua_CFunctions(L);
+  return 0; // globally added
 }
