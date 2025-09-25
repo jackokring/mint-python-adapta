@@ -7,6 +7,8 @@
 // #include <lua5.1/lua.hpp>
 #include <lua5.1/lualib.h>
 #include <python3.12/Python.h>
+// assert message
+#define assertm(exp, msg) assert((void(msg), exp))
 
 // sgn
 template <typename T> int sgn(T val) { return (T(0) < val) - (val < T(0)); }
@@ -69,30 +71,28 @@ void add_lua_CFunctions(lua_State *L) {
 // SPECIFIC HELLO FOR xapp_adapta BUT IS A GENERAL PYTHON LIB
 // output *name(self, args) { ... }
 PyObject *hello(PyObject *, PyObject *) {
-  if ((L = luaL_newstate()) == NULL) {
-    printf("Lua out of memory\n");
-  } else {
-    // surprisingly not sure how this fails out of memory
-    // maybe it's optimized as a bit flag extra table search?
-    luaL_openlibs(L);
-    // better to have the functions included here
-    add_lua_CFunctions(L);
-    lua_pop(L, 1);
-    // typing.lua has templates for type annotations
-    // so need if not _G.xxx then ... end guards
-    // as include from init.lua would overwrite otherwise
-    // load init.lua file
-    luaL_dostring(L, "require(\"init\")");
-    // even on error works
-    while (lua_gettop(L) > 0) {
-      const char *s = lua_tostring(L, -1);
-      if (s == NULL) {
-        s = ""; // almost getting error when not number or string
-      }
-      printf("%s\n", s);
-      // pop one error message AFTER string use
-      lua_pop(L, 1);
+  // fail on NULL
+  assertm(L = luaL_newstate(), "Lua out of memory\n");
+  // surprisingly not sure how this fails out of memory
+  // maybe it's optimized as a bit flag extra table search?
+  luaL_openlibs(L);
+  // better to have the functions included here
+  add_lua_CFunctions(L);
+  lua_pop(L, 1);
+  // typing.lua has templates for type annotations
+  // so need if not _G.xxx then ... end guards
+  // as include from init.lua would overwrite otherwise
+  // load init.lua file
+  luaL_dostring(L, "require(\"init\")");
+  // even on error works
+  while (lua_gettop(L) > 0) {
+    const char *s = lua_tostring(L, -1);
+    if (s == NULL) {
+      s = ""; // almost getting error when not number or string
     }
+    printf("%s\n", s);
+    // pop one error message AFTER string use
+    lua_pop(L, 1);
   }
   return PyUnicode_FromString(_("C++ module loaded"));
 }
