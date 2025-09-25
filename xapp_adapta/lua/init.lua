@@ -5,4 +5,6 @@ require("module")
 require("async")
 require("bus")
 require("util")
+-- syntax highlighting for lua_CFunctions
+require("typing")
 print("Super _G loading complete")
