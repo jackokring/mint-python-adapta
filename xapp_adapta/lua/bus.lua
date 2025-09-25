@@ -2,10 +2,9 @@
 
 local novaride = require("novaride").setup()
 
----@class Bus
-_G.Bus = {}
--- if not find method try class
-Bus.__index = Bus
+--make it fine
+---@class Bus: Class
+_G.Bus = require("class"):extend()
 local names = {}
 -- last ref to bus instance weak as not a names strong
 local weak = {}
@@ -20,7 +19,7 @@ local wait = false
 ---this bus object then supports
 ---send() and listen() with remove()
 ---@param named string
----@return Bus
+---@return NamedBus
 function Bus:__call(named)
 	-- avoid namespace issues with method names in self
 	local b = names[named]
@@ -29,6 +28,7 @@ function Bus:__call(named)
 		-- remember same one for same string name
 		names[named] = b
 	end
+	---@class NamedBus: Object
 	return b
 end
 
@@ -36,6 +36,7 @@ end
 ---args are bus state NOT bus clocks
 ---sen(...) combining might just send last only
 ---this is a feature NOT a bug
+---@param self NamedBus
 ---@param ... unknown
 function Bus:send(...)
 	-- que bus with merge efficiency
@@ -74,6 +75,7 @@ function Bus:send(...)
 end
 
 ---listen for calls on bus actor for function
+---@param self NamedBus
 ---@param fn fun(...): nil
 function Bus:listen(fn)
 	self[fn] = fn
@@ -82,12 +84,14 @@ end
 ---remove function from bus actor
 ---remember any function in a variable
 ---if you intend to remove it later
+---@param self NamedBus
 ---@param fn fun(...): nil
 function Bus:remove(fn)
 	self[fn] = nil
 end
 
 ---destroy a bus so it can be released by the collector
+---@param self NamedBus
 function Bus:destroy()
 	-- cancel all bussing
 	run[self] = nil
