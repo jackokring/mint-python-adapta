@@ -8,14 +8,37 @@
 #include <lua5.1/lualib.h>
 #include <python3.12/Python.h>
 
+// cosine, sine quartic
+static int csq(lua_State *L) {
+  if (lua_gettop(L) < 3) {
+    lua_pushstring(L, "needs unitary angle, quadgain and quartgain arguments");
+    lua_error(L);
+  }
+  // unitary -1 .. 1 is -PI/2 .. PI/2
+  float x = (float)luaL_checknumber(L, -3) * 2.0 / M_PI;
+  // quadratic gain of 1, flex for shaping
+  float a = (float)luaL_checknumber(L, -2) / 2.0;
+  // quartic gain of 1 flex for edge shaping
+  float b = (float)luaL_checknumber(L, -1) / 24.0;
+  float x2 = x * x;
+  float c = 1.0 - a * x2;
+  x2 *= x2;
+  c += b * x2;
+  float s = fsqrt(1.0 - c * c);
+  lua_pushnumber(L, c);
+  lua_pushnumber(L, s);
+  // return cos, sin
+  return 2;
+}
+
 // main lua instance state
 lua_State *L;
 
 void add_lua_CFunctions() {
   // all CFunctions must be C static global scope
   // static int foo(lua_State *L) { ... } // for example
-  static const char *names[] = {NULL}; // NULL TERMINATE!!
-  static const lua_CFunction fpointers[] = {};
+  static const char *names[] = {"csq", NULL}; // NULL TERMINATE!!
+  static const lua_CFunction fpointers[] = {csq};
   auto p = names;
   auto f = fpointers;
   while (*p != NULL) {
