@@ -82,14 +82,14 @@ PyObject *hello(PyObject *, PyObject *) {
     // so need if not _G.xxx then ... end guards
     // as include from init.lua would overwrite otherwise
     // load init.lua file
-    if (luaL_dostring(L, "require(\"init\")")) {
-      // error as -1 from top (zero is empty), +ve are from frame pointer
-      printf("%s\n", lua_tostring(L, -1));
-      // pop one error message AFTER string use
-      lua_pop(L, 1);
-    }
+    luaL_dostring(L, "require(\"init\")");
+    // even on error works
     while (lua_gettop(L) > 0) {
-      printf("%s\n", lua_tostring(L, -1));
+      const char *s = lua_tostring(L, -1);
+      if (s == NULL) {
+        s = ""; // almost getting error when not number or string
+      }
+      printf("%s\n", s);
       // pop one error message AFTER string use
       lua_pop(L, 1);
     }
