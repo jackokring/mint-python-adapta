@@ -6,41 +6,51 @@
 
 ---@class Class
 local Class = {}
+-- static class variables
 Class.__index = Class
 
 ---Does nothing.
 ---You have to implement this yourself for extra functionality when initializing
 ---@param self Class
-function Class:new() end
+---@param ... unknown
+function Class:new(...) end
 
 ---Create a new class/Class by extending the base Class class.
 ---The extended Class will have a field called `super` that will access the super class.
 ---@param self Class
 ---@return Class
 function Class:extend()
-  local cls = {}
-  for k, v in pairs(self) do
-    if k:find "__" == 1 then
-      cls[k] = v
-    end
-  end
-  cls.__index = cls
-  cls.super = self
-  setmetatable(cls, self)
-  return cls
+	local cls = {}
+	for k, v in pairs(self) do
+		--behaviours by copying "__metatable of instance == class"
+		--not the static class variables as different class
+		if k:find("__") == 1 then
+			cls[k] = v
+		end
+	end
+	--but check own statics not super's statics
+	cls.__index = cls
+	--static reference to super
+	cls.super = self
+	--if static not found, check super?
+	--no as cls.__index = cls
+	--an extra hidden super pointer for is()?
+	--I suppose it has a bit of dynamic programming anti-clobber of super
+	return setmetatable(cls, self)
+	--optimise
 end
 
 ---Implement a mixin onto this Class.
 ---@param self Class
----@param nil ...
+---@param ... unknown
 function Class:mixin(...)
-  for _, cls in pairs { ... } do
-    for k, v in pairs(cls) do
-      if self[k] == nil and type(v) == "function" then
-        self[k] = v
-      end
-    end
-  end
+	for _, cls in pairs({ ... }) do
+		for k, v in pairs(cls) do
+			if self[k] == nil and type(v) == "function" then
+				self[k] = v
+			end
+		end
+	end
 end
 
 ---Checks if the Class is an instance
@@ -49,14 +59,14 @@ end
 ---@param T Class
 ---@return boolean
 function Class:is(T)
-  local mt = getmetatable(self)
-  while mt do
-    if mt == T then
-      return true
-    end
-    mt = getmetatable(mt)
-  end
-  return false
+	local mt = getmetatable(self)
+	while mt do
+		if mt == T then
+			return true
+		end
+		mt = getmetatable(mt)
+	end
+	return false
 end
 
 ---The default tostring implementation for an Class.
@@ -64,18 +74,17 @@ end
 ---@param self Class
 ---@return string
 function Class:__tostring()
-  return "Class " .. tostring(self)
+	return "Class " .. tostring(getmetatable(self))
 end
 
 ---You can call the class the initialize it without using `Class:new`.
 ---@param self Class
----@param nil ...
+---@param ... unknown
 ---@return Class
 function Class:__call(...)
-  local obj = setmetatable({}, self)
-  obj:new(...)
-  return obj
+	local obj = setmetatable({}, self)
+	obj:new(...)
+	return obj
 end
 
 return Class
-
