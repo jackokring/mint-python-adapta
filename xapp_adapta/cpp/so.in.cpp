@@ -18,16 +18,18 @@ static int csq(lua_State *L) {
     lua_error(L);
   }
   // unitary -1 .. 1 is -PI/2 .. PI/2
-  float x = (float)luaL_checknumber(L, -3) * 2.0 / M_PI;
+  float x = (float)luaL_checknumber(L, -3) * 2.0f / float(M_PI);
   // quadratic gain of 1, flex for shaping
-  float a = (float)luaL_checknumber(L, -2) / 2.0;
+  float a = (float)luaL_checknumber(L, -2) / 2.0f;
   // quartic gain of 1 flex for edge shaping
-  float b = (float)luaL_checknumber(L, -1) / 24.0;
+  float b = (float)luaL_checknumber(L, -1) / 24.0f;
   float x2 = x * x;
   float c = 1.0 - a * x2;
   x2 *= x2;
   c += b * x2;
-  float s = fsqrt(1.0 - c * c) * sgn(x);
+  float s = 1.0 - c * c;
+  int i = sgn(s);
+  s = fsqrt(fabs(s)) * sgn(x) * i;
   lua_pushnumber(L, c);
   lua_pushnumber(L, s);
   // return cos, sin
