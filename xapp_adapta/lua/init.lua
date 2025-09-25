@@ -8,3 +8,4 @@ require("util")
 -- syntax highlighting for lua_CFunctions
 require("typing")
 print("Super _G loading complete")
+require("class")
