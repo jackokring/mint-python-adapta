@@ -13,10 +13,6 @@ template <typename T> int sgn(T val) { return (T(0) < val) - (val < T(0)); }
 
 // cosine, sine quartic
 static int csq(lua_State *L) {
-  if (lua_gettop(L) < 3) {
-    lua_pushstring(L, "needs unitary angle, quadgain and quartgain arguments");
-    lua_error(L);
-  }
   // unitary -1 .. 1 is -PI/2 .. PI/2
   float x = (float)luaL_checknumber(L, -3) * 2.0f / float(M_PI);
   // quadratic gain of 1, flex for shaping
@@ -39,11 +35,9 @@ static int csq(lua_State *L) {
 //=============================================================================
 // call user data
 static int call(lua_State *L) {
-  if (lua_gettop(L) < 1) {
-    lua_pushstring(L, "no userdata");
-    lua_error(L);
-  }
   void *ud = luaL_checkudata(L, -1, "name"); // name?
+  // apparently this next one is an unexpected test missing mem???
+  luaL_argcheck(L, ud != NULL, -1, "`name' expected");
   return 0;
 }
 // meta functions for a userdata
