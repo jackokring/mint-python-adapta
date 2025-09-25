@@ -36,9 +36,47 @@ static int csq(lua_State *L) {
   return 2;
 }
 
+void add_lua_CFunctions_local(lua_State *L, const luaL_reg *p) {
+  while ((*p).name != NULL) {
+    lua_pushcfunction(L, (*p).func);
+    lua_setfield(L, -2, (*p).name);
+    p++;
+  }
+}
+// make a new class with CFunctions
+void make_class(lua_State *L, const char *name, const luaL_reg *m,
+                const luaL_reg *c) {
+  lua_newtable(L);
+  lua_pushvalue(L, -1);
+  lua_setfield(L, -2, "__index"); // for instance method not found
+  lua_newtable(L);
+  add_lua_CFunctions_local(L, m);
+  lua_setmetatable(L, -2); // so has own actions (__index loop?)
+  add_lua_CFunctions_local(L, c);
+  lua_setglobal(L, name);
+}
+
+static int new_instance(lua_State *L) {
+  if (lua_gettop(L) != 1) {
+    lua_pushstring(L, "no class");
+    lua_error(L);
+  }
+  lua_newtable(L);      // instance
+  lua_pushvalue(L, -2); // class named
+  lua_setmetatable(L, -2);
+  return 1; // does drop
+}
+
+// meta functions for a class class "instance"
+static const luaL_reg meta[] = {{"__call", new_instance}, {NULL, NULL}};
+// class functions for an instance of such
+// __call works to make class instance a class also (prototype)
+static const luaL_reg clazz[] = {{"__call", new_instance}, {NULL, NULL}};
+
+//============================================================================
 // main lua instance state
 lua_State *L;
-static const struct luaL_reg so_lua[] = {{"csq", csq}, {NULL, NULL}};
+static const luaL_reg so_lua[] = {{"csq", csq}, {NULL, NULL}};
 
 void add_lua_CFunctions(lua_State *L) {
   auto p = so_lua;
@@ -46,6 +84,7 @@ void add_lua_CFunctions(lua_State *L) {
     lua_register(L, (*p).name, (*p).func);
     p++;
   }
+  make_class(L, "Nad", meta, clazz);
 }
 
 //=============================================================================
