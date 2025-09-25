@@ -1,19 +1,18 @@
 ---@brief [[
 ---classic (altered by S. Jackson under MIT)
----
----Copyright (c) 2014, rxi
+---now includes Class typedefs
+---Copyright (c) 2014, 2025, rxi, S. Jackson
 ---@brief ]]
 
----@class Class: Instance
+---@class Class: Object
 ---@field super Class|nil
-local Class = {}
+local Class = { super = nil }
 -- static class variables
 Class.__index = Class
-Class.super = nil
 
 ---Does nothing.
 ---You have to implement this yourself for extra functionality when initializing
----@param self Instance
+---@param self Object
 ---@param ... unknown
 function Class:new(...) end
 
@@ -57,10 +56,11 @@ end
 
 ---Checks if the Class is an instance
 ---This will start with the lowest class and loop over all the superclasses.
----@param self Instance
+---@param self Object
 ---@param T Class
 ---@return boolean
 function Class:is(T)
+	--use metatable method as no hash indexing needed
 	local mt = getmetatable(self)
 	while mt do
 		if mt == T then
@@ -73,19 +73,19 @@ end
 
 ---The default tostring implementation for an Class.
 ---You can override this to provide a different tostring.
----@param self Instance
+---@param self Object
 ---@return string
 function Class:__tostring()
-	return "Instance " .. tostring(self)
+	return "Object " .. tostring(self)
 end
 
 ---You can call the class the initialize it without using `Class:new`.
 ---@param self Class
 ---@param ... unknown
----@return Instance
+---@return Object
 function Class:__call(...)
 	--Yes, a Class is an instance of class class
-	---@class Instance
+	---@class Object
 	local obj = setmetatable({}, self)
 	--compiler type exact not inferred
 	--as the : notation just goes funny, and won't
