@@ -14,11 +14,11 @@ template <typename T> int sgn(T val) { return (T(0) < val) - (val < T(0)); }
 // cosine, sine quartic
 static int csq(lua_State *L) {
   // unitary -1 .. 1 is -PI/2 .. PI/2
-  float x = (float)luaL_checknumber(L, -3) * 2.0f / float(M_PI);
+  float x = (float)luaL_checknumber(L, 1) * 2.0f / float(M_PI);
   // quadratic gain of 1, flex for shaping
-  float a = (float)luaL_checknumber(L, -2) / 2.0f;
+  float a = (float)luaL_optnumber(L, 2, 1.0f) / 2.0f;
   // quartic gain of 1 flex for edge shaping
-  float b = (float)luaL_checknumber(L, -1) / 24.0f;
+  float b = (float)luaL_optnumber(L, 3, 1.0f) / 24.0f;
   float x2 = x * x;
   float c = 1.0 - a * x2;
   x2 *= x2;
@@ -61,7 +61,8 @@ static const luaL_reg so_lua[] = {{"csq", csq}, {NULL, NULL}};
 void add_lua_CFunctions(lua_State *L) {
   // ADD EXTRA HERE BEFDRE RETURN
   lua_getglobal(L, "_G");
-  luaL_openlib(L, NULL, so_lua, 0);
+  // luaL_openlib depricated NULL implies top of stack used as table
+  luaL_register(L, NULL, so_lua);
 }
 
 //=============================================================================
@@ -69,20 +70,29 @@ void add_lua_CFunctions(lua_State *L) {
 // output *name(self, args) { ... }
 PyObject *hello(PyObject *, PyObject *) {
   if ((L = luaL_newstate()) == NULL) {
-    printf("Lua out of memory");
+    printf("Lua out of memory\n");
   } else {
     // surprisingly not sure how this fails out of memory
     // maybe it's optimized as a bit flag extra table search?
     luaL_openlibs(L);
+    // better to have the functions included here
+    add_lua_CFunctions(L);
+    lua_pop(L, 1);
+    // typing.lua has templates for type annotations
+    // so need if not _G.xxx then ... end guards
+    // as include from init.lua would overwrite otherwise
     // load init.lua file
     if (luaL_dostring(L, "require(\"init\")")) {
       // error as -1 from top (zero is empty), +ve are from frame pointer
-      printf("%s", lua_tostring(L, -1));
+      printf("%s\n", lua_tostring(L, -1));
       // pop one error message AFTER string use
       lua_pop(L, 1);
     }
-    add_lua_CFunctions(L);
-    lua_pop(L, 1);
+    while (lua_gettop(L) > 0) {
+      printf("%s\n", lua_tostring(L, -1));
+      // pop one error message AFTER string use
+      lua_pop(L, 1);
+    }
   }
   return PyUnicode_FromString(_("C++ module loaded"));
 }
