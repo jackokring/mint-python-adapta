@@ -8,6 +8,9 @@
 #include <lua5.1/lualib.h>
 #include <python3.12/Python.h>
 
+// sgn
+template <typename T> int sgn(T val) { return (T(0) < val) - (val < T(0)); }
+
 // cosine, sine quartic
 static int csq(lua_State *L) {
   if (lua_gettop(L) < 3) {
@@ -24,7 +27,7 @@ static int csq(lua_State *L) {
   float c = 1.0 - a * x2;
   x2 *= x2;
   c += b * x2;
-  float s = fsqrt(1.0 - c * c);
+  float s = fsqrt(1.0 - c * c) * sgn(x);
   lua_pushnumber(L, c);
   lua_pushnumber(L, s);
   // return cos, sin
