@@ -29,6 +29,7 @@ Included commands (add more):
   The `~/.local/share/applications/*.desktop` files might need edits.
 - `adapta_remove_local` is an uninstall to clean the user's `~/.local/share` of
   just the installed files which `adapta_make_local` placed.
+- There is a `lua` loader loading `lua/init.lua` for extra possibilities.
 - ...
 
 Thanks

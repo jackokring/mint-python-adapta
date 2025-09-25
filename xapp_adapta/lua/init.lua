@@ -6,6 +6,8 @@ require("async")
 require("bus")
 require("util")
 -- syntax highlighting for lua_CFunctions
+-- make sure you have the if not _G.xxx then ... end guard
 require("typing")
 print("Super _G loading complete")
-require("class")
+--the base object type
+Object = require("class")

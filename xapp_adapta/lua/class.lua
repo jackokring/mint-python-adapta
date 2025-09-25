@@ -9,6 +9,8 @@
 local Class = { super = nil }
 -- static class variables
 Class.__index = Class
+-- is()?
+setmetatable(Class, Class)
 
 ---Does nothing.
 ---You have to implement this yourself for extra functionality when initializing
@@ -91,6 +93,31 @@ function Class:__call(...)
 	--as the : notation just goes funny, and won't
 	getmetatable(obj).new(obj, ...)
 	return obj
+end
+
+local typi = type
+---an extended type finder
+---this might be useful after extra operators are added
+---@param any any
+---@return string
+_G.type = function(any)
+	---@type string
+	local t = typi(any)
+	-- ok so far
+	if t == "table" then
+		-- might be an object
+		if any.is then
+			-- might be an object
+			if any:is(Class) then
+				t = "object"
+				if any.__index == any then
+					-- seems to be definitive
+					t = "class"
+				end
+			end
+		end
+	end
+	return t
 end
 
 return Class
