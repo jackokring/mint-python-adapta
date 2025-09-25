@@ -46,11 +46,13 @@ void add_lua_CFunctions_local(lua_State *L, const luaL_reg *p) {
 // make a new class with CFunctions
 void make_class(lua_State *L, const char *name, const luaL_reg *m,
                 const luaL_reg *c) {
-  lua_newtable(L);
-  lua_pushvalue(L, -1);
-  lua_setfield(L, -2, "__index"); // for instance method not found
+  // the meta table
   lua_newtable(L);
   add_lua_CFunctions_local(L, m);
+  lua_pushvalue(L, -1);
+  lua_setfield(L, -2, "__index"); // for instance method not found
+  // the class table
+  lua_newtable(L);
   lua_setmetatable(L, -2); // so has own actions (__index loop?)
   add_lua_CFunctions_local(L, c);
   lua_setglobal(L, name);
@@ -71,7 +73,8 @@ static int new_instance(lua_State *L) {
 static const luaL_reg meta[] = {{"__call", new_instance}, {NULL, NULL}};
 // class functions for an instance of such
 // __call works to make class instance a class also (prototype)
-static const luaL_reg clazz[] = {{"__call", new_instance}, {NULL, NULL}};
+// __call not found so __index
+static const luaL_reg clazz[] = {/*{"__call", new_instance},*/ {NULL, NULL}};
 
 //============================================================================
 // main lua instance state
