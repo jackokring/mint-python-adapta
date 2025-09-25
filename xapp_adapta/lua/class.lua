@@ -4,10 +4,12 @@
 ---Copyright (c) 2014, rxi
 ---@brief ]]
 
----@class Class
+---@class Class: Instance
+---@field super Class|nil
 local Class = {}
 -- static class variables
 Class.__index = Class
+Class.super = nil
 
 ---Does nothing.
 ---You have to implement this yourself for extra functionality when initializing
@@ -71,10 +73,10 @@ end
 
 ---The default tostring implementation for an Class.
 ---You can override this to provide a different tostring.
----@param self Class
+---@param self Instance
 ---@return string
 function Class:__tostring()
-	return "Class " .. tostring(getmetatable(self))
+	return "Instance " .. tostring(self)
 end
 
 ---You can call the class the initialize it without using `Class:new`.
@@ -82,10 +84,12 @@ end
 ---@param ... unknown
 ---@return Instance
 function Class:__call(...)
-	--Yes, a Class is an instance of class class, but it's not an "Instance"
-	---@class Instance: Class
+	--Yes, a Class is an instance of class class
+	---@class Instance
 	local obj = setmetatable({}, self)
-	obj:new(...)
+	--compiler type exact not inferred
+	--as the : notation just goes funny, and won't
+	getmetatable(obj).new(obj, ...)
 	return obj
 end
 
