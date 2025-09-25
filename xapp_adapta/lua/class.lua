@@ -11,7 +11,7 @@ Class.__index = Class
 
 ---Does nothing.
 ---You have to implement this yourself for extra functionality when initializing
----@param self Class
+---@param self Instance
 ---@param ... unknown
 function Class:new(...) end
 
@@ -55,7 +55,7 @@ end
 
 ---Checks if the Class is an instance
 ---This will start with the lowest class and loop over all the superclasses.
----@param self Class
+---@param self Instance
 ---@param T Class
 ---@return boolean
 function Class:is(T)
@@ -80,8 +80,10 @@ end
 ---You can call the class the initialize it without using `Class:new`.
 ---@param self Class
 ---@param ... unknown
----@return Class
+---@return Instance
 function Class:__call(...)
+	--Yes, a Class is an instance of class class, but it's not an "Instance"
+	---@class Instance: Class
 	local obj = setmetatable({}, self)
 	obj:new(...)
 	return obj
