@@ -33,7 +33,7 @@ _G.at = function(s, pos)
 	return sub(s, pos, pos)
 end
 ---utf8 charpattern
-_G.utfpat = "[\0-\x7F\xC2-\xF4][\x80-\xBF]*"
+_G.utf8pattern = "[\0-\x7F\xC2-\xF4][\x80-\xBF]*"
 
 ---pattern compiler (use % for insert of a match specifier)
 ---in a string that's "%" to substitue the patterns appended
@@ -180,7 +180,7 @@ _G.pattern = function(lit_pattern)
 	---@return PatternStatement
 	Table.unicode = function()
 		state = 2
-		insert(tu, utfpat)
+		insert(tu, utf8pattern)
 		return Table
 	end
 	---match an alpha character
@@ -445,6 +445,69 @@ _G.switch = function(is)
 	end
 
 	return Table
+end
+
+--olde skool num and chr
+_G.byte = string.byte
+_G.char = string.char
+
+---get UTF code point number
+---@param s string
+---@return integer | nil
+_G.num = function(s)
+	local a, b, c, d = byte(match(s, utf8pattern), 1, -1)
+	if a == nil or a < 128 then
+		return a
+	else
+		a = a - 128 - 64
+		if a > 31 then
+			a = a - 32
+			if a > 15 then
+				a = a - 16
+				return ((a * 64 + (b - 128)) * 64 + (c - 128)) * 64 + (d - 128)
+			else
+				return (a * 64 + (b - 128)) * 64 + (c - 128)
+			end
+		else
+			return a * 64 + (b - 128)
+		end
+	end
+end
+
+---get UTF char from code point
+---@param x integer
+---@return string | nil
+_G.chr = function(x)
+	if x < 0 then
+		return nil
+	end
+	if x < 128 then
+		return char(x)
+	else
+		local c = x % 64
+		local s = char(c + 128)
+		x = (x - c) / 64
+		if x < 32 then
+			return char(x + 128 + 64) .. s
+		else
+			c = x % 64
+			s = char(c + 128) .. s
+			x = (x - c) / 64
+			if x < 16 then
+				return char(x + 128 + 64 + 32) .. s
+			else
+				c = x % 64
+				s = char(c + 128) .. s
+				x = (x - c) / 64
+				if x < 8 then
+					return char(x + 128 + 64 + 32 + 16) .. s
+				else
+					--invalid in modern unicode
+					return nil
+				end
+			end
+		end
+	end
 end
 
 ---ranged for by in 1, #n, 1
