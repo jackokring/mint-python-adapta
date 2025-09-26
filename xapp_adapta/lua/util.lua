@@ -18,7 +18,7 @@ end
 _G.script_path = function()
 	local str = debug.getinfo(2, "S").source
 	if str:sub(1, 1) ~= "@" then
-		return "eval: " .. str -- loadstring
+		return "<<<" .. os.shell_quote(str) -- loadstring
 	end
 	if is_win() then
 		str = str:sub(2):gsub("/", "\\")
