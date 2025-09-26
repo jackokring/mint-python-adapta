@@ -21,6 +21,7 @@ static int csq(lua_State *L) {
   float a = (float)luaL_optnumber(L, 2, 1.0f) / 2.0f;
   // quartic gain of 1 flex for edge shaping
   float b = (float)luaL_optnumber(L, 3, 1.0f) / 24.0f;
+  lua_pop(L, 3); // just in case stack under high pressure
   float x2 = x * x;
   float c = 1.0 - a * x2;
   x2 *= x2;
