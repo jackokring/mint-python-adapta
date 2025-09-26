@@ -1,5 +1,5 @@
 -- everything using async
-local novaride = require("novaride").setup()
+local nv = require("novaride").setup()
 
 local co = coroutine
 
@@ -14,10 +14,10 @@ _G.yield = co.yield
 ---@param init unknown
 ---@return thread
 _G.chain = function(fn, init)
-	return co.create(function()
-		-- generic ... and other info supply
-		fn(init)
-	end)
+  return co.create(function()
+    -- generic ... and other info supply
+    fn(init)
+  end)
 end
 
 ---rx a sent any from a producer in a thread
@@ -25,13 +25,13 @@ end
 ---@param chain thread
 ---@return any
 _G.rx = function(chain)
-	-- manual vague about error message (maybe second return, but nil?)
-	local ok, value = co.resume(chain)
-	if not ok or value == nil then
-		--if rx(x) then ... else ... exit ... end
-		return nil
-	end
-	return value
+  -- manual vague about error message (maybe second return, but nil?)
+  local ok, value = co.resume(chain)
+  if not ok or value == nil then
+    --if rx(x) then ... else ... exit ... end
+    return nil
+  end
+  return value
 end
 
 ---tx(x) an any from inside a producer thread to be received
@@ -39,13 +39,13 @@ end
 ---@param x any
 ---@return boolean
 _G.tx = function(x)
-	yield(x)
-	if x == nil then
-		--if not tx(x) then ... exit ... end
-		return true
-	else
-		return false
-	end
+  yield(x)
+  if x == nil then
+    --if not tx(x) then ... exit ... end
+    return true
+  else
+    return false
+  end
 end
 
-novaride.restore()
+nv()

@@ -1,8 +1,6 @@
 -- init.lua is loaded on startup
 -- load many quick shortcuts into _G for less verbosity
 print("Loading Lua")
---the base object type
-Object = require("class")
 require("module")
 require("async")
 require("bus")
@@ -11,3 +9,5 @@ require("util")
 -- make sure you have the if not _G.xxx then ... end guard
 require("typing")
 print("Super _G loading complete")
+--the base object type
+Object = require("class")

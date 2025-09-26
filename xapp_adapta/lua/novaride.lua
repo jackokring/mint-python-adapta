@@ -68,19 +68,18 @@ end
 
 -- grab the global context
 ---allow multiple tracking of the _G context
----@return NovarideModule
+---@return function():nil
 M.setup = function()
   _G = M.track(_G)
   -- get locale to eventually restore
   table.insert(index, os.setlocale())
   -- use a standard locale too
   os.setlocale("C")
-  return M
+  return M.restore
 end
 
 ---restore the global context
 ---every setup (beginning) must have a restore (end)
----@return NovarideModule
 M.restore = function()
   if #index > 0 then
     -- restore locale for UI weirdness
@@ -94,7 +93,6 @@ M.restore = function()
     -- restore the context at last
     _G = M.untrack(_G)
   end
-  return M
 end
 
 return M

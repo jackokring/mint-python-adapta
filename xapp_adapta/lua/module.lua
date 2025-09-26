@@ -1,7 +1,7 @@
 -- pure module with no install specifics
 -- designed to provide global context programming simplifications
 -- everything is independant of nvim
-local novaride = require("novaride").setup()
+local nv = require("novaride").setup()
 
 ---blank callback no operation
 _G.nop = function() end
@@ -693,4 +693,4 @@ _G.quote = function(str)
 end
 
 -- clean up
-novaride.restore()
+nv()

@@ -1,9 +1,8 @@
 -- bus for signalling
 
---clobbers type()
-local Object = require("class")
-local novaride = require("novaride").setup()
+local nv = require("novaride").setup()
 
+local Object = require("class")
 --make it fine
 ---@class Bus: Class
 _G.Bus = Object:extend()
@@ -108,4 +107,4 @@ function Bus:destroy()
   end
 end
 
-novaride.restore()
+nv()
