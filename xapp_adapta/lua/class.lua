@@ -14,8 +14,11 @@ setmetatable(Class, Class)
 
 ---Does nothing.
 ---You have to implement this yourself for extra functionality when initializing
+---You can return a replacement Object (sub class factory)
+---nil implies self for convienience of coding
 ---@param self Object
 ---@param ... unknown
+---@return Object | nil
 function Class:new(...) end
 
 ---Create a new class/Class by extending the base Class class.
@@ -91,8 +94,7 @@ function Class:__call(...)
   local obj = setmetatable({}, self)
   --compiler type exact not inferred
   --as the : notation just goes funny, and won't
-  getmetatable(obj).new(obj, ...)
-  return obj
+  return getmetatable(obj).new(obj, ...) or obj
 end
 
 local nv = require("novaride").skip()
