@@ -1,5 +1,5 @@
 -- blank functions to get syntax highlighting from libso.so lua_CFunctions
-local novaride = require("novaride").setup()
+local nv = require("novaride").setup()
 
 if not _G.csq then
   ---Unitary simplified sine and cosine
@@ -13,4 +13,4 @@ if not _G.csq then
   end
 end
 
-novaride.restore()
+nv()
