@@ -19,18 +19,18 @@ local wait = false
 ---return a bus object for a name
 ---this bus object then supports
 ---send() and listen() with remove()
+---bus singleton
 ---@param named string
----@return NamedBus
-function Bus:__call(named)
+---@return NamedBus | nil
+function Bus:new(named)
   -- avoid namespace issues with method names in self
   local b = names[named]
-  if not b then
-    b = setmetatable({}, self)
-    -- remember same one for same string name
-    names[named] = b
+  if b then
+    ---@class NamedBus: Object
+    return b
+  else
+    names[named] = self
   end
-  ---@class NamedBus: Object
-  return b
 end
 
 ---send bus arguments on bus actor

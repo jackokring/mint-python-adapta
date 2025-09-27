@@ -16,6 +16,7 @@ setmetatable(Class, Class)
 ---You have to implement this yourself for extra functionality when initializing
 ---You can return a replacement Object (sub class factory)
 ---nil implies self for convienience of coding
+---a class variable can also be used for an object singleton pattern
 ---@param self Object
 ---@param ... unknown
 ---@return Object | nil
