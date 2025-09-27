@@ -382,7 +382,7 @@ _G.datetime = "!%Y-%m-%d.%a.%H:%M:%S"
 ---this invert quote(code) and is useful
 ---with anonymous functions
 ---@param code string
----@return any
+---@return ...
 _G.eval = function(code)
   local ok, err = loadstring("return " .. code)
   if not ok then
@@ -433,7 +433,7 @@ _G.switch = function(is)
   end
 
   ---default case
-  ---@param callback fun(is: any): nil
+  ---@param callback fun(...): nil
   Table.default = function(callback)
     local Case = Table.Functions[Table.Value]
     if Case then
@@ -545,15 +545,15 @@ end
 ---more state by explicit closure based on type?
 ---compare hidden and chain equal to start
 ---return nil to end iterator
----@param fn fun(hidden: any, chain: any): any
----@return fun(hidden: table, chain: any): any
+---@param fn fun(hidden: table, chain: ...): ...
+---@return fun(hidden: table, chain: ...): ...
 ---@return table
 ---@return table
 _G.iter = function(fn)
   ---iter next function
   ---@param hidden table
-  ---@param chain any
-  ---@return any
+  ---@param chain ...
+  ---@return fun(table, ...)
   local next = function(hidden, chain)
     -- maybe like the linked list access problem of needing preceding node
     -- the nil node "or" head pointer
@@ -567,8 +567,8 @@ end
 ---convenient wrapper for varargs
 ---actually consistently defined to allow nil
 ---as ipairs({ ... }) may terminate on a nil
----@param ... unknown
----@return fun(table: table, integer: integer):integer, any
+---@param ... ...
+---@return fun(table: table, integer: integer):integer, ...
 ---@return table
 ---@return integer
 _G.gargs = function(...)
@@ -589,8 +589,8 @@ end
 ---return a table of the mapping over a varargs
 ---it seemed a possible waste to not offer
 ---the intermediate table for processing
----@param fn fun(any: any): any
----@param ... unknown
+---@param fn fun(any: ...): ...
+---@param ... ...
 ---@return table
 _G.gmapto = function(fn, ...)
   local r = {}
@@ -602,8 +602,7 @@ end
 
 ---apply function over varargs
 ---useful for argument sanitation
----@param fn fun(any: any): any
----@param ... unknown
+---@param fn fun(any: ...): ...
 ---@return ...
 _G.gmap = function(fn, ...)
   return unpack(gmapto(fn, ...))
@@ -654,7 +653,7 @@ _G.sort = table.sort
 ---number to string with default C numeric locale
 ---nil return if can't convert to number
 ---@param num any
----@return string?
+---@return string | nil
 _G.str = function(num)
   if type(num) ~= "number" then
     return nil
@@ -669,24 +668,24 @@ end
 ---string to number with default C numeric locale
 ---nil return if not a number
 ---@param str string
----@return number?
+---@return number
 _G.val = function(str)
   local l = os.setlocale()
   os.setlocale("C", "numeric")
   local s = tonumber(str)
   os.setlocale(l, "numeric")
-  return s
+  return s or 0
 end
 
 ---to number from hex integer value only
 ---@param str string
----@return integer?
+---@return integer
 _G.val_hex = function(str)
   return tonumber(str, 16)
 end
 
 ---quote a string escaped (includes beginning and end "\"" literal)
----@param str any
+---@param str string
 ---@return string
 _G.quote = function(str)
   return sf("%q", str)

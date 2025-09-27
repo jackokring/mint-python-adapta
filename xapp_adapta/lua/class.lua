@@ -18,7 +18,7 @@ setmetatable(Class, Class)
 ---nil implies self for convienience of coding
 ---a class variable can also be used for an object singleton pattern
 ---@param self Object
----@param ... unknown
+---@param ... any
 ---@return Object | nil
 function Class:new(...) end
 
@@ -109,6 +109,7 @@ _G.type = function(any)
   local t = typi(any)
   -- ok so far
   if t == "table" then
+    --NON STANDARD BUT THE MANUAL GIVES EXAMPLES IMPLYING SUCH
     -- might be an object
     local mt = getmetatable(any)
     -- might be an object

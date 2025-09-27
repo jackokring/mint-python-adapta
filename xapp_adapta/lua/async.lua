@@ -10,8 +10,8 @@ _G.yield = co.yield
 
 ---construct a producer function which can use tx(x)
 ---and rx(chain: thread) using the supply chain
----@param fn fun(init: unknown): nil
----@param init unknown
+---@param fn fun(init: ...): nil
+---@param init ...
 ---@return thread
 _G.chain = function(fn, init)
   return co.create(function()
@@ -23,7 +23,7 @@ end
 ---rx a sent any from a producer in a thread
 ---this includes the main thread with it's implicit coroutine
 ---@param chain thread
----@return any
+---@return ...
 _G.rx = function(chain)
   -- manual vague about error message (maybe second return, but nil?)
   local ok, value = co.resume(chain)
@@ -36,7 +36,7 @@ end
 
 ---tx(x) an any from inside a producer thread to be received
 ---returns success if send(nil) is considered a fail
----@param x any
+---@param x ...
 ---@return boolean
 _G.tx = function(x)
   yield(x)
