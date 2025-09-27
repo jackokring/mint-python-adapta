@@ -60,7 +60,7 @@ void make_meta(lua_State *L, const char *meta_name, size_t size,
   luaL_openlib(L, NULL, methods, 0);
   lua_pushvalue(L, -1);
   lua_setfield(L, -2, "__index"); // for userdata method not found
-  lua_setmetatable(L, -1);        // so has own actions (__index loop?)
+  lua_setmetatable(L, -2);        // so has own actions (__index)
 }
 
 //============================================================================
