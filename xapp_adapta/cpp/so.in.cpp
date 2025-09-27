@@ -39,32 +39,33 @@ static int csq(lua_State *L) {
 // static const luaL_reg meta[] = {{"__call", call}, {NULL, NULL}};
 
 // by UUID
-static const char *meta_name = "3c511c12-c865-4193-a435-cd6fc838aefa";
+static const char *meta_uuid = "3c511c12-c865-4193-a435-cd6fc838aefa";
 
 //=============================================================================
 // check userdata
-void *check_meta(lua_State *L, const char *meta_name) {
+void *check_meta(lua_State *L, const char *meta_uuid,
+                 const char *meta_name_expected) {
   //===== TYPE and then RANGE (is subtype in this case) check
   // has a NULL soft error with no message
   // it's a "way" of checking "meta_name" by NULL
   // if it didn't have the argument, how would one tell?
-  void *ud = luaL_checkudata(L, -1, meta_name);
+  void *ud = luaL_checkudata(L, -1, meta_uuid);
   // apparently this next one is an unexpected test missing mem???
   // Nope, it's the "range check"" on the userdata unified type
-  luaL_argcheck(L, ud != NULL, -1, meta_name); // UUID fine
+  luaL_argcheck(L, ud != NULL, -1, meta_name_expected); // UUID fine
   return ud;
 }
 
 // make a new class with CFunctions
-void make_meta(lua_State *L, const char *meta_name, size_t size,
-               const luaL_reg *methods) {
-  lua_newuserdata(L, size);
-  // the meta table
-  luaL_newmetatable(L, meta_name);
+void make_meta(lua_State *L, const char *meta_uuid, const luaL_reg *methods) {
+  // lua_newuserdata(L, size);
+  //  the meta table
+  luaL_newmetatable(L, meta_uuid);
   luaL_openlib(L, NULL, methods, 0);
   lua_pushvalue(L, -1);
   lua_setfield(L, -2, "__index"); // for userdata method not found
-  lua_setmetatable(L, -2);        // so has own actions (__index)
+  // lua_setmetatable(L, -2);        // so has own actions (__index)
+  //  lua_setglobal(L, meta_name);
 }
 
 //============================================================================
