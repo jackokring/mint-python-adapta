@@ -44,9 +44,13 @@ static const char *meta_name = "3c511c12-c865-4193-a435-cd6fc838aefa";
 //=============================================================================
 // check userdata
 void *check_meta(lua_State *L, const char *meta_name) {
+  //===== TYPE and then RANGE (is subtype in this case) check
   // has a NULL soft error with no message
+  // it's a "way" of checking "meta_name" by NULL
+  // if it didn't have the argument, how would one tell?
   void *ud = luaL_checkudata(L, -1, meta_name);
   // apparently this next one is an unexpected test missing mem???
+  // Nope, it's the "range check"" on the userdata unified type
   luaL_argcheck(L, ud != NULL, -1, meta_name); // UUID fine
   return ud;
 }
