@@ -667,14 +667,15 @@ end
 
 ---string to number with default C numeric locale
 ---nil return if not a number
+---I'm no fan of number? as a vague type
 ---@param str string
----@return number
+---@return number | nil
 _G.val = function(str)
   local l = os.setlocale()
   os.setlocale("C", "numeric")
   local s = tonumber(str)
   os.setlocale(l, "numeric")
-  return s or 0
+  return s
 end
 
 ---to number from hex integer value only
