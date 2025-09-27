@@ -1,6 +1,12 @@
 -- pure module with no install specifics
 -- designed to provide global context programming simplifications
 -- everything is independant of nvim
+-- NOTE: much useful things
+-- many standard library functions are placed in the global _G context
+-- this shortens code and I like it so there
+-- have a look at some of the things like a regex pattern builder
+-- a case statement, some iterator generators
+-- and all the UTF to do that kind of thing
 local nv = require("novaride").setup()
 
 ---blank callback no operation
@@ -580,7 +586,7 @@ _G.gargs = function(...)
     return newIdx, tab[newIdx]
   end
   local tab = {}
-  for i = 1, select("#", ...) do
+  for i in range(select("#", ...)) do
     tab[i] = select(i, ...)
   end
   return next, tab, 0

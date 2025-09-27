@@ -57,16 +57,15 @@ void *check_meta(lua_State *L, const char *meta_uuid,
 }
 
 // make a new class with CFunctions
-void make_meta(lua_State *L, const char *meta_uuid, const char *meta_name,
-               size_t size, const luaL_reg *methods) {
-  lua_newuserdata(L, size);
-  // the meta table
+void make_meta(lua_State *L, const char *meta_uuid, const luaL_reg *methods) {
+  // lua_newuserdata(L, size);
+  //  the meta table
   luaL_newmetatable(L, meta_uuid);
   luaL_openlib(L, NULL, methods, 0);
   lua_pushvalue(L, -1);
   lua_setfield(L, -2, "__index"); // for userdata method not found
-  lua_setmetatable(L, -2);        // so has own actions (__index)
-  lua_setglobal(L, meta_name);
+  // lua_setmetatable(L, -2);        // so has own actions (__index)
+  //  lua_setglobal(L, meta_name);
 }
 
 //============================================================================

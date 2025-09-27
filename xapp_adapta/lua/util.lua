@@ -1,4 +1,6 @@
 -- utilities not called directly from "doris"
+-- NOTE: more sort of interfacing and an example of how to get novaride
+-- to protect other tables besides _G (the default)
 local nv = require("novaride").setup()
 
 local function is_win()

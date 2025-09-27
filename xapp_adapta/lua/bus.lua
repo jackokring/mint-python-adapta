@@ -1,5 +1,5 @@
 -- bus for state signalling
-
+-- NOTE: a signalling bus for sending messages by named target
 local nv = require("novaride").setup()
 
 local Object = require("class")

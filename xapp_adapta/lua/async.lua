@@ -1,4 +1,6 @@
 -- everything using async
+-- NOTE: all the threading routines I'm likely to use under shorter names
+-- some are adapted from the manual with shorter names
 local nv = require("novaride").setup()
 
 local co = coroutine

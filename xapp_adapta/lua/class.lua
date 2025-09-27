@@ -4,12 +4,19 @@
 ---Copyright (c) 2014, 2025, rxi, S. Jackson
 ---@brief ]]
 
+-- NOTE: a class implementation from plenary.nvim with some minor improvements
+-- support for the factory paradigm by returning another instance from new
+-- singletons can also be supported (bus has an example)
+-- a new type function for also detecting classes and objects by their
+-- metatable arrangement is injected into _G with a novaride skip example
+
 ---@class Class: Object
 ---@field super Class|nil
 local Class = { super = nil }
 -- static class variables
 Class.__index = Class
--- is()?
+-- NOTE: is()? it's a consistency thing for me
+-- Object was renamed Class as it's a sub-class of Object
 setmetatable(Class, Class)
 
 ---Does nothing.
@@ -17,6 +24,7 @@ setmetatable(Class, Class)
 ---You can return a replacement Object (sub class factory)
 ---nil implies self for convienience of coding
 ---a class variable can also be used for an object singleton pattern
+---NOTE: use Class(...) to make an Object as new(...) is used indirectly
 ---@param self Object
 ---@param ... any
 ---@return Object | nil
@@ -97,6 +105,11 @@ function Class:__call(...)
   --as the : notation just goes funny, and won't
   return getmetatable(obj).new(obj, ...) or obj
 end
+
+-- NOTE: the novaride skip() example extends type() to detect "object"
+-- and "class" by metatable properties as an instance has a "class" as a
+-- metatable and a "class" is it's own __index due to methods for "object"
+-- needing to be in the "class" table
 
 local nv = require("novaride").skip()
 local typi = type
