@@ -7,11 +7,24 @@
 // #include <lua5.1/lua.hpp>
 #include <lua5.1/lualib.h>
 #include <python3.12/Python.h>
-// assert message
+
+//============================================================================
+// NOTE: helper macros and utility functions for the whole library
+//
+// assert message (hard fail for debugging)
 #define assertm(exp, msg) assert((void(msg), exp))
 
-// sgn
+// sgn (useful but missing from base C++)
 template <typename T> int sgn(T val) { return (T(0) < val) - (val < T(0)); }
+
+//============================================================================
+// NOTE: lua C functions exported by the library
+// add any new ones to so_lua[] for them to appear in lua as
+// global commands or objects
+
+// NOTE: these can be used from inside the library by using the return
+// to know the number of return values and adding any arguments
+// to the lua stack before calling them
 
 // cosine, sine quartic
 static int csq(lua_State *L) {
@@ -35,14 +48,9 @@ static int csq(lua_State *L) {
   return 2;
 }
 
-// meta functions for a userdata
-// static const luaL_reg meta[] = {{"__call", call}, {NULL, NULL}};
-
-// by UUID
-static const char *meta_uuid = "3c511c12-c865-4193-a435-cd6fc838aefa";
-
 //=============================================================================
 // check userdata
+// NOTE: helper functions to make lua userdata objects within the library
 void *check_meta(lua_State *L, const char *meta_uuid,
                  const char *meta_name_expected) {
   //===== TYPE and then RANGE (is subtype in this case) check
@@ -52,7 +60,7 @@ void *check_meta(lua_State *L, const char *meta_uuid,
   void *ud = luaL_checkudata(L, -1, meta_uuid);
   // apparently this next one is an unexpected test missing mem???
   // Nope, it's the "range check"" on the userdata unified type
-  luaL_argcheck(L, ud != NULL, -1, meta_name_expected); // UUID fine
+  luaL_argcheck(L, ud != NULL, -1, meta_name_expected); // UUID fine?
   return ud;
 }
 
@@ -68,9 +76,19 @@ void make_meta(lua_State *L, const char *meta_uuid, const luaL_reg *methods) {
   //  lua_setglobal(L, meta_name);
 }
 
+//=============================================================================
+// NOTE: various lua userdata definitions
+
+// meta functions for a userdata
+// static const luaL_reg meta[] = {{"__call", call}, {NULL, NULL}};
+
+// by UUID
+static const char *meta_uuid = "3c511c12-c865-4193-a435-cd6fc838aefa";
+
 //============================================================================
 // main lua instance state
-lua_State *L;
+// NOTE: the common from python and from lua library initialization routine
+
 static const luaL_reg so_lua[] = {{"csq", csq}, {NULL, NULL}};
 
 void add_lua_CFunctions(lua_State *L) {
@@ -81,6 +99,13 @@ void add_lua_CFunctions(lua_State *L) {
 }
 
 //=============================================================================
+// NOTE: main lua instance in python pointer
+lua_State *L;
+
+// NOTE: the python hello loader for an embedded lua context
+// this library can be loaded from lua on it's own outside a python context
+// you won't get any python features if you do that however
+
 // SPECIFIC HELLO FOR xapp_adapta BUT IS A GENERAL PYTHON LIB
 // output *name(self, args) { ... }
 PyObject *hello(PyObject *, PyObject *) {
@@ -110,6 +135,8 @@ PyObject *hello(PyObject *, PyObject *) {
   return PyUnicode_FromString(_("C++ module loaded"));
 }
 
+//============================================================================
+// NOTE: python module definition to load library into python
 static PyMethodDef so_methods[] = {{"hello", (PyCFunction)hello, METH_NOARGS},
                                    {nullptr, nullptr, 0, nullptr}};
 
@@ -130,6 +157,8 @@ PyMODINIT_FUNC PyInit_so(void) {
 // maybe a direct lua loader for some
 // MAKES IT SLIGHTLY MORE USEFUL
 // loads as global overrides not a module
+// NOTE: loads library from lua without python as an option
+// no default init.lua is loaded as you'd have an init already to call here
 int luaopen_so(lua_State *L) {
   add_lua_CFunctions(L);
   return 1; // globally added
