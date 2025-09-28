@@ -51,16 +51,18 @@ static int csq(lua_State *L) {
 //=============================================================================
 // check userdata
 // NOTE: helper functions to make lua userdata objects within the library
-void *check_meta(lua_State *L, const char *meta_uuid,
-                 const char *meta_name_expected) {
+void *check_meta(lua_State *L, const char *meta_uuid /*,
+                   const char *meta_name_expected */) {
   //===== TYPE and then RANGE (is subtype in this case) check
   // has a NULL soft error with no message
   // it's a "way" of checking "meta_name" by NULL
   // if it didn't have the argument, how would one tell?
   void *ud = luaL_checkudata(L, -1, meta_uuid);
+  // NEW IN 5.1 the above line should error on wrong type
+  // perhaps it gets the "name" from the registry
   // apparently this next one is an unexpected test missing mem???
   // Nope, it's the "range check"" on the userdata unified type
-  luaL_argcheck(L, ud != NULL, -1, meta_name_expected); // UUID fine?
+  // luaL_argcheck(L, ud != NULL, -1, meta_name_expected); // UUID fine?
   return ud;
 }
 
