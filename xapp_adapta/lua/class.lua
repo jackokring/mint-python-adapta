@@ -17,7 +17,16 @@ local Class = { super = nil }
 Class.__index = Class
 -- NOTE: is()? it's a consistency thing for me
 -- Object was renamed Class as it's a sub-class of Object
-setmetatable(Class, Class)
+local void = {}
+void.__index = void
+-- a special class emptier than a class to give Class a parent from nothing
+void.__metatable = false
+-- "once there was something preceded by nothing with its symbol"
+-- sure now it's a class, but it can't be the terminal beginning
+-- it can't be its own meta table or other and so it becomes defered to a
+-- hidden void, simplistic in maitaining the integrity of fulfilling the
+-- needs of class but performing its own miracle of inacces
+setmetatable(Class, void)
 
 ---Does nothing.
 ---You have to implement this yourself for extra functionality when initializing
@@ -103,7 +112,7 @@ function Class:__call(...)
   local obj = setmetatable({}, self)
   --compiler type exact not inferred
   --as the : notation just goes funny, and won't
-  return getmetatable(obj).new(obj, ...) or obj
+  return self.new(obj, ...) or obj
 end
 
 -- NOTE: the novaride skip() example extends type() to detect "object"
