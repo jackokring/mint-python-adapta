@@ -588,11 +588,7 @@ _G.gargs = function(...)
     end
     return newIdx, tab[newIdx]
   end
-  local tab = {}
-  for i in range(select("#", ...)) do
-    tab[i] = select(i, ...)
-  end
-  return next, tab, 0
+  return next, { ... }, 0
 end
 
 ---return a table of the mapping over a varargs
