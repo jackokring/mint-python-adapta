@@ -115,7 +115,7 @@ end
 ---@param self Object
 ---@return string
 function Class:__tostring()
-  return "Object " .. tostring(self)
+  return type(self) .. ": " .. tostring(self)
 end
 
 ---You can call the class the initialize it without using `Class:new`.

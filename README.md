@@ -29,6 +29,9 @@ The scripts.
   before `./pydo.sh` so the document mimetype icon is also made.
 - `lang.sh` makes a localization file based on the user's language setting.
   Also updates the localizations if new things to translate are found.
+- `lazy-type.sh` to monkey patch Neovim `LazyVim` for a `_G.type` new
+  type definition function, which also return "object" and "class" as
+  sub-types of "table".
 
 Change the paths from `xapp_adapta`, as the name must be unique on `PyPI`, if
 you intend to upload a derivative work there. This is important.
