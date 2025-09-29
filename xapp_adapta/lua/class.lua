@@ -18,8 +18,26 @@ Class.__index = Class
 -- NOTE: is()? it's a consistency thing for me
 -- Object was renamed Class as it's a sub-class of Object
 local void = {}
-void.__index = void
 -- a special class emptier than a class to give Class a parent from nothing
+void.__index = void
+local on = {}
+-- a special class handling the fallback index checking up on __on being
+-- present so that the default error can be avoided in processing
+-- is a class not knowing a method a fail or an intended null?
+on.__index = function(t, k)
+  -- a second class trace after not found for checking continuation
+  local ton = getmetatable(t).__on
+  if ton then
+    -- seems lua sytyle
+    if type(ton) == "function" then
+      return ton(t, k)
+    end
+    return ton
+  end
+  return nil
+end
+setmetatable(void, on)
+-- lock metatable on
 void.__metatable = false
 -- "once there was something preceded by nothing with its symbol"
 -- sure now it's a class, but it can't be the terminal beginning
@@ -27,19 +45,6 @@ void.__metatable = false
 -- hidden void, simplistic in maitaining the integrity of fulfilling the
 -- needs of class but performing its own miracle of inacces
 setmetatable(Class, void)
-
----allows dispatch from understanding
----you could just make this yourself but ideas are free
----@param method any
----@param ... ...
-function Class:on(method, ...)
-  -- index once
-  local sm = self[method]
-  if sm then
-    return sm(...)
-  end
-  return nil
-end
 
 ---Does nothing.
 ---You have to implement this yourself for extra functionality when initializing
