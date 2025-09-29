@@ -20,13 +20,18 @@ function StateBus:send(...)
 end
 
 ---synchronize to last send(...) only
+---beware the infinite send loop if sync() triggers send()
 ---@param self StateBus
 function StateBus:sync()
-  if que[self] then
-    for k, _ in pairs(self) do
-      -- call value function on last sent arguments
-      k(unpack(que[self]))
-    end
+  local qs = que[self]
+  if qs then
+    repeat
+      for k, _ in pairs(self) do
+        -- call value function on last sent arguments
+        k(unpack(que[self]))
+      end
+    -- bus managed to not send() to itself at least one whole sync
+    until qs == que[self]
     que[self] = nil
   end
 end
