@@ -8,6 +8,14 @@ local index = {}
 -- used for error supression when defining a type template
 local stoperror = nil
 
+-- fix possible over sharing when in an nvim context
+local printnv = function(...)
+  if _G.vim then
+    return
+  end
+  print(...)
+end
+
 ---restore the global context
 ---every setup (beginning) must have a restore (end)
 local restore = function()
@@ -22,6 +30,7 @@ local restore = function()
   if #index == 0 then
     -- restore the context at last
     _G = M.untrack(_G)
+    printnv("untracked")
   end
 end
 
@@ -42,14 +51,14 @@ local mt = {
         end
         -- NOTE: makes an error if _G[...] gets clobbered
         -- assume stack 2 as __newindex
-        error("novaride key: " .. tostring(k) .. " of: " .. tostring(t) .. " assigned already", 2)
+        error("novaride: " .. tostring(k) .. " of: " .. tostring(t) .. " assigned already", 2)
       else
-        print("template: " .. tostring(k) .. " note: ", unpack(stoperror))
+        printnv("template: " .. tostring(k) .. " note: ", unpack(stoperror))
         --leave C alone
         return
       end
     end
-    print("adding " .. tostring(k))
+    printnv("adding " .. tostring(k))
     t[index][k] = v -- update original table
   end,
 }
@@ -65,6 +74,7 @@ M.track = function(t)
   local proxy = {}
   proxy[index] = t
   setmetatable(proxy, mt)
+  printnv("tracking")
   return proxy
 end
 
@@ -74,7 +84,7 @@ end
 M.skip = function()
   -- NOTE: use to wrap a definitive clobber you desire
   if _G[index] then
-    print("Skipping ")
+    printnv("skipping")
     _G = M.untrack(_G)
     return function()
       _G = M.track(_G)
@@ -102,8 +112,9 @@ M.setup = function(...)
   -- NOTE: using any arguments prevents errors but has no assignment
   -- the args will be displayed if say a C function is loaded
   -- and a LSP template for it is not then loaded
-  if select("#", ...) ~= 0 then
-    stoperror = { ... }
+  stoperror = { ... }
+  if #stoperror == 0 then
+    stoperror = nil
   end
   _G = M.track(_G)
   -- get locale to eventually restore
