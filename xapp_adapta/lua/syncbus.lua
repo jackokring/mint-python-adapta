@@ -1,8 +1,10 @@
 -- bus for state signalling
--- NOTE: a state bus for sending messages by named target
--- messages are combined and the last is issued by sync()
--- so used to keep a state current and avoid unsychronized
--- transitions of state
+-- NOTE: a sync bus for sending messages by named target
+-- messages are grouped to efficiently forward at a time by sync()
+-- so used to control timely processing of messages on a clock
+
+-- oooh, <leader>e for less mousy tabbing
+-- trying not to get distracted by Mordoria ...
 local nv = require("novaride").setup()
 
 local Bus = require("bus")
