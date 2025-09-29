@@ -74,7 +74,7 @@ end
 M.skip = function()
   -- NOTE: use to wrap a definitive clobber you desire
   if _G[index] then
-    print("Skiping ")
+    print("Skipping ")
     _G = M.untrack(_G)
     return function()
       _G = M.track(_G)

@@ -554,64 +554,65 @@ end
 ---more state by explicit closure based on type?
 ---compare hidden and chain equal to start
 ---return nil to end iterator
----@param fn fun(hidden: table, chain: ...): ...
----@return fun(hidden: table, chain: ...): ...
+---@param fn fun(hidden: table, ...): ...
+---@return fun(hidden: table, ...): ...
 ---@return table
 ---@return table
 _G.iter = function(fn)
   ---iter next function
   ---@param hidden table
-  ---@param chain ...
-  ---@return fun(table, ...)
-  local next = function(hidden, chain)
+  ---@param ... ...
+  ---@return fun(table, ...): ...
+  local next = function(hidden, ...)
     -- maybe like the linked list access problem of needing preceding node
     -- the nil node "or" head pointer
-    return fn(hidden, chain) --, xtra iter values, ...
+    return fn(hidden, ...) --, xtra iter values, ...
   end
   -- mutable private table closure
   local state = {}
   return next, state, state -- jump of point 1st (compare state == state)
 end
 
----convenient wrapper for varargs
----actually consistently defined to allow nil
----as ipairs({ ... }) may terminate on a nil
+---return a mapping over a varargs
+---@param fn fun(any: ...): ...
 ---@param ... ...
----@return fun(table: table, integer: integer):integer, ...
+---@return ...
+_G.map = function(fn, ...)
+  local r = {}
+  -- using ipairs has an until nil on ordered number indexing
+  -- has non-deterministic fn calling order but allows nil
+  for k, v in pairs({ ... }) do
+    r[k] = fn(v)
+  end
+  return unpack(r)
+end
+
+local sk = require("novaride").skip()
+---an easy fix for one of lua's most anoying things
+---@param table table
+---@return fun(table, integer): integer, any
 ---@return table
 ---@return integer
-_G.gargs = function(...)
-  local next = function(tab, idx)
-    local newIdx = idx + 1
-    if newIdx > #tab then
-      return
+_G.ipairs = function(table)
+  ---iterator
+  ---@param t table
+  ---@param i integer
+  ---@return integer | nil
+  ---@return any
+  local iter = function(t, i)
+    i = i + 1
+    -- NOTE: exit condition is length not a nil
+    if i > #t then
+      return nil
     end
-    return newIdx, tab[newIdx]
+    local v = t[i]
+    --if v then
+    return i, v
+    --end
   end
-  return next, { ... }, 0
+  return iter, table, 0
 end
-
----return a table of the mapping over a varargs
----it seemed a possible waste to not offer
----the intermediate table for processing
----@param fn fun(any: ...): ...
----@param ... ...
----@return table
-_G.gmapto = function(fn, ...)
-  local r = {}
-  for _, v in gargs(...) do
-    insert(r, fn(v))
-  end
-  return r
-end
-
----apply function over varargs
----useful for argument sanitation
----@param fn fun(any: ...): ...
----@return ...
-_G.gmap = function(fn, ...)
-  return unpack(gmapto(fn, ...))
-end
+sk()
 
 local nf = function(x, width, base)
   width = width or 0
