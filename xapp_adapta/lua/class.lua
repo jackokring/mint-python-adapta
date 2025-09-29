@@ -28,6 +28,19 @@ void.__metatable = false
 -- needs of class but performing its own miracle of inacces
 setmetatable(Class, void)
 
+---allows dispatch from understanding
+---you could just make this yourself but ideas are free
+---@param method any
+---@param ... ...
+function Class:on(method, ...)
+  -- index once
+  local sm = self[method]
+  if sm then
+    return sm(...)
+  end
+  return nil
+end
+
 ---Does nothing.
 ---You have to implement this yourself for extra functionality when initializing
 ---You can return a replacement Object (sub class factory)
