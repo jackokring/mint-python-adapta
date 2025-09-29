@@ -24,6 +24,7 @@ local on = {}
 -- a special class handling the fallback index checking up on __on being
 -- present so that the default error can be avoided in processing
 -- is a class not knowing a method a fail or an intended null?
+-- NOTE: on.__index = on
 -- "and on the filler of uptime created the void to be filled by all classes"
 on.__index = function(t, k)
   -- a second class trace after not found for checking continuation
@@ -38,8 +39,9 @@ setmetatable(void, on)
 -- lock metatable on to terminate is() chain
 -- it also makes void not an object as its meta is false
 -- class has to have a meta "class" (void) to be a class
-on.__metatable = false
+-- NOTE: on.__metatable = false
 -- "once there was something preceded by nothing with its symbol"
+
 -- sure now it's a class, but it can't be the terminal beginning
 -- it can't be its own meta table or other and so it becomes defered to a
 -- hidden void, simplistic in maitaining the integrity of fulfilling the
