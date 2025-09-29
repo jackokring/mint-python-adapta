@@ -24,17 +24,15 @@ local on = {}
 -- a special class handling the fallback index checking up on __on being
 -- present so that the default error can be avoided in processing
 -- is a class not knowing a method a fail or an intended null?
+-- "and on the filler of uptime created the void to be filled by all classes"
 on.__index = function(t, k)
   -- a second class trace after not found for checking continuation
   local ton = getmetatable(t).__on
-  if ton then
-    -- seems lua sytyle
-    if type(ton) == "function" then
-      return ton(t, k)
-    end
-    return ton
+  -- seems lua sytyle
+  if type(ton) == "function" then
+    return ton(t, k)
   end
-  return nil
+  return ton
 end
 setmetatable(void, on)
 -- lock metatable on
