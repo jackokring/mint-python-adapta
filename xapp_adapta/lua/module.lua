@@ -10,7 +10,10 @@
 local nv = require("novaride").setup()
 
 ---blank callback no operation
-_G.nop = function() end
+local nop = function()
+  return nop
+end
+_G.nop = nop
 ---insert into table
 _G.insert = table.insert
 ---concat table
