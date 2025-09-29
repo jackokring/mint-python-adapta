@@ -12,6 +12,7 @@ local names = {}
 ---this bus object then supports
 ---send() and listen() with remove()
 ---bus singleton
+---@param self Bus
 ---@param named string
 ---@return NamedBus | nil
 function Bus:new(named)
@@ -26,7 +27,7 @@ function Bus:new(named)
 end
 
 ---send bus arguments on bus actor
----@param self NamedBus
+---@param self Bus
 ---@param ... ...
 function Bus:send(...)
   for k, _ in pairs(self) do
@@ -36,21 +37,22 @@ function Bus:send(...)
 end
 
 ---listen for calls on bus actor for function
----@param self NamedBus
+---@param self Bus
 ---@param fn fun(...): nil
 function Bus:listen(fn)
-  self[fn] = fn
+  -- minor ref count efficiency
+  self[fn] = true
 end
 
 ---remove listener function from bus
----@param self NamedBus
+---@param self Bus
 ---@param fn fun(...): nil
 function Bus:remove(fn)
   self[fn] = nil
 end
 
 ---destroy a bus so it can be released by the collector
----@param self NamedBus
+---@param self Bus
 function Bus:destroy()
   -- cancel all bussing
   for k, _ in pairs(self) do
@@ -63,6 +65,7 @@ function Bus:destroy()
       return
     end
   end
+  error("bus clone anti-pattern with nice destroy", 2)
 end
 
 nv()
