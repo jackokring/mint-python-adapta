@@ -25,13 +25,15 @@ end
 ---@param self SyncBus
 function SyncBus:sync()
   --best order for I-cache locallity
+  local qs = que[self]
+  -- aligned atomic commit
+  que[self] = {}
   for k, _ in pairs(self) do
-    for _, v in pairs(que[self] or {}) do
+    for _, v in pairs(qs or {}) do
       -- call value function on all sent arguments
       k(unpack(v))
     end
   end
-  que[self] = {}
 end
 
 nv()

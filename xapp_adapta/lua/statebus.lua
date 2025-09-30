@@ -25,7 +25,9 @@ end
 function StateBus:sync()
   -- don't repeat inactive state changes
   local same = true
-  for k, v in pairs(que[self]) do
+  -- aligned atomic
+  local qs = que[self]
+  for k, v in pairs(qs) do
     if not last[self] or v ~= last[self][k] then
       same = false
       break
@@ -35,7 +37,7 @@ function StateBus:sync()
     return
   end
   -- lock in to commit sending
-  last[self] = que[self]
+  last[self] = qs
   for k, _ in pairs(self) do
     -- call value function on last sent arguments
     k(unpack(last[self]))
