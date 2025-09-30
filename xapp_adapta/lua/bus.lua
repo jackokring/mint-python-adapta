@@ -5,6 +5,8 @@ local nv = require("novaride").setup()
 local Object = require("class")
 --make it fine
 ---@class Bus: Object
+---the constructor format overload
+---@overload fun(): Bus?
 _G.Bus = Object:extend()
 local names = {}
 

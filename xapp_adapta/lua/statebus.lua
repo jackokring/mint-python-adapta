@@ -8,6 +8,8 @@ local nv = require("novaride").setup()
 local Bus = require("bus")
 --make it fine
 ---@class StateBus: Bus
+---constructor format
+---@overload fun(): StateBus
 _G.StateBus = Bus:extend()
 
 local que = {}
