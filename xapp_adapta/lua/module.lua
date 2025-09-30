@@ -32,6 +32,8 @@ _G.gsub = string.gsub
 _G.find = string.find
 ---length of string
 _G.len = string.len
+---string format
+_G.format = string.format
 ---get ascii char at
 ---a surprising lack of [index] for strings
 ---perhaps it's a parse simplification thing
@@ -359,13 +361,12 @@ _G.pattern = function(lit_pattern)
   return Table
 end
 
-local sf = string.format
 ---encode_url_part
 ---@param s string
 ---@return string
 _G.encode_url_part = function(s)
   s = gsub(s, "([&=+%c])", function(c)
-    return sf("%%%02X", string.byte(c))
+    return format("%%%02X", byte(c))
   end)
   s = gsub(s, " ", "+")
   return s
@@ -376,7 +377,7 @@ end
 _G.decode_url_part = function(s)
   s = gsub(s, "+", " ")
   s = gsub(s, "%%(%x%x)", function(h)
-    return string.char(tonumber(h, 16))
+    return char(tonumber(h, 16))
   end)
   return s
 end
@@ -595,7 +596,7 @@ end
 ---@return string
 local nf = function(x, width, base)
   width = width or 0
-  return sf("%" .. sf("%d", width) .. base, x)
+  return format("%" .. format("%d", width) .. base, x)
 end
 
 ---decimal string of number with default C numeric locale
@@ -625,7 +626,7 @@ _G.sci = function(x, width, prec)
   local l = os.setlocale()
   os.setlocale("C", "numeric")
   -- default size 8 = 6 + #"x."
-  local s = nf(x, width, "." .. sf("%d", prec or 6) .. "G")
+  local s = nf(x, width, "." .. format("%d", prec or 6) .. "G")
   os.setlocale(l, "numeric")
   return s
 end
@@ -675,7 +676,7 @@ end
 ---@param str string
 ---@return string
 _G.quote = function(str)
-  return sf("%q", str)
+  return format("%q", str)
 end
 
 -- clean up
