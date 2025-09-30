@@ -11,7 +11,7 @@ local Bus = require("bus")
 --make it fine
 ---@class SyncBus: Bus
 ---constructor format
----@overload fun(): SyncBus
+---@overload fun(name: string): SyncBus
 _G.SyncBus = Bus:extend()
 
 local que = {}
