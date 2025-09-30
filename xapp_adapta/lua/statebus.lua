@@ -11,6 +11,7 @@ local Bus = require("bus")
 _G.StateBus = Bus:extend()
 
 local que = {}
+local last = {}
 
 ---send bus arguments on bus actor
 ---@param self StateBus
@@ -20,19 +21,24 @@ function StateBus:send(...)
 end
 
 ---synchronize to last send(...) only
----beware the infinite send loop if sync() triggers send()
 ---@param self StateBus
 function StateBus:sync()
-  local qs = que[self]
-  if qs then
-    repeat
-      for k, _ in pairs(self) do
-        -- call value function on last sent arguments
-        k(unpack(que[self]))
-      end
-    -- bus managed to not send() to itself at least one whole sync
-    until qs == que[self]
-    que[self] = nil
+  -- don't repeat inactive state changes
+  local same = true
+  for k, v in pairs(que[self]) do
+    if not last[self] or v ~= last[self][k] then
+      same = false
+      break
+    end
+  end
+  if same then
+    return
+  end
+  -- lock in to commit sending
+  last[self] = que[self]
+  for k, _ in pairs(self) do
+    -- call value function on last sent arguments
+    k(unpack(last[self]))
   end
 end
 
