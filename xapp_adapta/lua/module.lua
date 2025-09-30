@@ -400,60 +400,27 @@ _G.eval = function(code)
   return ok()
 end
 
----switch statement
----@param is any
----@return SwitchStatement
-_G.switch = function(is)
-  ---@class SwitchStatement
-  ---@field Value any
-  ---@field Functions { [any]: fun(is: any): nil }
-  local Table = {
-    Value = is,
-    Functions = {}, -- dictionary as any value
-  }
-
-  ---each case
-  ---@param testElement any
-  ---@param callback fun(is: any): nil
-  ---@return SwitchStatement
-  Table.case = function(testElement, callback)
-    if Table.Functions[testElement] then
-      error("duplicate case in switch", 2)
-    end
-    Table.Functions[testElement] = callback
-    return Table
+---simplified table case
+---@param t table
+---@param k any
+---@return any ...
+_G.case = function(t, k, ...)
+  local v = t[k]
+  local ty = type(v)
+  if ty == "function" then
+    return v(t, k, ...)
   end
-
-  ---remove case
-  ---@param testElement any
-  ---@return SwitchStatement
-  Table.uncase = function(testElement)
-    -- can remove it many times
-    Table.Functions[testElement] = nil
-    return Table
-  end
-
-  ---use newer switch value
-  ---@param testElement any
-  ---@return SwitchStatement
-  Table.reswitch = function(testElement)
-    Table.Value = testElement
-    return Table
-  end
-
-  ---default case
-  ---@param callback fun(t: any): nil
-  Table.default = function(callback)
-    local Case = Table.Functions[Table.Value]
-    if Case then
-      -- allowing duplicate function usage
-      Case(Table.Value)
-    else
-      callback(Table.Value)
+  if ty == "object" or ty == "class" then
+    --a self named method
+    local vt = v[t]
+    if type(vt) == "function" then
+      return v:vt(t, k, ...)
     end
   end
-
-  return Table
+  if ty == "table" then
+    return v[k], ...
+  end
+  return v, ...
 end
 
 --olde skool num and chr
