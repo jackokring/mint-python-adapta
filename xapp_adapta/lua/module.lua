@@ -395,7 +395,7 @@ _G.datetime = "!%Y-%m-%d.%a.%H:%M:%S"
 _G.eval = function(code)
   local ok, err = loadstring("return " .. code)
   if not ok then
-    error("error in eval compile: " .. err, 2)
+    error("error in eval: " .. err, 2)
   end
   return ok()
 end
@@ -576,7 +576,14 @@ _G.clone = function(t)
   end
   -- NOTE: the new _G.type definition is all kinds of trouble
   if ty == "table" or ty == "object" then
-    return setmetatable(ret, getmetatable(t))
+    local mt = getmetatable(t)
+    local cl = mt.__clone
+    setmetatable(ret)
+    if type(cl) == "function" then
+      -- NOTE: can use this for a deeper copy of any shared data
+      ret:cl()
+    end
+    return ret
   end
   return t
 end
