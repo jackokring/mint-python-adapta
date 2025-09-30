@@ -391,7 +391,7 @@ _G.datetime = "!%Y-%m-%d.%a.%H:%M:%S"
 ---this invert quote(code) and is useful
 ---with anonymous functions
 ---@param code string
----@return ...
+---@return any ...
 _G.eval = function(code)
   local ok, err = loadstring("return " .. code)
   if not ok then
@@ -442,7 +442,7 @@ _G.switch = function(is)
   end
 
   ---default case
-  ---@param callback fun(...): nil
+  ---@param callback fun(t: any): nil
   Table.default = function(callback)
     local Case = Table.Functions[Table.Value]
     if Case then
@@ -554,14 +554,14 @@ end
 ---more state by explicit closure based on type?
 ---compare hidden and chain equal to start
 ---return nil to end iterator
----@param fn fun(hidden: table, ...): ...
----@return fun(hidden: table, ...): ...
+---@param fn fun(table, ... ): ...
+---@return fun(table, ...): ...
 ---@return table
 ---@return table
 _G.iter = function(fn)
   ---iter next function
   ---@param hidden table
-  ---@param ... ...
+  ---@param ... any
   ---@return fun(table, ...): ...
   local next = function(hidden, ...)
     -- maybe like the linked list access problem of needing preceding node
@@ -574,9 +574,9 @@ _G.iter = function(fn)
 end
 
 ---return a mapping over a varargs
----@param fn fun(any: ...): ...
----@param ... ...
----@return ...
+---@param fn fun(any): any
+---@param ... any
+---@return any ...
 _G.map = function(fn, ...)
   local r = {}
   -- using ipairs has an until nil on ordered number indexing

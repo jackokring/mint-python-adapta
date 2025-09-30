@@ -80,13 +80,14 @@ function Class:extend()
   --no as cls.__index = cls
   --an extra hidden super pointer for is()?
   --I suppose it has a bit of dynamic programming anti-clobber of super
+  cls.class = cls
+  --the magic method chain when function not found
   return setmetatable(cls, self)
-  --optimise
 end
 
 ---Implement a mixin onto this Class.
 ---@param self Class
----@param ... unknown
+---@param ... Class
 function Class:mixin(...)
   for _, cls in pairs({ ... }) do
     for k, v in pairs(cls) do
@@ -124,7 +125,7 @@ end
 
 ---You can call the class the initialize it without using `Class:new`.
 ---@param self Class
----@param ... unknown
+---@param ... any
 ---@return Object
 function Class:__call(...)
   --Yes, a Class is an instance of class class

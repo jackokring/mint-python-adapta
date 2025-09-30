@@ -4,7 +4,7 @@ local nv = require("novaride").setup()
 
 local Object = require("class")
 --make it fine
----@class Bus: Class
+---@class BusClass: Class
 _G.Bus = Object:extend()
 local names = {}
 
@@ -14,12 +14,12 @@ local names = {}
 ---bus singleton
 ---@param self Bus
 ---@param named string
----@return NamedBus | nil
+---@return Bus | nil
 function Bus:new(named)
   -- avoid namespace issues with method names in self
   local b = names[named]
   if b then
-    ---@class NamedBus: Object
+    ---@class Bus: Object
     return b
   else
     names[named] = self
@@ -28,7 +28,7 @@ end
 
 ---send bus arguments on bus actor
 ---@param self Bus
----@param ... ...
+---@param ... any
 function Bus:send(...)
   for k, _ in pairs(self) do
     -- call value function on arguments
