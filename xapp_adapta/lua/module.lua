@@ -530,7 +530,7 @@ end
 
 ---ranged for by in 1, #n, 1
 ---@param len integer
----@return fun(iterState: integer, lastIter: integer): integer | nil
+---@return fun(iterState: integer, lastIter: integer): integer?
 ---@return integer
 ---@return integer
 _G.range = function(len)
@@ -550,31 +550,8 @@ _G.range = function(len)
   return next, state, iter
 end
 
----iter for by fn(state, iterate)
----more state by explicit closure based on type?
----compare hidden and chain equal to start
----return nil to end iterator
----@param fn fun(table, ... ): ...
----@return fun(table, ...): ...
----@return table
----@return table
-_G.iter = function(fn)
-  ---iter next function
-  ---@param hidden table
-  ---@param ... any
-  ---@return fun(table, ...): ...
-  local next = function(hidden, ...)
-    -- maybe like the linked list access problem of needing preceding node
-    -- the nil node "or" head pointer
-    return fn(hidden, ...) --, xtra iter values, ...
-  end
-  -- mutable private table closure
-  local state = {}
-  return next, state, state -- jump of point 1st (compare state == state)
-end
-
 ---return a mapping over a varargs
----@param fn fun(any): any
+---@param fn fun(val: any): any
 ---@param ... any
 ---@return any ...
 _G.map = function(fn, ...)
@@ -597,8 +574,8 @@ _G.ipairs = function(table)
   ---iterator
   ---@param t table
   ---@param i integer
-  ---@return integer | nil
-  ---@return any
+  ---@return integer?
+  ---@return any?
   local iter = function(t, i)
     i = i + 1
     -- NOTE: exit condition is length not a nil
@@ -688,7 +665,7 @@ _G.sort = table.sort
 ---number to string with default C numeric locale
 ---nil return if can't convert to number
 ---@param num any
----@return string | nil
+---@return string?
 _G.str = function(num)
   if type(num) ~= "number" then
     return nil
@@ -704,7 +681,7 @@ end
 ---nil return if not a number
 ---I'm no fan of number? as a vague type
 ---@param str string
----@return number | nil
+---@return number?
 _G.val = function(str)
   local l = os.setlocale()
   os.setlocale("C", "numeric")

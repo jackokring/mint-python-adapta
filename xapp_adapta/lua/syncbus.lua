@@ -9,20 +9,20 @@ local nv = require("novaride").setup()
 
 local Bus = require("bus")
 --make it fine
----@class SyncBusClass: BusClass
+---@class SyncBus: Bus
 _G.SyncBus = Bus:extend()
 
 local que = {}
 
 ---send bus arguments on bus actor
----@param self Bus
+---@param self SyncBus
 ---@param ... any
 function SyncBus:send(...)
   que[self] = table.insert(que[self] or {}, { ... })
 end
 
 ---synchronize to all send(...) on bus
----@param self Bus
+---@param self SyncBus
 function SyncBus:sync()
   --best order for I-cache locallity
   local qs = que[self]

@@ -12,7 +12,7 @@ _G.yield = co.yield
 
 ---construct a producer function which can use tx(x)
 ---and rx(chain: thread) using the supply chain
----@param fn fun(...): nil
+---@param fn fun(...: any): nil
 ---@param ... any
 ---@return thread
 _G.chain = function(fn, ...)
@@ -30,9 +30,9 @@ end
 _G.rx = function(chain)
   -- manual vague about error message (maybe second return, but nil?)
   local ok, value = co.resume(chain)
-  if not ok or value == nil then
+  if not ok then
     --if rx(x) then ... else ... exit ... end
-    return nil
+    return false
   end
   return value
 end
@@ -43,12 +43,10 @@ end
 ---@return boolean
 _G.tx = function(x)
   yield(x)
-  if x == nil then
-    --if not tx(x) then ... exit ... end
+  if x == false then
     return true
-  else
-    return false
   end
+  return x
 end
 
 nv()

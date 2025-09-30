@@ -7,21 +7,21 @@ local nv = require("novaride").setup()
 
 local Bus = require("bus")
 --make it fine
----@class StateBusClass: BusClass
+---@class StateBus: Bus
 _G.StateBus = Bus:extend()
 
 local que = {}
 local last = {}
 
 ---send bus arguments on bus actor
----@param self Bus
+---@param self StateBus
 ---@param ... any
 function StateBus:send(...)
   que[self] = { ... }
 end
 
 ---synchronize to last send(...) only
----@param self Bus
+---@param self StateBus
 function StateBus:sync()
   -- don't repeat inactive state changes
   local same = true

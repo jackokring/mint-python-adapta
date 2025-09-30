@@ -4,7 +4,7 @@ local nv = require("novaride").setup()
 
 local Object = require("class")
 --make it fine
----@class BusClass: Class
+---@class Bus: Object
 _G.Bus = Object:extend()
 local names = {}
 
@@ -14,12 +14,11 @@ local names = {}
 ---bus singleton
 ---@param self Bus
 ---@param named string
----@return Bus | nil
+---@return Bus?
 function Bus:new(named)
   -- avoid namespace issues with method names in self
   local b = names[named]
   if b then
-    ---@class Bus: Object
     return b
   else
     names[named] = self
@@ -38,7 +37,7 @@ end
 
 ---listen for calls on bus actor for function
 ---@param self Bus
----@param fn fun(...): nil
+---@param fn fun(...: any): nil
 function Bus:listen(fn)
   -- minor ref count efficiency
   self[fn] = true
@@ -46,7 +45,7 @@ end
 
 ---remove listener function from bus
 ---@param self Bus
----@param fn fun(...): nil
+---@param fn fun(...: any): nil
 function Bus:remove(fn)
   self[fn] = nil
 end

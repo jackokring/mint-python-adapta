@@ -10,11 +10,6 @@
 -- a new type function for also detecting classes and objects by their
 -- metatable arrangement is injected into _G with a novaride skip example
 
----@class Class: Object
----@field super Class|nil
-local Class = { super = nil }
--- static class variables
-Class.__index = Class
 -- NOTE: is()? it's a consistency thing for me
 -- Object was renamed Class as it's a sub-class of Object
 local void = {}
@@ -46,7 +41,14 @@ setmetatable(void, on)
 -- it can't be its own meta table or other and so it becomes defered to a
 -- hidden void, simplistic in maitaining the integrity of fulfilling the
 -- needs of class but performing its own miracle of inacces
-setmetatable(Class, void)
+
+---@class Object: table
+---@field super Object?
+---@overload fun(...: any): Object
+---getting this __call plummed in to do a table assign before classing it!!
+local Class = setmetatable({ super = nil }, void)
+-- static class variables
+Class.__index = Class
 
 ---Does nothing.
 ---You have to implement this yourself for extra functionality when initializing
@@ -56,13 +58,13 @@ setmetatable(Class, void)
 ---NOTE: use Class(...) to make an Object as new(...) is used indirectly
 ---@param self Object
 ---@param ... any
----@return Object | nil
+---@return Object?
 function Class:new(...) end
 
 ---Create a new class/Class by extending the base Class class.
 ---The extended Class will have a field called `super` that will access the super class.
----@param self Class
----@return Class
+---@param self Object
+---@return Object
 function Class:extend()
   local cls = {}
   for k, v in pairs(self) do
@@ -86,8 +88,8 @@ function Class:extend()
 end
 
 ---Implement a mixin onto this Class.
----@param self Class
----@param ... Class
+---@param self Object
+---@param ... Object
 function Class:mixin(...)
   for _, cls in pairs({ ... }) do
     for k, v in pairs(cls) do
@@ -101,7 +103,7 @@ end
 ---Checks if the Class is an instance
 ---This will start with the lowest class and loop over all the superclasses.
 ---@param self Object
----@param T Class
+---@param T Object
 ---@return boolean
 function Class:is(T)
   --use metatable method as no hash indexing needed
@@ -124,16 +126,14 @@ function Class:__tostring()
 end
 
 ---You can call the class the initialize it without using `Class:new`.
----@param self Class
+---@param self Object
 ---@param ... any
 ---@return Object
-function Class:__call(...)
+---ah, yes, it has a metatable matter entry
+function void:__call(...)
   --Yes, a Class is an instance of class class
-  ---@class Object
   local obj = setmetatable({}, self)
-  --compiler type exact not inferred
-  --as the : notation just goes funny, and won't
-  return self.new(obj, ...) or obj
+  return obj:new(...) or obj
 end
 
 -- NOTE: the novaride skip() example extends type() to detect "object"
