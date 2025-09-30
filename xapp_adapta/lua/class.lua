@@ -44,8 +44,9 @@ setmetatable(void, on)
 
 ---@class Object: table
 ---@field super Object?
----@overload fun(...: any): Object
+---@overload fun(): Object
 ---getting this __call plummed in to do a table assign before classing it!!
+---well yes technically, it didn't need (...: any) for "Object"
 local Class = setmetatable({ super = nil }, void)
 -- static class variables
 Class.__index = Class
