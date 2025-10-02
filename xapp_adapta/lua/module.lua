@@ -184,6 +184,8 @@ as.option = function(s)
   return s .. "?"
 end
 
+_G.as = as
+
 ---encode_url_part
 ---@param s string
 ---@return string
