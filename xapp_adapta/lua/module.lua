@@ -13,6 +13,7 @@ local nv = require("novaride").setup()
 local nop = function()
   return nop
 end
+
 _G.nop = nop
 ---insert into table
 _G.insert = table.insert
@@ -34,6 +35,7 @@ _G.find = string.find
 _G.len = string.len
 ---string format
 _G.format = string.format
+
 ---get ascii char at
 ---a surprising lack of [index] for strings
 ---perhaps it's a parse simplification thing
@@ -43,322 +45,143 @@ _G.format = string.format
 _G.at = function(s, pos)
   return sub(s, pos, pos)
 end
+string.at = _G.at
+
 ---utf8 charpattern
-_G.utf8pattern = "[\0-\x7F\xC2-\xF4][\x80-\xBF]*"
+_G.utf8pattern = "[\z-\x7F\xC2-\xF4][\x80-\xBF]*"
 
----pattern compiler (use % for insert of a match specifier)
----in a string that's "%" to substitue the patterns appended
----by .function(args).function(args) ... to the pattern
----to the literal argument finalizing on .compile()
----
----so start with an example literal and then replace
----what to find with "%" and add a .function(args) chain
----for the match kind needed at the "%" point in the
----literal and be less confused about pattern punctuation chaos
----
----use "%" for a literal % using .percent() for a literal percent
----@param lit_pattern string
----@return PatternStatement
-_G.pattern = function(lit_pattern)
-  ---@class PatternStatement
-  local Table = {}
-  -- store some data in capture
-  local literal = lit_pattern
-  local start_f = ""
-  local stop_f = ""
-  --enhancement
-  local tu = {}
-  -- state machine
-  -- 0 = beginning
-  -- 1 = beginning after ^
-  -- 2 = match
-  -- 3 = % match
-  local state = 0
-  local marks = 0
-  local m_array = {}
-  local last = 0
-  local magic = "^$()%.[]*+-?"
-  local sane = function(chars)
+local magic = "^$().[]*+-?"
+---make sane split on %
+---@param chars string
+---@return table
+local sane = function(chars)
+  local t = {}
+  for s in gmatch(chars .. "%", "(.-)%%") do
     for i in range(#magic) do
-      local r = "%" .. magic[i]
+      local mi = magic:at(i)
+      local r = "%" .. mi
       -- ironic match
-      chars = gsub(chars, r, r)
+      s = gsub(s, mi, r)
     end
-    return chars
+    insert(t, s)
   end
+  return t
+end
 
-  ---compile the pattern
-  ---@return string
-  Table.compile = function()
-    if marks ~= 0 then
-      error("mark not captured mismatch", 2)
-    end
-    if last > 0 and #tu > last then
-      error("stop must be last", 2)
-    end
-    local p = 1
-    local u = 1
-    literal = sane(literal)
-    while true do
-      local s, e = find(literal, "%%%%", p)
-      if not s then
+---so a bit like format, but puts a pattern item at every %
+---@alias asval string
+---@overload fun(s: string, ...: asval): string
+local as = setmetatable({}, {
+  __call = function(s, ...)
+    local r = ""
+    local t = sane(s)
+    local p = { ... }
+    -- then just % handling
+    for i, v in ipairs(t) do
+      r = r .. v
+      if i == #t then
         break
-      else
-        local v = tu[u]
-        if not v then
-          error("not enough arguments for pattern", 2)
-        end
-        literal = sub(literal, 1, s - 1) .. v .. sub(literal, e + 1)
-        u = u + 1
-        -- non-recursive application
-        p = s + len(v)
       end
+      r = r .. p[i]
     end
-    if not tu[u] then
-      error("too many arguments for pattern", 2)
-    end
-    -- turn escaped escape into literal backslash
-    return start_f .. literal .. stop_f
-  end
+    -- then return
+    return r
+  end,
+})
 
-  ---start of line match
-  ---@return PatternStatement
-  Table.start = function()
-    if state ~= 0 then
-      error("must start at the start", 2)
-    end
-    state = 1
-    start_f = "^"
-    return Table
-  end
-  ---end of line match
-  ---@return PatternStatement
-  Table.stop = function()
-    if last > 0 then
-      error("only one stop allowed", 2)
-    end
-    stop_f = "$"
-    last = #tu
-    return Table
-  end
+---literal percent
+---@type asval
+as.percent = "%%"
+---@type asval
+as.first = "^"
+---@type asval
+as.last = "$"
 
-  ---invert the previous match as a non-match (postfix)
-  ---does not work on an of which has its own invert flag
-  ---@return PatternStatement
-  Table.invert = function()
-    if state ~= 3 then
-      error("must be a match which can be inverted", 2)
-    end
-    -- also for %b
-    tu[#tu] = "%" .. upper(sub(tu[#tu], 2, 2)) .. sub(tu[#tu], 3)
-    state = 2
-    return Table
-  end
-  ---characters to possibly match with invert for not match
-  ---all characters are literal including ], ^ and -
-  ---@param chars string
-  ---@param invert boolean
-  ---@return PatternStatement
-  Table.of = function(chars, invert)
-    local i = ""
-    if invert then
-      i = "^"
-    end
-    chars = sane(chars)
-    --% activation
-    insert(tu, "[" .. i .. chars .. "]")
-    state = 2
-    return Table
-  end
-  ---a literal percent %
-  ---just so you can place %% in the template and allow one %
-  ---to be a literal percent
-  ---@return PatternStatement
-  Table.percent = function()
-    state = 2
-    insert(tu, "%%")
-    return Table
-  end
-  ---any single character
-  ---@return PatternStatement
-  Table.any = function()
-    state = 2
-    insert(tu, ".")
-    return Table
-  end
-  ---a unicode character but beware it will also match
-  ---bad formatting in UTF strings
-  ---@return PatternStatement
-  Table.unicode = function()
-    state = 2
-    insert(tu, utf8pattern)
-    return Table
-  end
-  ---match an alpha character
-  ---@return PatternStatement
-  Table.alpha = function()
-    state = 3
-    insert(tu, "%a")
-    return Table
-  end
-  ---control code match
-  ---@return PatternStatement
-  Table.control = function()
-    state = 3
-    insert(tu, "%c")
-    return Table
-  end
-  ---numeric digit match
-  ---@return PatternStatement
-  Table.digit = function()
-    state = 3
-    insert(tu, "%d")
-    return Table
-  end
-  ---lower case match
-  ---@return PatternStatement
-  Table.lower = function()
-    state = 3
-    insert(tu, "%l")
-    return Table
-  end
-  ---punctuation match
-  ---@return PatternStatement
-  Table.punc = function()
-    state = 3
-    insert(tu, "%p")
-    return Table
-  end
-  ---space equivelent match
-  ---@return PatternStatement
-  Table.whitespace = function()
-    state = 3
-    insert(tu, "%s")
-    return Table
-  end
-  ---upper case match
-  ---@return PatternStatement
-  Table.upper = function()
-    state = 3
-    insert(tu, "%u")
-    return Table
-  end
-  ---alphanumeric match
-  ---@return PatternStatement
-  Table.alphanum = function()
-    state = 3
-    insert(tu, "%w")
-    return Table
-  end
-  ---hex digit match
-  ---@return PatternStatement
-  Table.hex = function()
-    state = 3
-    insert(tu, "%x")
-    return Table
-  end
-  ---ASCII NUL code match
-  ---@return PatternStatement
-  Table.nul = function()
-    state = 3
-    insert(tu, "%z")
-    return Table
-  end
-  ---match between start and stop delimiters
-  ---@param start string
-  ---@param stop string
-  ---@return PatternStatement
-  Table.between = function(start, stop)
-    state = 3
-    if #start > 1 or #stop > 1 then
-      error("between must be between two ASCII characters", 2)
-    end
-    insert(tu, "%b" .. start[1] .. stop[1])
-    return Table
-  end
+---regular classes
+---@type asval
+as.any = "."
+---@type asval
+as.letter = "%a"
+---@type asval
+as.control = "%c"
+---@type asval
+as.digit = "%d"
+---@type asval
+as.lower = "%l"
+---@type asval
+as.punct = "%p"
+---@type asval
+as.space = "%s"
+---@type asval
+as.upper = "%u"
+---@type asval
+as.alphanum = "%w"
+---@type asval
+as.hex = "%x"
+---@type asval
+as.nul = "%z"
 
-  ---starts a capture with the last match (prefix)
-  ---which will become a single % capture match
-  ---@return PatternStatement
-  Table.mark = function()
-    marks = marks + 1
-    m_array[marks] = #tu + 1
-    return Table
+---@type fun(s: asval): asval
+as.compl = function(s)
+  if s:at(1) == "%" then
+    return "%" .. s:at(2):upper()
   end
-  ---ends a capture with the last match (postfix)
-  ---combines the pattern parts from mark to capture
-  ---together into one capture % match
-  ---@return PatternStatement
-  Table.capture = function()
-    if marks < 1 then
-      error("no matching mark for capture", 2)
-    end
-    -- find last opened mark
-    local m_tu = m_array[marks]
-    -- free element primitive
-    m_array[marks] = nil
-    while #tu ~= m_tu do
-      -- combine
-      local l = remove(tu)
-      tu[#tu] = tu[#tu] .. l
-    end
-    marks = marks - 1
-    tu[#tu] = "(" .. tu[#tu] .. ")"
-    return Table
+  if s:at(1) == "[" then
+    return "[^" .. s:sub(2, -1)
   end
-  ---match a previous capture again (ordered by left first is 1)
-  ---maximum of 9 can be used again but can have as many
-  ---mark/captures as you want
-  ---@param num integer
-  ---@return PatternStatement
-  Table.again = function(num)
-    if num < 1 or num > 9 then
-      error("capture number out of range in pattern")
-    end
-    insert(tu, "%" .. string.char(num + 48))
-    state = 2
-    return Table
-  end
+  error("only character sets or classes maybe complemented", 2)
+end
 
-  ---the last match is optional (postfix)
-  ---@return PatternStatement
-  Table.option = function()
-    if state < 2 then
-      error("option must follow match", 2)
-    end
-    tu[#tu] = tu[#tu] .. "?"
-    state = 1
-    return Table
+---@type fun(...: asval): asval
+local collect = function(...)
+  local t = { ... }
+  local s = ""
+  for _, v in ipairs(t) do
+    s = s .. v
   end
-  ---more repeats of the last match (postfix)
-  ---the argument "more" is false zero repeats are allowed
-  ---of course no repeat, but found, is acceptable as 1 repeat
-  ---@param more boolean
-  ---@return PatternStatement
-  Table.more = function(more)
-    if state < 2 then
-      error("more must follow match", 2)
-    end
-    if more then
-      tu[#tu] = tu[#tu] .. "+"
-    else
-      tu[#tu] = tu[#tu] .. "*"
-    end
-    state = 1
-    return Table
-  end
-  ---as few repeats as possible to obtain a match (postfix)
-  ---@return PatternStatement
-  Table.less = function()
-    if state < 2 then
-      error("less must follow match", 2)
-    end
-    tu[#tu] = tu[#tu] .. "-"
-    state = 1
-    return Table
-  end
+  return s
+end
 
-  return Table
+---@type fun(...: asval): asval
+as.set = function(...)
+  -- special minus handling as seems more rational
+  local t = collect(...)
+  t = gsub(t, "%-", "%-")
+  t = gsub(t, "%^", "%^")
+  return "[" .. t .. "]"
+end
+
+---@type fun(...: asval): asval
+as.capture = function(...)
+  return "(" .. collect(...) .. ")"
+end
+
+---@type fun(i: integer): asval
+as.captured = function(i)
+  if i < 1 and i > 9 then
+    error("only capture 1 to 9 supported", 2)
+  end
+  return "%" .. tostring(i):at(1)
+end
+
+---@type fun(s: asval): asval
+as.short = function(s)
+  return s .. "-"
+end
+
+---@type fun(s: asval): asval
+as.long = function(s)
+  return s .. "*"
+end
+
+---@type fun(s: asval): asval
+as.some = function(s)
+  return s .. "+"
+end
+
+---@type fun(s: asval): asval
+as.option = function(s)
+  return s .. "?"
 end
 
 ---encode_url_part
@@ -371,6 +194,7 @@ _G.encode_url_part = function(s)
   s = gsub(s, " ", "+")
   return s
 end
+
 ---decode_url_part
 ---@param s string
 ---@return string
@@ -388,6 +212,7 @@ end
 ---UTC preferred
 ---@type string
 _G.datetime = "!%Y-%m-%d.%a.%H:%M:%S"
+
 ---evaluate source code from a string
 ---this invert quote(code) and is useful
 ---with anonymous functions
@@ -559,36 +384,6 @@ _G.ipairs = function(table)
 end
 sk()
 
----shallow clone a table, object or class
----otherwise passthrough as likely primitive
----@param t any
----@return any
-_G.clone = function(t)
-  local ret = {}
-  for k, v in pairs(t) do
-    ret[k] = v
-  end
-  local ty = type(t)
-  if ty == "userdata" then
-    error("userdata cloning is C function specific", 2)
-  end
-  if ty == "class" then
-    error("classes are singletons", 2) -- class singletons
-  end
-  -- NOTE: the new _G.type definition is all kinds of trouble
-  if ty == "table" or ty == "object" then
-    local mt = getmetatable(t)
-    local cl = mt.__clone
-    setmetatable(ret)
-    if type(cl) == "function" then
-      -- NOTE: can use this for a deeper copy of any shared data
-      ret:cl()
-    end
-    return ret
-  end
-  return t
-end
-
 ---number format helper
 ---@param x number
 ---@param width integer
@@ -599,17 +394,26 @@ local nf = function(x, width, base)
   return format("%" .. format("%d", width) .. base, x)
 end
 
+---locale wrap helper
+---@param fn fun(): any
+local inc = function(fn)
+  local l = os.setlocale()
+  os.setlocale("C", "numeric")
+  local ret = fn()
+  os.setlocale(l, "numeric")
+  return ret
+end
+
 ---decimal string of number with default C numeric locale
 ---@param x integer
 ---@param width integer
 ---@return string
 _G.dec = function(x, width)
-  local l = os.setlocale()
-  os.setlocale("C", "numeric")
-  local s = nf(x, width, "d")
-  os.setlocale(l, "numeric")
-  return s
+  return inc(function()
+    return nf(x, width, "d")
+  end)
 end
+
 ---hex string of number
 ---@param x integer
 ---@param width integer
@@ -617,18 +421,17 @@ end
 _G.hex = function(x, width)
   return nf(x, width, "x")
 end
+
 ---scientific string of number with default C numeric locale
 ---@param x integer
 ---@param width integer
 ---@param prec integer
 ---@return string
 _G.sci = function(x, width, prec)
-  local l = os.setlocale()
-  os.setlocale("C", "numeric")
   -- default size 8 = 6 + #"x."
-  local s = nf(x, width, "." .. format("%d", prec or 6) .. "G")
-  os.setlocale(l, "numeric")
-  return s
+  return inc(function()
+    return nf(x, width, "." .. format("%d", prec or 6) .. "G")
+  end)
 end
 
 _G.upper = string.upper
@@ -645,11 +448,9 @@ _G.str = function(num)
   if type(num) ~= "number" then
     return nil
   end
-  local l = os.setlocale()
-  os.setlocale("C", "numeric")
-  local s = tostring(num)
-  os.setlocale(l, "numeric")
-  return s
+  return inc(function()
+    return tostring(num)
+  end)
 end
 
 ---string to number with default C numeric locale
@@ -658,11 +459,9 @@ end
 ---@param str string
 ---@return number?
 _G.val = function(str)
-  local l = os.setlocale()
-  os.setlocale("C", "numeric")
-  local s = tonumber(str)
-  os.setlocale(l, "numeric")
-  return s
+  return inc(function()
+    return tonumber(str)
+  end)
 end
 
 ---to number from hex integer value only
