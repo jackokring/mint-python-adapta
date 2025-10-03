@@ -1,11 +1,11 @@
 -- bus for state signalling
 -- NOTE: a signalling bus for sending messages by named target
-local Object = require("class")
+
 --make it fine
 ---@class Bus: Object
 ---the constructor format overload
 ---@overload fun(name: string): Bus
-local Bus = Object:extend()
+local Bus = require("class"):extend()
 local names = {}
 
 ---return a bus object for a name

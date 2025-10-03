@@ -7,7 +7,7 @@
 ---@class StateBus: Bus
 ---constructor format
 ---@overload fun(name: string): StateBus
-local StateBus = Bus:extend()
+local StateBus = require("bus"):extend()
 
 local que = {}
 local last = {}

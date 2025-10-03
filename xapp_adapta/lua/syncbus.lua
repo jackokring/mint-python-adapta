@@ -8,7 +8,7 @@
 ---@class SyncBus: Bus
 ---constructor format
 ---@overload fun(name: string): SyncBus
-local SyncBus = Bus:extend()
+local SyncBus = require("bus"):extend()
 
 local que = {}
 
