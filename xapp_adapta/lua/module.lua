@@ -77,10 +77,9 @@ local as = setmetatable({}, {
     -- then just % handling
     for i, v in ipairs(t) do
       r = r .. v
-      if i == #t then
-        break
+      if p[i] ~= nil then
+        r = r .. p[i]
       end
-      r = r .. p[i]
     end
     -- then return
     return r
@@ -373,17 +372,16 @@ _G.map = function(fn, ...)
   return unpack(r)
 end
 
-local sk = require("novaride").skip()
-
----yes, redefined ipairs as often pairs works
+---yes, refined ipairs as often pairs works
 ---and indexed order less often used
 ---an easy fix for one of lua's most anoying things
 ---the break when t[i] == nil ...
+---so it will go to the max of integer element
 ---@param t table
 ---@return fun(t: table, i: integer): integer, any
 ---@return table
 ---@return integer
-_G.ipairs = function(t)
+_G.apairs = function(t)
   --sure it's a linear search extra, but it has what I want (like Brando)
   local n = table.maxn(t)
   ---iterator
@@ -402,7 +400,6 @@ _G.ipairs = function(t)
   end
   return iter, table, 0
 end
-sk()
 
 ---number format helper
 ---@param x number
